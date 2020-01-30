@@ -33,3 +33,7 @@ mybatis-plus:
 spring:
   application:
     name:  4nCoV-Platform
+  flyway:
+    locations: classpath:db/migration
+    outOfOrder: true
+    enabled: false
