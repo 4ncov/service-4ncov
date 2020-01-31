@@ -1,5 +1,6 @@
 # 4nCoV 后端
 
+4nCoV平台的后端服务.
 
 ## 环境
 
@@ -48,6 +49,12 @@ docker run -dp 8000:8000 --name 4ncov-service \
     -e JWT_SECRET=${JWT_SECRET} \ # jwt secret
     4ncov/service
 ```
+
+
+## 数据库版本控制
+使用`**flyway**`进行数据库脚本的版本控制,服务启动时会自动进行数据库脚本的migration.  
+所有需要在数据库执行的脚本请放置于: `src/main/resources/db/migration`,命名方式为:`Vyyyy_MM_dd_HH_mm__Name_Of_Script.sql`,如`V2020_01_31_20_01__Create_4ncov_Tables.sql`.  
+通过运行`FlywayApplication`可以单独将数据库脚本migrate到所连接的数据库当中.
 
 
 ## 编码规约
