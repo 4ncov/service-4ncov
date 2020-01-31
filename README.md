@@ -56,6 +56,16 @@ docker run -dp 8000:8000 --name 4ncov-service \
 所有需要在数据库执行的脚本请放置于: `src/main/resources/db/migration`,命名方式为:`Vyyyy_MM_dd_HH_mm__Name_Of_Script.sql`,如`V2020_01_31_20_01__Create_4ncov_Tables.sql`.  
 通过运行`FlywayApplication`可以单独将数据库脚本migrate到所连接的数据库当中.
 
+## 项目进度与版本控制
+- 看板: [GitHub Projects](https://github.com/4ncov/service-4ncov/projects/1)
+- 开始开发前请自觉将看板的issue分配给自己并从`TODO`挪入`IN PROGRESS`,开发并验证完成之后挪入`DONE`
+- 创建短时的分支来进行开发
+- 分支命名
+  - 故事 `story-${issueNo}-${description}`, 如 `story-8-requester-signup-endpoint`
+  - 任务 `task-${issueNo}-${description}`, 如`task-15-api-documentation`
+- 合并回master分支之前,需要提PR(Pull Request)申请将分支合并回master,并分配PR给**除自己之外**的collaborator进行code review
+- Code review可直接在PR当中进行
+
 
 ## 编码规约
 - 严格遵照plugin: `Alibaba Java Coding Guidelines`.
