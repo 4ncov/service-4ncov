@@ -1,8 +1,8 @@
 spring:
   datasource:
-    username: wuhan
-    password: wuhan
-    url: jdbc:mysql://18.163.84.216:13306/wuhan?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
+    username: root
+    password: admin
+    url: jdbc:mysql://127.0.0.1:3306/wuhan?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
@@ -13,6 +13,6 @@ spring:
         useServerPrepStmts: true
 
 security:
-  jwtSecret: c0406b24d2d3447fa2eecc52f8550a63
+  jwtSecret: 123456
   # 一个月
   jwtExpirationInMs: 259200000

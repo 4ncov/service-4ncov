@@ -10,6 +10,7 @@ public class Constants {
     public static final String GLOBAL_OTHER_UPLOAD_PATH = "/usr/data/upload";
 
     public static final String SPRING_PROFILE_DEVELOPMENT = "dev";
+    public static final String SPRING_PROFILE_LOCAL = "local";
 
     public static final String SPRING_PROFILE_KEY = "spring.profiles.active";
 

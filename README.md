@@ -9,6 +9,7 @@
 - MyBatis 3.1.0
 - Flyway 用于数据库DDL(Data Definition Language)脚本版本控制
 - MySQL 5.7
+- Docker
 
 
 ### 测试框架
@@ -22,7 +23,31 @@
 
 
 ## 部署与启动
-- `java -jar -Dspring.profiles.active=${ACTIVE_PROFILE} target/4ncov-0.0.1-SNAPSHOT.jar # 通过传入ACTIVE_PROFILE的值确定当前环境配置,可选项:dev,prod`
+
+### Plain JRE
+```
+java -jar -Dspring.profiles.active=${ACTIVE_PROFILE} \
+    -Dspring.datasource.username=${DB_USERNAME} \
+    -Dspring.datasource.password=${DB_PASSWORD} \
+    -Dspring.datasource.url=${DB_URL} \
+    -Dsecurity.jwtSecret=${JWT_SECRET} \
+    target/4ncov-0.0.1-SNAPSHOT.jar 
+# 通过传入ACTIVE_PROFILE的值确定当前环境配置,可选项:dev,prod
+```
+
+### Docker
+- 打包docker镜像: `docker build -t 4ncov/service . -f Dockerfile`
+- 部署docker容器: 
+```
+docker run -dp 8000:8000 --name 4ncov-service \
+    -e SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE} \ # dev,prod
+    -e DB_USERNAME=${DB_USERNAME} \ # database username
+    -e DB_PASSWORD=${DB_PASSWORD} \ # database password
+    -e DB_HOST=${DB_HOST} \ # database host
+    -e DB_PORT=${DB_PORT} \ # database port
+    -e JWT_SECRET=${JWT_SECRET} \ # jwt secret
+    4ncov/service
+```
 
 
 ## 编码规约
