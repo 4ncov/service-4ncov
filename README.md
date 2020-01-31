@@ -7,7 +7,9 @@
 - Java 8
 - Spring Boot 2.1.0.RELEASE
 - MyBatis 3.1.0
+- Flyway 用于数据库DDL(Data Definition Language)脚本版本控制
 - MySQL 5.7
+
 
 ### 测试框架
 - JUnit 5 jupiter
@@ -95,9 +97,10 @@ try {
 - 代码提交必须经过测试
 - 未完成的功能、存在的问题需要用 `//TODO` 注明
 - 传入后台的VM(ViewModel)对象遵守[JSR-303](https://www.ibm.com/developerworks/cn/java/j-lo-jsr303/index.html)标准，注解`message`字段必填(全局异常处理器会自动返回错误消息)
-- 本地开发应使用适当的本地配置如`application-local.yml`,并使用`local`作为active profile
+- 本地开发应使用适当的本地配置如`application-local.yml`,并使用`local`作为active profile. 可复制`src/main/resources/config/application-local.yml.template`创建一个本地开发配置
 - 单元测试如有必要请使用mockito对依赖进行mock
 - **切勿在测试代码当中连接dev/prod数据库**
+- **切勿将任何线上环境的数据库用户名密码或其它敏感信息提交到本项目**
 
 
 ## 接口设计原则
