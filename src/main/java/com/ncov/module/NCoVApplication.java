@@ -19,7 +19,7 @@ public class NCoVApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) throws UnknownHostException {
         if (System.getProperty(Constants.SPRING_PROFILE_KEY) == null) {
-            System.setProperty(Constants.SPRING_PROFILE_KEY, Constants.SPRING_PROFILE_DEVELOPMENT);
+            System.setProperty(Constants.SPRING_PROFILE_KEY, Constants.SPRING_PROFILE_LOCAL);
         }
         SpringApplication app = new SpringApplication(NCoVApplication.class);
         Environment env = app.run(args).getEnvironment();
@@ -36,7 +36,7 @@ public class NCoVApplication extends SpringBootServletInitializer {
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
         if (System.getProperty(Constants.SPRING_PROFILE_KEY) == null) {
-            System.setProperty(Constants.SPRING_PROFILE_KEY, "dev");
+            System.setProperty(Constants.SPRING_PROFILE_KEY, Constants.SPRING_PROFILE_LOCAL);
         }
         builder.sources(this.getClass());
         return super.configure(builder);
