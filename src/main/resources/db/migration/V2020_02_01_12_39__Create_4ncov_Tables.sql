@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS `4ncov`.`user_role` (
+CREATE TABLE IF NOT EXISTS `user_role` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '角色ID，目前应该有：\n\n1. 管理员\n2. 供应商\n3. 需求方',
   `user_role_desc` VARCHAR(45) NOT NULL COMMENT '角色描述',
   `gmt_created` DATETIME NOT NULL,
@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS `4ncov`.`user_role` (
 ENGINE = InnoDB
 COMMENT = '系统中用户角色，目前包括（ID对应）\n\n1. 系统管理员\n2. 物资供应商\n3. 医院负责人\n\n暂时没有考虑普通个人用户';
 
-CREATE TABLE IF NOT EXISTS `4ncov`.`user_info` (
+CREATE TABLE IF NOT EXISTS `user_info` (
   `id` BIGINT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_nick_name` VARCHAR(10) NOT NULL,
   `user_salt` TEXT(256) NOT NULL COMMENT '目前暂时用不到，因为不需要设置密码，直接和手机号进行关联\n密码使用的随机salt，创建时CSPRNG 生成的随机数。',
@@ -19,16 +19,14 @@ CREATE TABLE IF NOT EXISTS `4ncov`.`user_info` (
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_user_info_user_role_id`
     FOREIGN KEY (`user_role_id`)
-    REFERENCES `4ncov`.`user_role` (`id`)
+    REFERENCES `user_role` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-CREATE INDEX `fk_user_info_type_idx` ON `4ncov`.`user_info` (`user_role_id` ASC);
+CREATE UNIQUE INDEX `user_nick_name_UNIQUE` ON `user_info` (`user_nick_name` ASC);
 
-CREATE UNIQUE INDEX `user_nick_name_UNIQUE` ON `4ncov`.`user_info` (`user_nick_name` ASC);
-
-CREATE TABLE IF NOT EXISTS `4ncov`.`hospital_info` (
+CREATE TABLE IF NOT EXISTS `hospital_info` (
   `id` BIGINT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `hospital_name` VARCHAR(200) NOT NULL,
   `gmt_created` DATETIME NOT NULL,
@@ -45,17 +43,15 @@ CREATE TABLE IF NOT EXISTS `4ncov`.`hospital_info` (
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_hospital_info_creator_user_id`
     FOREIGN KEY (`hospital_creator_user_id`)
-    REFERENCES `4ncov`.`user_info` (`id`)
+    REFERENCES `user_info` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = '医院的基本信息，目前设计上只允许一个医院关联一个用户，这是为了避免进一步内部的浪费。\n当然一个用户可以有多个联系人和联系方式';
 
-CREATE UNIQUE INDEX `hospital_organizing_instituion_bar_code_UNIQUE` ON `4ncov`.`hospital_info` (`hospital_uniform_social_credit_code` ASC);
+CREATE UNIQUE INDEX `hospital_organizing_instituion_bar_code_UNIQUE` ON `hospital_info` (`hospital_uniform_social_credit_code` ASC);
 
-CREATE INDEX `fk_hospital_info_creator_user_id_idx` ON `4ncov`.`hospital_info` (`hospital_creator_user_id` ASC);
-
-CREATE TABLE IF NOT EXISTS `4ncov`.`material_supplier_info` (
+CREATE TABLE IF NOT EXISTS `material_supplier_info` (
   `id` BIGINT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `gmt_created` DATETIME NOT NULL,
   `gmt_modified` DATETIME NULL,
@@ -72,15 +68,13 @@ CREATE TABLE IF NOT EXISTS `4ncov`.`material_supplier_info` (
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_material_supplier_info_user_id`
     FOREIGN KEY (`material_supplier_creator_user_id`)
-    REFERENCES `4ncov`.`user_info` (`id`)
+    REFERENCES `user_info` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = '供应商基本信息';
 
-CREATE INDEX `fk_material_supplier_info_user_id_idx` ON `4ncov`.`material_supplier_info` (`material_supplier_creator_user_id` ASC);
-
-CREATE TABLE IF NOT EXISTS `4ncov`.`accepted_materials` (
+CREATE TABLE IF NOT EXISTS `accepted_materials` (
   `id` BIGINT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `accepted_material_name` VARCHAR(45) NOT NULL COMMENT '物资名，例如一次性口罩，核酸试剂',
   `accepted_material_standard_name` VARCHAR(45) NOT NULL COMMENT '物资满足的标准名称',
@@ -90,14 +84,14 @@ CREATE TABLE IF NOT EXISTS `4ncov`.`accepted_materials` (
 ENGINE = InnoDB
 COMMENT = '平台目前能够接受处理的物资列表';
 
-CREATE TABLE IF NOT EXISTS `4ncov`.`region_code` (
+CREATE TABLE IF NOT EXISTS `region_code` (
   `id` CHAR(6) NOT NULL COMMENT '6位区划ID',
   `region_name` VARCHAR(45) BINARY NOT NULL COMMENT '行政区划名称，例如“北京市”',
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 COMMENT = '国家规定的行政区划代码表格，方便区域统计用\nhttp://www.mca.gov.cn/article/sj/xzqh/2019/';
 
-CREATE TABLE IF NOT EXISTS `4ncov`.`material_supplied` (
+CREATE TABLE IF NOT EXISTS `material_supplied` (
   `id` BIGINT(10) NOT NULL,
   `material_supplied_contactor_name` VARCHAR(45) NOT NULL COMMENT '物资联系人',
   `material_supplied_contactor_phone` VARCHAR(20) NOT NULL,
@@ -117,36 +111,28 @@ CREATE TABLE IF NOT EXISTS `4ncov`.`material_supplied` (
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_material_supplied_supplier_info_id`
     FOREIGN KEY (`material_supplier_organization_id`)
-    REFERENCES `4ncov`.`material_supplier_info` (`id`)
+    REFERENCES `material_supplier_info` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_material_supplied_user_info_id`
     FOREIGN KEY (`material_supplied_user_id`)
-    REFERENCES `4ncov`.`user_info` (`id`)
+    REFERENCES `user_info` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_material_supplied_material_id`
     FOREIGN KEY (`material_id`)
-    REFERENCES `4ncov`.`accepted_materials` (`id`)
+    REFERENCES `accepted_materials` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_material_supplied_region_code_id`
     FOREIGN KEY (`material_supplied_region_code`)
-    REFERENCES `4ncov`.`region_code` (`id`)
+    REFERENCES `region_code` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = '一条来自供应商的信息，可以被分拆给多个用户';
 
-CREATE INDEX `fk_material_supplier_organization_id_idx` ON `4ncov`.`material_supplied` (`material_supplier_organization_id` ASC);
-
-CREATE INDEX `fk_material_supplied_material_id_idx` ON `4ncov`.`material_supplied` (`material_id` ASC);
-
-CREATE INDEX `fk_material_supplied_user_id_idx` ON `4ncov`.`material_supplied` (`material_supplied_user_id` ASC);
-
-CREATE INDEX `fk_material_supplied_1_idx` ON `4ncov`.`material_supplied` (`material_supplied_region_code` ASC);
-
-CREATE TABLE IF NOT EXISTS `4ncov`.`material_required` (
+CREATE TABLE IF NOT EXISTS `material_required` (
   `id` BIGINT(10) UNSIGNED NOT NULL,
   `material_required_contactor_name` VARCHAR(45) NOT NULL,
   `material_required_contactor_phone` VARCHAR(45) NOT NULL,
@@ -166,36 +152,28 @@ CREATE TABLE IF NOT EXISTS `4ncov`.`material_required` (
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_material_required_user_info_id`
     FOREIGN KEY (`material_required_user_id`)
-    REFERENCES `4ncov`.`user_info` (`id`)
+    REFERENCES `user_info` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_material_required_accepted_materials_id`
     FOREIGN KEY (`material_id`)
-    REFERENCES `4ncov`.`accepted_materials` (`id`)
+    REFERENCES `accepted_materials` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_material_required_hospital_info_id`
     FOREIGN KEY (`material_required_organization_id`)
-    REFERENCES `4ncov`.`hospital_info` (`id`)
+    REFERENCES `hospital_info` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_material_required_region_code_id`
     FOREIGN KEY (`material_required_region_code`)
-    REFERENCES `4ncov`.`region_code` (`id`)
+    REFERENCES `region_code` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = '医院发布的需求，由用户发布，可以被多个供应商满足';
 
-CREATE INDEX `fk_material_required_user_info_id_idx` ON `4ncov`.`material_required` (`material_required_user_id` ASC);
-
-CREATE INDEX `fk_material_required_1_idx` ON `4ncov`.`material_required` (`material_id` ASC);
-
-CREATE INDEX `fk_material_required_hospital_info_id_idx` ON `4ncov`.`material_required` (`material_required_organization_id` ASC);
-
-CREATE INDEX `fk_material_required_region_code_id_idx` ON `4ncov`.`material_required` (`material_required_region_code` ASC);
-
-CREATE TABLE IF NOT EXISTS `4ncov`.`require_supply_match_info` (
+CREATE TABLE IF NOT EXISTS `require_supply_match_info` (
   `id` BIGINT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `material_supplied_id` BIGINT(10) UNSIGNED NOT NULL COMMENT '对应的物资供给表中的ID',
   `material_required_id` BIGINT(10) UNSIGNED NOT NULL COMMENT '对应的物资需求表中的ID',
@@ -207,17 +185,13 @@ CREATE TABLE IF NOT EXISTS `4ncov`.`require_supply_match_info` (
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_require_supply_match_info_material_required_id`
     FOREIGN KEY (`material_required_id`)
-    REFERENCES `4ncov`.`material_required` (`id`)
+    REFERENCES `material_required` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_require_supply_match_info_material_supplied_id`
     FOREIGN KEY (`material_supplied_id`)
-    REFERENCES `4ncov`.`material_supplied` (`material_id`)
+    REFERENCES `material_supplied` (`material_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = '一个供应商和需求的匹配，理论上来说，一个供应商发布的一批物资可以被多个寻求方匹配，一个需求也可以由来自多个供应商的物资满足';
-
-CREATE INDEX `fk_require_supply_match_info_1_idx` ON `4ncov`.`require_supply_match_info` (`material_required_id` ASC);
-
-CREATE INDEX `fk_require_supply_match_info_2_idx` ON `4ncov`.`require_supply_match_info` (`material_supplied_id` ASC);
