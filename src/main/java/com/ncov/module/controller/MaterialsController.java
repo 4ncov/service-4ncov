@@ -2,10 +2,10 @@ package com.ncov.module.controller;
 
 import com.ncov.module.common.SwaggerConstants;
 import com.ncov.module.controller.dto.MaterialDto;
-import com.ncov.module.controller.request.requiredmaterial.MaterialRequest;
+import com.ncov.module.controller.request.material.MaterialRequest;
 import com.ncov.module.controller.resp.Page;
 import com.ncov.module.controller.resp.RestResponse;
-import com.ncov.module.controller.resp.requiredmaterial.MaterialResponse;
+import com.ncov.module.controller.resp.material.MaterialResponse;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

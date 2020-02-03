@@ -1,4 +1,4 @@
-package com.ncov.module.controller.request.requiredmaterial;
+package com.ncov.module.controller.request.material;
 
 import com.ncov.module.controller.dto.MaterialDto;
 import lombok.*;

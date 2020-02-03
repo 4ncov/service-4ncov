@@ -1,4 +1,4 @@
-package com.ncov.module.controller.resp.requiredmaterial;
+package com.ncov.module.controller.resp.material;
 
 import com.ncov.module.controller.dto.MaterialDto;
 import lombok.AllArgsConstructor;
