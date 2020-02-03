@@ -1,5 +1,9 @@
 package com.ncov.module.controller.resp;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 
 /**
@@ -7,6 +11,9 @@ import java.util.List;
  * 2019/7/4 20:11
  * Life is not just about survival.
  */
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Page<T> {
     private List<T> data;
     private long total;

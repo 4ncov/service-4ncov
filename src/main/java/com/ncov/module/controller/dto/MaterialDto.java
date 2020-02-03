@@ -9,10 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class RequesterDto {
+public class MaterialDto {
 
-    private String organisationName;
-    private String contactName;
-    private String phoneNumber;
-    private String shippingAddress;
+    private String name;
+    private Double quantity;
+    private String standard;
+    private String category;
 }

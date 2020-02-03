@@ -1,21 +1,23 @@
-package com.ncov.module.controller.request.supplier;
+package com.ncov.module.controller.resp.supplier;
 
 import lombok.*;
 
-@Data
+import java.util.Date;
+
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SupplierSignUpRequest {
+public class SupplierResponse {
 
+    private Long id;
     private String name;
     private String uniformSocialCreditCode;
     private String address;
-    private String verifyInfoUrl1;
-    private String verifyInfoUrl2;
-    private String verifyInfoUrl3;
     private String contactorName;
     private String contactorTelephone;
-    private String password;
+    private Date gmtCreated;
+    private Date gmtModified;
     private Boolean haveLogistics;
 }

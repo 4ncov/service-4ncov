@@ -1,7 +1,7 @@
 package com.ncov.module.controller;
 
 import com.ncov.module.common.SwaggerConstants;
-import com.ncov.module.controller.request.supplement.SupplementRequest;
+import com.ncov.module.controller.request.suppliedmaterial.SupplementRequest;
 import com.ncov.module.controller.resp.Page;
 import com.ncov.module.controller.resp.RestResponse;
 import com.ncov.module.controller.resp.supplement.SupplementResponse;
@@ -15,7 +15,7 @@ public class SupplementController {
 
     @ApiOperation(
             value = "Create supplement.",
-            tags = SwaggerConstants.TAG_SUPPLEMENTS
+            tags = SwaggerConstants.TAG_SUPPLIED_MATERIALS
     )
     @PostMapping
     public ResponseEntity<RestResponse> create(@RequestBody SupplementRequest supplement) {
@@ -25,7 +25,7 @@ public class SupplementController {
 
     @ApiOperation(
             value = "List supplements.",
-            tags = SwaggerConstants.TAG_SUPPLEMENTS
+            tags = SwaggerConstants.TAG_SUPPLIED_MATERIALS
     )
     @GetMapping
     public ResponseEntity<Page<SupplementResponse>> list(
@@ -37,7 +37,7 @@ public class SupplementController {
 
     @ApiOperation(
             value = "List my supplements.",
-            tags = SwaggerConstants.TAG_SUPPLEMENTS
+            tags = SwaggerConstants.TAG_SUPPLIED_MATERIALS
     )
     @GetMapping("/me")
     public ResponseEntity<Page<SupplementResponse>> listMine(@RequestParam Integer page, @RequestParam Integer size) {

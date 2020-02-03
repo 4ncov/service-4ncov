@@ -1,6 +1,6 @@
 package com.ncov.module.controller.resp.supplement;
 
-import com.ncov.module.controller.dto.CommodityDto;
+import com.ncov.module.controller.dto.MaterialDto;
 import com.ncov.module.controller.dto.SupplierDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,7 +17,7 @@ import java.util.List;
 public class SupplementResponse {
 
     private Long id;
-    private List<CommodityDto> commodities;
+    private List<MaterialDto> commodities;
     private SupplierDto supplier;
     private String supplementImageUrl;
     private String comment;

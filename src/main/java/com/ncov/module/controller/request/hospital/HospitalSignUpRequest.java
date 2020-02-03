@@ -1,4 +1,4 @@
-package com.ncov.module.controller.request.supplier;
+package com.ncov.module.controller.request.hospital;
 
 import lombok.*;
 
@@ -6,7 +6,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SupplierSignUpRequest {
+public class HospitalSignUpRequest {
 
     private String name;
     private String uniformSocialCreditCode;
@@ -17,5 +17,4 @@ public class SupplierSignUpRequest {
     private String contactorName;
     private String contactorTelephone;
     private String password;
-    private Boolean haveLogistics;
 }
