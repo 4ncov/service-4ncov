@@ -181,7 +181,7 @@ public class MaterialsController {
             value = "List supplied materials.",
             tags = SwaggerConstants.TAG_SUPPLIED_MATERIALS
     )
-    @GetMapping("/required-materials")
+    @GetMapping("/supplied-materials")
     @ResponseStatus(HttpStatus.OK)
     public Page<MaterialResponse> listSuppliedMaterials(
             @RequestParam Integer page, @RequestParam Integer size,
@@ -232,7 +232,7 @@ public class MaterialsController {
             value = "List my supplied materials.",
             tags = SwaggerConstants.TAG_SUPPLIED_MATERIALS
     )
-    @GetMapping("/required-materials/me")
+    @GetMapping("/supplied-materials/me")
     public Page<MaterialResponse> listMySuppliedMaterials(@RequestParam Integer page,
                                                           @RequestParam Integer size) {
         // TODO: 2020-01-29
