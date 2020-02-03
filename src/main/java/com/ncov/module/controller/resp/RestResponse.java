@@ -2,6 +2,7 @@ package com.ncov.module.controller.resp;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ncov.module.common.ServiceExecuteResult;
+import lombok.Builder;
 
 /**
  * @author JackJun
@@ -15,6 +16,7 @@ public class RestResponse<T> {
 
     /* Static */
 
+    @Builder
     RestResponse(String message, T data) {
         this.message = message;
         this.data = data;

@@ -6,8 +6,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class SwaggerConstants {
 
-    public static final String TAG_REQUESTERS = "Requesters";
+    public static final String TAG_HOSPITALS = "Hospitals";
     public static final String TAG_SUPPLIERS = "Suppliers";
-    public static final String TAG_REQUIREMENTS = "Requirements";
-    public static final String TAG_SUPPLEMENTS = "Supplements";
+    public static final String TAG_REQUIRED_MATERIALS = "Required Materials";
+    public static final String TAG_SUPPLIED_MATERIALS = "Supplied Materials";
 }
