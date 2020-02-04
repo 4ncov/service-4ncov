@@ -68,4 +68,16 @@ public class GlobalExceptionHandler {
         //TODO 全局异常记录
         return new ResponseEntity<>(RestResponse.getResp("内部程序错误！请联系管理员！"), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    /**
+     * 处理自定义异常
+     */
+    @ExceptionHandler(RRException.class)
+    public ResponseEntity<?> handleRRException(RRException e){
+        //TODO 全局异常记录
+        ByteArrayOutputStream exceptionStream = new ByteArrayOutputStream();
+        e.printStackTrace(new PrintStream(exceptionStream));
+        String exceptionMsg =e.getMsg();
+        return new ResponseEntity<>(RestResponse.getResp(exceptionMsg), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
