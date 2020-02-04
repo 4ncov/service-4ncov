@@ -3,6 +3,8 @@ package com.ncov.module.controller.request.material;
 import com.ncov.module.controller.dto.MaterialDto;
 import lombok.*;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,5 +16,6 @@ public class MaterialRequest {
     private String address;
     private String contactorName;
     private String contactorPhone;
+    private List<String> imageUrls;
     private String comment;
 }
