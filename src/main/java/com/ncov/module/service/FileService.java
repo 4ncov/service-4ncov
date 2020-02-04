@@ -18,9 +18,9 @@ public class FileService {
 
     private JdOssClient jdOssClient;
 
-    public String uploadImage(String category, Long uploaderId, MultipartFile image) {
-        log.info("Uploading image, category=[{}], uploaderId=[{}]", category, uploaderId);
-        String imageName = getImageName(category, uploaderId, FilenameUtils.getExtension(image.getOriginalFilename()));
+    public String uploadImage(String category, MultipartFile image) {
+        log.info("Uploading image, category=[{}]", category);
+        String imageName = getImageName(category, FilenameUtils.getExtension(image.getOriginalFilename()));
         try {
             String imageUrl = jdOssClient.uploadImage(imageName, image);
             log.info("Uploaded image name [{}], imageUrl=[{}]", imageName, imageUrl);
@@ -31,7 +31,7 @@ public class FileService {
         }
     }
 
-    private String getImageName(String imageType, Long uploaderId, String imageExtension) {
-        return String.format("%s-%s-%s.%s", imageType, uploaderId, UUID.randomUUID().toString(), imageExtension);
+    private String getImageName(String imageType, String imageExtension) {
+        return String.format("%s-%s.%s", imageType, UUID.randomUUID().toString(), imageExtension);
     }
 }
