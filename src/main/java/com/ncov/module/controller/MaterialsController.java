@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 
 @RestController
@@ -30,12 +31,14 @@ public class MaterialsController {
                 .message("Required material created.")
                 .data(MaterialResponse.builder()
                         .id(1L)
-                        .material(MaterialDto.builder()
-                                .name("N95口罩")
-                                .category("口罩")
-                                .quantity(100000.0)
-                                .standard("ISO-8859-1")
-                                .build())
+                        .materials(Collections.singletonList(
+                                MaterialDto.builder()
+                                        .name("N95口罩")
+                                        .category("口罩")
+                                        .quantity(100000.0)
+                                        .standard("ISO-8859-1")
+                                        .build()
+                        ))
                         .address("湖北省武汉市东西湖区银潭路1号")
                         .contactorName("张三")
                         .contactorPhone("18801234567")
@@ -64,12 +67,14 @@ public class MaterialsController {
                 .data(Arrays.asList(
                         MaterialResponse.builder()
                                 .id(1L)
-                                .material(MaterialDto.builder()
-                                        .name("N95口罩")
-                                        .category("口罩")
-                                        .quantity(100000.0)
-                                        .standard("ISO-8859-1")
-                                        .build())
+                                .materials(Collections.singletonList(
+                                        MaterialDto.builder()
+                                                .name("N95口罩")
+                                                .category("口罩")
+                                                .quantity(100000.0)
+                                                .standard("ISO-8859-1")
+                                                .build()
+                                ))
                                 .address("湖北省武汉市东西湖区银潭路1号")
                                 .contactorName("张三")
                                 .contactorPhone("18801234567")
@@ -80,12 +85,20 @@ public class MaterialsController {
                                 .build(),
                         MaterialResponse.builder()
                                 .id(2L)
-                                .material(MaterialDto.builder()
-                                        .name("医用防护服")
-                                        .category("防护服")
-                                        .quantity(2000.0)
-                                        .standard("ISO-8859-10")
-                                        .build())
+                                .materials(Arrays.asList(
+                                        MaterialDto.builder()
+                                                .name("医用防护服")
+                                                .category("防护服")
+                                                .quantity(2000.0)
+                                                .standard("ISO-8859-10")
+                                                .build(),
+                                        MaterialDto.builder()
+                                                .name("口罩")
+                                                .category("口罩")
+                                                .quantity(300000.0)
+                                                .standard("ISO-8859-1")
+                                                .build()
+                                ))
                                 .address("湖北省武汉市东西湖区银潭路1号")
                                 .contactorName("张三")
                                 .contactorPhone("18801234567")
@@ -113,12 +126,14 @@ public class MaterialsController {
                 .data(Arrays.asList(
                         MaterialResponse.builder()
                                 .id(1L)
-                                .material(MaterialDto.builder()
-                                        .name("N95口罩")
-                                        .category("口罩")
-                                        .quantity(100000.0)
-                                        .standard("ISO-8859-1")
-                                        .build())
+                                .materials(Collections.singletonList(
+                                        MaterialDto.builder()
+                                                .name("N95口罩")
+                                                .category("口罩")
+                                                .quantity(100000.0)
+                                                .standard("ISO-8859-1")
+                                                .build()
+                                ))
                                 .address("湖北省武汉市东西湖区银潭路1号")
                                 .contactorName("张三")
                                 .contactorPhone("18801234567")
@@ -129,12 +144,20 @@ public class MaterialsController {
                                 .build(),
                         MaterialResponse.builder()
                                 .id(2L)
-                                .material(MaterialDto.builder()
-                                        .name("医用防护服")
-                                        .category("防护服")
-                                        .quantity(2000.0)
-                                        .standard("ISO-8859-10")
-                                        .build())
+                                .materials(Arrays.asList(
+                                        MaterialDto.builder()
+                                                .name("医用防护服")
+                                                .category("防护服")
+                                                .quantity(2000.0)
+                                                .standard("ISO-8859-10")
+                                                .build(),
+                                        MaterialDto.builder()
+                                                .name("口罩")
+                                                .category("口罩")
+                                                .quantity(300000.0)
+                                                .standard("ISO-8859-1")
+                                                .build()
+                                ))
                                 .address("湖北省武汉市东西湖区银潭路1号")
                                 .contactorName("张三")
                                 .contactorPhone("18801234567")
@@ -160,12 +183,12 @@ public class MaterialsController {
                 .message("Required material created.")
                 .data(MaterialResponse.builder()
                         .id(1L)
-                        .material(MaterialDto.builder()
+                        .materials(Collections.singletonList(MaterialDto.builder()
                                 .name("N95口罩")
                                 .category("口罩")
                                 .quantity(100000.0)
                                 .standard("ISO-8859-1")
-                                .build())
+                                .build()))
                         .address("湖北省武汉市东西湖区银潭路1号")
                         .contactorName("张三")
                         .contactorPhone("18801234567")
@@ -181,7 +204,7 @@ public class MaterialsController {
             value = "List supplied materials.",
             tags = SwaggerConstants.TAG_SUPPLIED_MATERIALS
     )
-    @GetMapping("/required-materials")
+    @GetMapping("/supplied-materials")
     @ResponseStatus(HttpStatus.OK)
     public Page<MaterialResponse> listSuppliedMaterials(
             @RequestParam Integer page, @RequestParam Integer size,
@@ -194,12 +217,14 @@ public class MaterialsController {
                 .data(Arrays.asList(
                         MaterialResponse.builder()
                                 .id(1L)
-                                .material(MaterialDto.builder()
-                                        .name("N95口罩")
-                                        .category("口罩")
-                                        .quantity(100000.0)
-                                        .standard("ISO-8859-1")
-                                        .build())
+                                .materials(Collections.singletonList(
+                                        MaterialDto.builder()
+                                                .name("N95口罩")
+                                                .category("口罩")
+                                                .quantity(100000.0)
+                                                .standard("ISO-8859-1")
+                                                .build()
+                                ))
                                 .address("湖北省武汉市东西湖区银潭路1号")
                                 .contactorName("张三")
                                 .contactorPhone("18801234567")
@@ -210,12 +235,14 @@ public class MaterialsController {
                                 .build(),
                         MaterialResponse.builder()
                                 .id(2L)
-                                .material(MaterialDto.builder()
-                                        .name("医用防护服")
-                                        .category("防护服")
-                                        .quantity(2000.0)
-                                        .standard("ISO-8859-10")
-                                        .build())
+                                .materials(Collections.singletonList(
+                                        MaterialDto.builder()
+                                                .name("医用防护服")
+                                                .category("防护服")
+                                                .quantity(2000.0)
+                                                .standard("ISO-8859-10")
+                                                .build()
+                                ))
                                 .address("湖北省武汉市东西湖区银潭路1号")
                                 .contactorName("张三")
                                 .contactorPhone("18801234567")
@@ -232,7 +259,7 @@ public class MaterialsController {
             value = "List my supplied materials.",
             tags = SwaggerConstants.TAG_SUPPLIED_MATERIALS
     )
-    @GetMapping("/required-materials/me")
+    @GetMapping("/supplied-materials/me")
     public Page<MaterialResponse> listMySuppliedMaterials(@RequestParam Integer page,
                                                           @RequestParam Integer size) {
         // TODO: 2020-01-29
@@ -243,12 +270,14 @@ public class MaterialsController {
                 .data(Arrays.asList(
                         MaterialResponse.builder()
                                 .id(1L)
-                                .material(MaterialDto.builder()
-                                        .name("N95口罩")
-                                        .category("口罩")
-                                        .quantity(100000.0)
-                                        .standard("ISO-8859-1")
-                                        .build())
+                                .materials(Collections.singletonList(
+                                        MaterialDto.builder()
+                                                .name("N95口罩")
+                                                .category("口罩")
+                                                .quantity(100000.0)
+                                                .standard("ISO-8859-1")
+                                                .build()
+                                ))
                                 .address("湖北省武汉市东西湖区银潭路1号")
                                 .contactorName("张三")
                                 .contactorPhone("18801234567")
@@ -259,12 +288,14 @@ public class MaterialsController {
                                 .build(),
                         MaterialResponse.builder()
                                 .id(2L)
-                                .material(MaterialDto.builder()
-                                        .name("医用防护服")
-                                        .category("防护服")
-                                        .quantity(2000.0)
-                                        .standard("ISO-8859-10")
-                                        .build())
+                                .materials(Collections.singletonList(
+                                        MaterialDto.builder()
+                                                .name("医用防护服")
+                                                .category("防护服")
+                                                .quantity(2000.0)
+                                                .standard("ISO-8859-10")
+                                                .build()
+                                ))
                                 .address("湖北省武汉市东西湖区银潭路1号")
                                 .contactorName("张三")
                                 .contactorPhone("18801234567")

@@ -47,28 +47,28 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
      */
     @Override
     protected void doFilterInternal(@NotNull HttpServletRequest httpServletRequest, @NotNull HttpServletResponse httpServletResponse, @NotNull FilterChain filterChain) throws ServletException, IOException {
-        if (shouldPassSwaggerUrl(httpServletRequest)) {
-            logger.info("Swagger request allowed {}", httpServletRequest.getRequestURI());
-        } else {
-            String jwt = getJwtFormRequest(httpServletRequest);
-
-            try {
-                if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
-                    Authentication authentication = this.jwtTokenProvider.getAuthentication(jwt);
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                } else {
-                    Authentication authentication = new AnonymousAuthenticationToken("anonymous",
-                            new User("guest", "guest", Collections.EMPTY_LIST),
-                            Collections.EMPTY_LIST);
-                    String token = this.jwtTokenProvider.generateToken(authentication);
-                    httpServletResponse.setHeader(SET_TOKEN, token);
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                }
-            } catch (ExpiredJwtException ex) {
-                logger.info("Security exception for user {} - {}", ex.getClaims().getSubject(), ex.getMessage());
-                httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            }
-        }
+//        if (shouldPassSwaggerUrl(httpServletRequest)) {
+//            logger.info("Swagger request allowed {}", httpServletRequest.getRequestURI());
+//        } else {
+//            String jwt = getJwtFormRequest(httpServletRequest);
+//
+//            try {
+//                if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
+//                    Authentication authentication = this.jwtTokenProvider.getAuthentication(jwt);
+//                    SecurityContextHolder.getContext().setAuthentication(authentication);
+//                } else {
+//                    Authentication authentication = new AnonymousAuthenticationToken("anonymous",
+//                            new User("guest", "guest", Collections.EMPTY_LIST),
+//                            Collections.EMPTY_LIST);
+//                    String token = this.jwtTokenProvider.generateToken(authentication);
+//                    httpServletResponse.setHeader(SET_TOKEN, token);
+//                    SecurityContextHolder.getContext().setAuthentication(authentication);
+//                }
+//            } catch (ExpiredJwtException ex) {
+//                logger.info("Security exception for user {} - {}", ex.getClaims().getSubject(), ex.getMessage());
+//                httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+//            }
+//        }
 
         filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
