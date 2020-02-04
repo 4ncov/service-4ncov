@@ -27,7 +27,7 @@ import javax.inject.Inject;
  */
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
+//@EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Inject
@@ -69,17 +69,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf()
                 .disable()
-                .exceptionHandling()
-                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                .and()
+//                .exceptionHandling()
+//                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+//                .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/auth").permitAll()
-                .antMatchers("/swagger-ui.html").permitAll()
-                .antMatchers("/api/**")
-                .authenticated();
+                .antMatchers("/api/**").permitAll();
+//                .antMatchers("/api/auth").permitAll()
+//                .antMatchers("/swagger-ui.html").permitAll()
+//                .antMatchers("/api/**")
+//                .authenticated();
 
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(corsSecurityFilter, JwtAuthenticationFilter.class);
