@@ -56,8 +56,8 @@ security:
   jwtExpirationInMs: 259200000
 
 oss:
-  endpoint: ${OSS_ENDPOINT}
-  region: ${OSS_REGION}
-  bucketName: ${OSS_BUCKET_NAME}
-  accessKey: ${OSS_ACCESS_KEY}
-  secretKey: ${OSS_SECRET_KEY}
+  endpoint: ${OSS_ENDPOINT:https://s3.cn-north-1.jdcloud-oss.com}
+  region: ${OSS_REGION:cn-north-1}
+  bucketName: ${OSS_BUCKET_NAME:4ncov}
+  accessKey: ${OSS_ACCESS_KEY:<access-key>}
+  secretKey: ${OSS_SECRET_KEY:<secret-key>}

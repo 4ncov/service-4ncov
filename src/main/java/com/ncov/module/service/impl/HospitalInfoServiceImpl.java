@@ -5,7 +5,6 @@ import com.ncov.module.common.exception.RRException;
 import com.ncov.module.controller.request.hospital.HospitalSignUpRequest;
 import com.ncov.module.controller.resp.hospital.HospitalResponse;
 import com.ncov.module.entity.HospitalInfoEntity;
-import com.ncov.module.entity.SupplierInfoEntity;
 import com.ncov.module.entity.UserInfoEntity;
 import com.ncov.module.mapper.HospitalInfoMapper;
 import com.ncov.module.service.HospitalInfoService;
@@ -19,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 
-@Service("HospitalInfoService")
+@Service("hospitalInfoService")
 public class HospitalInfoServiceImpl extends ServiceImpl<HospitalInfoMapper, HospitalInfoEntity> implements HospitalInfoService {
 
     private static Logger logger = LoggerFactory.getLogger(SupplierServiceImpl.class);
@@ -90,10 +89,10 @@ public class HospitalInfoServiceImpl extends ServiceImpl<HospitalInfoMapper, Hos
      * @return
      */
     public Long  saveUserInfo(HospitalSignUpRequest hospitalSignUpRequest){
-//        Integer count=userInfoService.findUserCountByPhoneOrNickName(hospitalSignUpRequest.getContactorTelephone(),hospitalSignUpRequest.getContactorName());
-//        if(count>0){
-//            throw new RRException("该供应商已经注册，请使用手机号登陆！！");
-//        }
+        Integer count=userInfoService.findUserCountByPhoneOrNickName(hospitalSignUpRequest.getContactorTelephone(),hospitalSignUpRequest.getContactorName());
+        if(count>0){
+            throw new RRException("该医院已经注册，请使用手机号登陆！！");
+        }
         UserInfoEntity userInfoEntity=new UserInfoEntity();
         //昵称为医院名称
         userInfoEntity.setUserNickName(hospitalSignUpRequest.getName());

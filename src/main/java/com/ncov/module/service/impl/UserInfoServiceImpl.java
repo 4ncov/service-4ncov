@@ -1,6 +1,7 @@
 package com.ncov.module.service.impl;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ncov.module.entity.UserInfoEntity;
 import com.ncov.module.mapper.UserInfoMapper;
@@ -21,9 +22,12 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfoEnt
 
     @Override
     public Integer findUserCountByPhoneOrNickName(String phone, String nickName) {
-        Map<String,Object> parms=new HashMap<>();
-        parms.put("phone",phone);
-        parms.put("nickName",nickName);
-        return this.baseMapper.selectCountByPhoneOrNickName(parms);
+        QueryWrapper<UserInfoEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_phone",phone).or().eq("user_nick_name",nickName);
+        int count = this.count(queryWrapper);
+//        Map<String,Object> parms=new HashMap<>();
+//        parms.put("phone",phone);
+//        parms.put("nickName",nickName);
+        return count;
     }
 }
