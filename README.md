@@ -32,6 +32,11 @@ java -jar -Dspring.profiles.active=${ACTIVE_PROFILE} \
     -Dspring.datasource.password=${DB_PASSWORD} \
     -Dspring.datasource.url=${DB_URL} \
     -Dsecurity.jwtSecret=${JWT_SECRET} \
+    -Doss.endpoint=${OSS_ENDPOINT} \
+    -Doss.region=${OSS_REGION} \
+    -Doss.bucketName=${OSS_BUCKET_NAME} \
+    -Doss.accessKey=${OSS_ACCESS_KEY} \
+    -Doss.secretKey=${OSS_SECRET_KEY} \
     target/4ncov-0.0.1-SNAPSHOT.jar 
 # 通过传入ACTIVE_PROFILE的值确定当前环境配置,可选项:dev,prod
 ```
@@ -47,6 +52,11 @@ docker run -dp 8000:8000 --name 4ncov-service \
     -e DB_HOST=${DB_HOST} \ # database host
     -e DB_PORT=${DB_PORT} \ # database port
     -e JWT_SECRET=${JWT_SECRET} \ # jwt secret
+    -e OSS_ENDPOINT=${OSS_ENDPOINT} \ # oss endpoint
+    -e OSS_REGION=${OSS_REGION} \ # oss region
+    -e OSS_BUCKET_NAME=${OSS_BUCKET_NAME} \ # oss bucket name
+    -e OSS_ACCESS_KEY=${OSS_ACCESS_KEY} \ # oss access key
+    -e OSS_SECRET_KEY=${OSS_SECRET_KEY} \ # oss secret key
     4ncov/service
 ```
 
