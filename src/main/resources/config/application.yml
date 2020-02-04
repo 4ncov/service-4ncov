@@ -54,3 +54,10 @@ security:
   jwtSecret: ${JWT_SECRET:123456}
   # 一个月
   jwtExpirationInMs: 259200000
+
+oss:
+  endpoint: ${OSS_ENDPOINT}
+  region: ${OSS_REGION}
+  bucketName: ${OSS_BUCKET_NAME}
+  accessKey: ${OSS_ACCESS_KEY}
+  secretKey: ${OSS_SECRET_KEY}

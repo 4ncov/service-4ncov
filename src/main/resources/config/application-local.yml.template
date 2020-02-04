@@ -16,3 +16,10 @@ security:
   jwtSecret: 123456
   # 一个月
   jwtExpirationInMs: 259200000
+
+ oss:
+   endpoint: 'https://s3.cn-north-1.jdcloud-oss.com'
+   region: cn-north-1
+   bucketName: 4ncov
+   accessKey: <access-key>
+   secretKey: <secret-key>
