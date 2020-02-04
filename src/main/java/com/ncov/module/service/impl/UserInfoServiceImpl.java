@@ -24,6 +24,6 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfoEnt
         Map<String,Object> parms=new HashMap<>();
         parms.put("phone",phone);
         parms.put("nickName",nickName);
-        return this.baseMapper.selectUserCountByPhoneOrNickName(parms);
+        return this.baseMapper.selectCountByPhoneOrNickName(parms);
     }
 }

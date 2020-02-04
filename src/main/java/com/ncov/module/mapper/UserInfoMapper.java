@@ -12,5 +12,5 @@ public interface UserInfoMapper extends BaseMapper<UserInfoEntity> {
      * 按照手机号或者昵称查询
      * @return
      */
-    Integer selectUserCountByPhoneOrNickName( Map<String,Object> params);
+    Integer selectCountByPhoneOrNickName( Map<String,Object> params);
 }

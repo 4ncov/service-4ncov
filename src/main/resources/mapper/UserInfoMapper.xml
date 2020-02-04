@@ -4,11 +4,11 @@
 <mapper namespace="com.ncov.module.mapper.UserInfoMapper">
 
 
-     <select id="selectUserCountByPhoneOrNickName" resultType="integer">
+     <select id="selectCountByPhoneOrNickName" resultType="integer" parameterType="map">
          select count(1)
          from user_info
          <where>
-             user_nick_name = #{nickName,jdbcType=VARCHAR}  or phone = #{phone,jdbcType=VARCHAR}
+             user_nick_name = #{nickName,jdbcType=VARCHAR}  or  phone = #{phone,jdbcType=VARCHAR}
          </where>
      </select>
 </mapper>

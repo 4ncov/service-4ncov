@@ -4,7 +4,9 @@ import com.ncov.module.common.SwaggerConstants;
 import com.ncov.module.controller.request.hospital.HospitalSignUpRequest;
 import com.ncov.module.controller.resp.RestResponse;
 import com.ncov.module.controller.resp.hospital.HospitalResponse;
+import com.ncov.module.service.HospitalInfoService;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,25 +20,20 @@ import java.util.Date;
 @RequestMapping("/api/hospitals")
 public class HospitalController {
 
+    @Autowired
+    private HospitalInfoService hospitalInfoService;
+
     @ApiOperation(
             value = "Hospital signup.",
             tags = SwaggerConstants.TAG_HOSPITALS
     )
     @PostMapping("/sign-up")
     public ResponseEntity<RestResponse<HospitalResponse>> signUp(@RequestBody HospitalSignUpRequest signupRequest) {
+        HospitalResponse hospitalResponse = hospitalInfoService.signUp(signupRequest);
         // TODO
         return new ResponseEntity<>(RestResponse.<HospitalResponse>builder()
                 .message("Hospital signed up.")
-                .data(HospitalResponse.builder()
-                        .id(3L)
-                        .name("武汉市金银潭医院")
-                        .uniformSocialCreditCode("123456789012345678")
-                        .address("湖北省武汉市东西湖区银潭路1号")
-                        .contactorName("张三")
-                        .contactorTelephone("18801234567")
-                        .gmtCreated(new Date())
-                        .gmtModified(new Date())
-                        .build())
+                .data(hospitalResponse)
                 .build(), HttpStatus.OK);
     }
 }
