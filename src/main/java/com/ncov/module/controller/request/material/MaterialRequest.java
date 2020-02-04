@@ -11,7 +11,7 @@ import java.util.List;
 @Builder
 public class MaterialRequest {
 
-    private MaterialDto material;
+    private List<MaterialDto> materials;
     private String hospitalName;
     private String address;
     private String contactorName;

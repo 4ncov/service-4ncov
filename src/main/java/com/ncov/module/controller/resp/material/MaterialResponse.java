@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -15,7 +16,7 @@ import java.util.Date;
 public class MaterialResponse {
 
     private Long id;
-    private MaterialDto material;
+    private List<MaterialDto> materials;
     private String address;
     private String contactorName;
     private String contactorPhone;
