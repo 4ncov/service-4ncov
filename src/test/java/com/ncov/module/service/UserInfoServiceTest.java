@@ -2,13 +2,19 @@ package com.ncov.module.service;
 
 import com.ncov.module.common.enums.UserRole;
 import com.ncov.module.common.exception.DuplicateException;
+import com.ncov.module.controller.resp.user.SignInResponse;
 import com.ncov.module.entity.UserInfoEntity;
 import com.ncov.module.mapper.UserInfoMapper;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.impl.DefaultJwtParser;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.Date;
@@ -27,6 +33,9 @@ class UserInfoServiceTest {
     void setUp() {
         MockitoAnnotations.initMocks(this);
         ReflectionTestUtils.setField(userInfoService, "baseMapper", userInfoMapper);
+        ReflectionTestUtils.setField(userInfoService, "jwtSecret", "123456");
+        ReflectionTestUtils.setField(userInfoService, "jwtExpirationInMs", 259200000L);
+        when(userInfoMapper.findByUserPhone(anyString())).thenReturn(UserInfoEntity.builder().id(3L).userRoleId(2).userNickName("Nick test").userPasswordSHA256(DigestUtils.sha256Hex("password")).build());
     }
 
     @Test
@@ -43,5 +52,32 @@ class UserInfoServiceTest {
         when(userInfoMapper.selectCountByPhoneOrNickName(anyString(), anyString())).thenReturn(1);
 
         assertThrows(DuplicateException.class, () -> userInfoService.createUniqueUser(UserInfoEntity.builder().userNickName("nick").userPasswordSHA256("abc").gmtCreated(new Date()).userPhone("12345678901").userRoleId(UserRole.SUPPLIER.getRoleId()).build()));
+    }
+
+    @Test
+    void should_return_token_and_expiration_time_when_sign_in_given_phone_and_password() {
+        SignInResponse response = userInfoService.signIn("18800001111", "password");
+
+        assertTrue(StringUtils.isNotEmpty(response.getToken()));
+        assertTrue(new Date().getTime() < response.getExpiresAt().getTime());
+        assertTrue(new DefaultJwtParser().isSigned(response.getToken()));
+        Claims jwtClaims = new DefaultJwtParser().setSigningKey("123456").parseClaimsJws(response.getToken()).getBody();
+        assertEquals(3L, jwtClaims.get("id", Long.class).longValue());
+        assertEquals("Nick test", jwtClaims.get("userNickName", String.class));
+        assertEquals(UserRole.SUPPLIER.name(), jwtClaims.get("userRole", String.class));
+    }
+
+    @Test
+    void should_throw_bad_credential_exception_when_sign_in_given_phone_not_exist() {
+        when(userInfoMapper.findByUserPhone(anyString())).thenReturn(null);
+
+        assertThrows(BadCredentialsException.class, () -> userInfoService.signIn("18900001111", "password"));
+    }
+
+    @Test
+    void should_throw_bad_credential_exception_when_sign_in_given_password_does_not_match_with_record() {
+        when(userInfoMapper.findByUserPhone(anyString())).thenReturn(UserInfoEntity.builder().userPasswordSHA256("correctpassword").build());
+
+        assertThrows(BadCredentialsException.class, () -> userInfoService.signIn("18800001111", "wrongpassword"));
     }
 }
