@@ -1,6 +1,7 @@
 package com.ncov.module.controller;
 
 import com.ncov.module.common.SwaggerConstants;
+import com.ncov.module.controller.request.user.PasswordResetRequest;
 import com.ncov.module.controller.request.user.SignInRequest;
 import com.ncov.module.controller.resp.RestResponse;
 import com.ncov.module.controller.resp.user.SignInResponse;
@@ -23,5 +24,14 @@ public class UserController {
     public RestResponse<SignInResponse> signIn(@RequestBody SignInRequest signInRequest) {
         return RestResponse.getResp("Sign-in successful.",
                 SignInResponse.builder().token("token123456").expiresAt(new Date()).build());
+    }
+
+    @ApiOperation(
+            value = "Reset password.",
+            tags = SwaggerConstants.TAG_USERS
+    )
+    @ResponseStatus(code = HttpStatus.OK)
+    public RestResponse<Object> resetPassword(@RequestBody PasswordResetRequest passwordResetRequest) {
+        return RestResponse.getResp("Password reset successful.");
     }
 }
