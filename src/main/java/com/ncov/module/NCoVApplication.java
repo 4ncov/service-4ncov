@@ -1,6 +1,7 @@
 package com.ncov.module;
 
 import com.ncov.module.common.Constants;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -13,9 +14,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 @SpringBootApplication
+@Slf4j
 public class NCoVApplication extends SpringBootServletInitializer {
-
-    private static Logger logger = LoggerFactory.getLogger(NCoVApplication.class);
 
     public static void main(String[] args) throws UnknownHostException {
         if (System.getProperty(Constants.SPRING_PROFILE_KEY) == null) {
@@ -23,7 +23,7 @@ public class NCoVApplication extends SpringBootServletInitializer {
         }
         SpringApplication app = new SpringApplication(NCoVApplication.class);
         Environment env = app.run(args).getEnvironment();
-        logger.info("\n----------------------------------------------------------\n\t" +
+        log.info("\n----------------------------------------------------------\n\t" +
                         "Application '{}' is running! Access URLs:\n\t" +
                         "Local: \t\thttp://localhost:{}\n\t" +
                         "External: \thttp://{}:{}\n----------------------------------------------------------",

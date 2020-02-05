@@ -4,7 +4,6 @@ import com.ncov.module.common.SwaggerConstants;
 import com.ncov.module.controller.request.hospital.HospitalSignUpRequest;
 import com.ncov.module.controller.resp.RestResponse;
 import com.ncov.module.controller.resp.hospital.HospitalResponse;
-import com.ncov.module.service.HospitalInfoService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,8 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Date;
 
 @RestController
 @RequestMapping("/api/hospitals")

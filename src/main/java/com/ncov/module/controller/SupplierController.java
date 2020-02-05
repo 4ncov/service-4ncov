@@ -4,14 +4,11 @@ import com.ncov.module.common.SwaggerConstants;
 import com.ncov.module.controller.request.supplier.SupplierSignUpRequest;
 import com.ncov.module.controller.resp.RestResponse;
 import com.ncov.module.controller.resp.supplier.SupplierResponse;
-import com.ncov.module.service.SupplierService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Date;
 
 @RestController
 @RequestMapping("/api/suppliers")

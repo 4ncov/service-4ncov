@@ -18,7 +18,7 @@ import java.util.List;
 @Builder
 @TableName("material_supplier_info")
 public class SupplierInfoEntity {
-    @TableId(value="id", type= IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     private Date gmtCreated;
@@ -43,6 +43,6 @@ public class SupplierInfoEntity {
 
     private String materialSupplierContactorPhone;
 
-    private Integer haveLogistics;
+    private Boolean haveLogistics;
 
 }
