@@ -2,7 +2,6 @@ package com.ncov.module.service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ncov.module.common.enums.UserRole;
-import com.ncov.module.common.exception.DuplicateException;
 import com.ncov.module.controller.request.hospital.HospitalSignUpRequest;
 import com.ncov.module.controller.resp.hospital.HospitalResponse;
 import com.ncov.module.entity.HospitalInfoEntity;
@@ -10,6 +9,7 @@ import com.ncov.module.entity.UserInfoEntity;
 import com.ncov.module.mapper.HospitalInfoMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,15 +57,11 @@ public class HospitalInfoService extends ServiceImpl<HospitalInfoMapper, Hospita
     }
 
     private UserInfoEntity saveUserInfo(HospitalSignUpRequest hospitalSignUpRequest) {
-        Integer count = userInfoService.findUserCountByPhoneOrNickName(
-                hospitalSignUpRequest.getContactorTelephone(), hospitalSignUpRequest.getContactorName());
-        if (count > 0) {
-            throw new DuplicateException("该医院已经注册，请使用手机号登陆！！");
-        }
-        return this.userInfoService.saveUserInfo(UserInfoEntity.builder()
+        return userInfoService.createUniqueUser(UserInfoEntity.builder()
                 .userNickName(hospitalSignUpRequest.getName())
                 .userPhone(hospitalSignUpRequest.getContactorTelephone())
                 .userRoleId(UserRole.HOSPITAL.getRoleId())
+                .userPasswordSHA256(DigestUtils.sha256Hex(hospitalSignUpRequest.getPassword()))
                 .gmtCreated(new Date())
                 .build());
     }

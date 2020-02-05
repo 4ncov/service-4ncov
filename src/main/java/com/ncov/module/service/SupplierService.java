@@ -1,9 +1,7 @@
 package com.ncov.module.service;
 
-
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ncov.module.common.enums.UserRole;
-import com.ncov.module.common.exception.DuplicateException;
 import com.ncov.module.controller.request.supplier.SupplierSignUpRequest;
 import com.ncov.module.controller.resp.supplier.SupplierResponse;
 import com.ncov.module.entity.UserInfoEntity;
@@ -11,6 +9,7 @@ import com.ncov.module.mapper.SupplierMapper;
 import com.ncov.module.entity.SupplierInfoEntity;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,6 +48,7 @@ public class SupplierService extends ServiceImpl<SupplierMapper, SupplierInfoEnt
                 .materialSupplierCompanyAddress(supplierSignUpRequest.getAddress())
                 .materialSupplierUniformSocialCreditCode(supplierSignUpRequest.getUniformSocialCreditCode())
                 .materialSupplierCreatorUserId(userId)
+                .haveLogistics(supplierSignUpRequest.getHaveLogistics())
                 .gmtCreated(new Date())
                 .build();
         supplierInfo.setMaterialSupplierVerifyImageUrls(imageUrls);
@@ -58,15 +58,11 @@ public class SupplierService extends ServiceImpl<SupplierMapper, SupplierInfoEnt
     }
 
     private UserInfoEntity saveUserInfo(SupplierSignUpRequest supplierSignUpRequest) {
-        Integer count = userInfoService.findUserCountByPhoneOrNickName(
-                supplierSignUpRequest.getContactorTelephone(), supplierSignUpRequest.getContactorName());
-        if (count > 0) {
-            throw new DuplicateException("该供应商已经注册，请使用手机号登陆！！");
-        }
-        return this.userInfoService.saveUserInfo(UserInfoEntity.builder()
+        return userInfoService.createUniqueUser(UserInfoEntity.builder()
                 .userNickName(supplierSignUpRequest.getName())
                 .gmtCreated(new Date())
                 .userPhone(supplierSignUpRequest.getContactorTelephone())
+                .userPasswordSHA256(DigestUtils.sha256Hex(supplierSignUpRequest.getPassword()))
                 .userRoleId(UserRole.SUPPLIER.getRoleId())
                 .build());
     }

@@ -3,14 +3,11 @@ package com.ncov.module.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ncov.module.entity.UserInfoEntity;
 import org.apache.ibatis.annotations.Mapper;
-
-import java.util.Map;
+import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface UserInfoMapper extends BaseMapper<UserInfoEntity> {
-    /**
-     * 按照手机号或者昵称查询
-     * @return
-     */
-    Integer selectCountByPhoneOrNickName( Map<String,Object> params);
+
+    Integer selectCountByPhoneOrNickName(@Param("userPhone") String userPhone,
+                                         @Param("userNickName") String userNickName);
 }

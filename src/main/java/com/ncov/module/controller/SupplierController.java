@@ -8,7 +8,6 @@ import com.ncov.module.service.SupplierService;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,11 +22,9 @@ public class SupplierController {
             tags = SwaggerConstants.TAG_SUPPLIERS
     )
     @PostMapping("/sign-up")
-    public ResponseEntity<RestResponse<SupplierResponse>> signUp(@RequestBody SupplierSignUpRequest signUpRequest) {
+    @ResponseStatus(code = HttpStatus.CREATED)
+    public RestResponse<SupplierResponse> signUp(@RequestBody SupplierSignUpRequest signUpRequest) {
         SupplierResponse supplierResponse = supplierService.signUp(signUpRequest);
-        return new ResponseEntity<>(RestResponse.<SupplierResponse>builder()
-                .message("Supplier signed up.")
-                .data(supplierResponse)
-                .build(), HttpStatus.OK);
+        return RestResponse.getResp("Supplier signed up.", supplierResponse);
     }
 }

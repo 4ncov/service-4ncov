@@ -22,12 +22,9 @@ public class HospitalController {
             tags = SwaggerConstants.TAG_HOSPITALS
     )
     @PostMapping("/sign-up")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(code = HttpStatus.CREATED)
     public RestResponse<HospitalResponse> signUp(@RequestBody HospitalSignUpRequest signupRequest) {
         HospitalResponse hospitalResponse = hospitalInfoService.signUp(signupRequest);
-        return RestResponse.<HospitalResponse>builder()
-                .message("Hospital signed up.")
-                .data(hospitalResponse)
-                .build();
+        return RestResponse.getResp("Hospital signed up.", hospitalResponse);
     }
 }
