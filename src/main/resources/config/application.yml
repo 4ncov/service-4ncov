@@ -34,9 +34,9 @@ spring:
   application:
     name:  4nCoV-Platform
   datasource:
-    username: ${DB_USERNAME:root}
-    password: ${DB_PASSWORD:root}
-    url: jdbc:mysql://${DB_HOST:127.0.0.1}:${DB_PORT:3306}/wuhan?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    url: jdbc:mysql://${DB_HOST}:${DB_PORT}/wuhan?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
@@ -51,13 +51,13 @@ spring:
     enabled: true
 
 security:
-  jwtSecret: ${JWT_SECRET:123456}
+  jwtSecret: ${JWT_SECRET}
   # 一个月
   jwtExpirationInMs: 259200000
 
 oss:
-  endpoint: ${OSS_ENDPOINT:https://s3.cn-north-1.jdcloud-oss.com}
-  region: ${OSS_REGION:cn-north-1}
-  bucketName: ${OSS_BUCKET_NAME:4ncov}
-  accessKey: ${OSS_ACCESS_KEY:<access-key>}
-  secretKey: ${OSS_SECRET_KEY:<secret-key>}
+  endpoint: ${OSS_ENDPOINT}
+  region: ${OSS_REGION}
+  bucketName: ${OSS_BUCKET_NAME}
+  accessKey: ${OSS_ACCESS_KEY}
+  secretKey: ${OSS_SECRET_KEY}

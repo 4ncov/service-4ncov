@@ -195,5 +195,3 @@ CREATE TABLE IF NOT EXISTS `require_supply_match_info` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = '一个供应商和需求的匹配，理论上来说，一个供应商发布的一批物资可以被多个寻求方匹配，一个需求也可以由来自多个供应商的物资满足';
-
-insert into user_role (user_role_desc,gmt_created) values ('系统管理员',now()),('供应商',now()),('需求方',now());
