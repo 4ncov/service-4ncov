@@ -26,4 +26,5 @@ public class UserInfoEntity {
     private Date gmtModified;
     private String userPhone;
     private Integer userRoleId;
+    private String userIdentificationNumber;
 }

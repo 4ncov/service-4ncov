@@ -33,7 +33,7 @@ public class SupplierService extends ServiceImpl<SupplierMapper, SupplierInfoEnt
                 .haveLogistics(supplierInfo.getHaveLogistics())
                 .name(supplierInfo.getMaterialSupplierName())
                 .contactorTelephone(supplierInfo.getMaterialSupplierContactorPhone())
-                .identificationNumber(supplierInfo.getMaterialSupplierIdentificationNumber())
+                .identificationNumber(userInfo.getUserIdentificationNumber())
                 .gmtModified(supplierInfo.getGmtModified())
                 .build();
     }
@@ -44,7 +44,6 @@ public class SupplierService extends ServiceImpl<SupplierMapper, SupplierInfoEnt
                 .materialSupplierName(supplierSignUpRequest.getName())
                 .materialSupplierContactorName(supplierSignUpRequest.getContactorName())
                 .materialSupplierContactorPhone(supplierSignUpRequest.getContactorTelephone())
-                .materialSupplierIdentificationNumber(supplierSignUpRequest.getIdentificationNumber())
                 .materialSupplierCreatorUserId(userId)
                 .haveLogistics(supplierSignUpRequest.getHaveLogistics())
                 .gmtCreated(new Date())
@@ -62,6 +61,7 @@ public class SupplierService extends ServiceImpl<SupplierMapper, SupplierInfoEnt
                 .userPhone(supplierSignUpRequest.getContactorTelephone())
                 .userPasswordSHA256(DigestUtils.sha256Hex(supplierSignUpRequest.getPassword()))
                 .userRoleId(UserRole.SUPPLIER.getRoleId())
+                .userIdentificationNumber(supplierSignUpRequest.getIdentificationNumber())
                 .build());
     }
 }

@@ -29,7 +29,6 @@ public class SupplierInfoEntity {
     private Long id;
     private String materialSupplierName;
     private String materialSupplierContactorName;
-    private String materialSupplierIdentificationNumber;
     private String materialSupplierVerifyImageUrls;
     private Long materialSupplierCreatorUserId;
     private String materialSupplierContactorPhone;

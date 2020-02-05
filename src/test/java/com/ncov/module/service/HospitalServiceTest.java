@@ -34,7 +34,7 @@ class HospitalServiceTest {
     void setUp() {
         MockitoAnnotations.initMocks(this);
         ReflectionTestUtils.setField(hospitalService, "baseMapper", hospitalInfoMapper);
-        when(userInfoService.createUniqueUser(any(UserInfoEntity.class))).thenReturn(UserInfoEntity.builder().id(32L).build());
+        when(userInfoService.createUniqueUser(any(UserInfoEntity.class))).thenReturn(UserInfoEntity.builder().id(32L).userIdentificationNumber("110102198509250091").build());
         when(hospitalInfoMapper.insert(any(HospitalInfoEntity.class))).then((e) -> {
             ((HospitalInfoEntity) e.getArgument(0)).setId(98L);
             return 1;
@@ -50,6 +50,7 @@ class HospitalServiceTest {
                 .contactorName("Test")
                 .contactorTelephone("18888888888")
                 .password("12345678")
+                .identificationNumber("110102198509250091")
                 .build());
 
         assertEquals(98L, response.getId().longValue());
@@ -57,6 +58,7 @@ class HospitalServiceTest {
         assertEquals("123456789012345678", response.getUniformSocialCreditCode());
         assertEquals("Test", response.getContactorName());
         assertEquals("18888888888", response.getContactorTelephone());
+        assertEquals("110102198509250091", response.getIdentificationNumber());
         assertNotNull(response.getGmtCreated());
     }
 
@@ -69,6 +71,7 @@ class HospitalServiceTest {
                 .contactorName("Test")
                 .contactorTelephone("18888888888")
                 .password("12345678")
+                .identificationNumber("110102198509250091")
                 .build());
 
         ArgumentCaptor<UserInfoEntity> userCaptor = ArgumentCaptor.forClass(UserInfoEntity.class);
@@ -78,6 +81,7 @@ class HospitalServiceTest {
         assertEquals(DigestUtils.sha256Hex("12345678"), user.getUserPasswordSHA256());
         assertNotNull(user.getGmtCreated());
         assertEquals("18888888888", user.getUserPhone());
+        assertEquals("110102198509250091", user.getUserIdentificationNumber());
         assertEquals(UserRole.HOSPITAL.getRoleId(), user.getUserRoleId());
     }
 
@@ -90,6 +94,7 @@ class HospitalServiceTest {
                 .contactorName("Test")
                 .contactorTelephone("18888888888")
                 .password("12345678")
+                .identificationNumber("110102198509250091")
                 .build());
 
         ArgumentCaptor<HospitalInfoEntity> hospitalCaptor = ArgumentCaptor.forClass(HospitalInfoEntity.class);

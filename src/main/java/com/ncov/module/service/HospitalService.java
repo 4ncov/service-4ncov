@@ -35,6 +35,7 @@ public class HospitalService extends ServiceImpl<HospitalInfoMapper, HospitalInf
                 .contactorTelephone(hospitalInfo.getHospitalContactorTelephone())
                 .uniformSocialCreditCode(hospitalInfo.getHospitalUniformSocialCreditCode())
                 .gmtModified(hospitalInfo.getGmtModified())
+                .identificationNumber(userInfo.getUserIdentificationNumber())
                 .build();
     }
 
@@ -60,6 +61,7 @@ public class HospitalService extends ServiceImpl<HospitalInfoMapper, HospitalInf
                 .userPhone(hospitalSignUpRequest.getContactorTelephone())
                 .userRoleId(UserRole.HOSPITAL.getRoleId())
                 .userPasswordSHA256(DigestUtils.sha256Hex(hospitalSignUpRequest.getPassword()))
+                .userIdentificationNumber(hospitalSignUpRequest.getIdentificationNumber())
                 .gmtCreated(new Date())
                 .build());
     }

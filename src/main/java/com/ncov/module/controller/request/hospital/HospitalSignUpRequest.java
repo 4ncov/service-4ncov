@@ -17,6 +17,8 @@ public class HospitalSignUpRequest {
     private String uniformSocialCreditCode;
     @ApiModelProperty(value = "上传的图片地址, 支持多个图片")
     private List<String> imageUrls;
+    @ApiModelProperty(value = "申请人身份证号")
+    private String identificationNumber;
     @ApiModelProperty(value = "需求方联系人")
     private String contactorName;
     @ApiModelProperty(value = "需求方联系电话")

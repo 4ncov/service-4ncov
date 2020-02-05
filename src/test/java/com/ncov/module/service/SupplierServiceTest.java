@@ -35,7 +35,7 @@ class SupplierServiceTest {
     void setUp() {
         MockitoAnnotations.initMocks(this);
         ReflectionTestUtils.setField(supplierService, "baseMapper", supplierMapper);
-        when(userInfoService.createUniqueUser(any(UserInfoEntity.class))).thenReturn(UserInfoEntity.builder().id(31L).build());
+        when(userInfoService.createUniqueUser(any(UserInfoEntity.class))).thenReturn(UserInfoEntity.builder().id(31L).userIdentificationNumber("110301192001010001").build());
         when(supplierMapper.insert(any(SupplierInfoEntity.class))).then((mock) -> {
             ((SupplierInfoEntity) (mock.getArgument(0))).setId(703L);
             return 1;
@@ -82,6 +82,7 @@ class SupplierServiceTest {
         assertEquals(DigestUtils.sha256Hex("87654321"), user.getUserPasswordSHA256());
         assertEquals("18900010001", user.getUserPhone());
         assertEquals(UserRole.SUPPLIER.getRoleId(), user.getUserRoleId());
+        assertEquals("110301192001010001", user.getUserIdentificationNumber());
         assertNotNull(user.getGmtCreated());
     }
 
@@ -102,7 +103,6 @@ class SupplierServiceTest {
         SupplierInfoEntity supplier = supplierCaptor.getValue();
         assertEquals("Liangshan Haohan Supplier Pty Ltd", supplier.getMaterialSupplierName());
         assertEquals("Mock", supplier.getMaterialSupplierContactorName());
-        assertEquals("110301192001010001", supplier.getMaterialSupplierIdentificationNumber());
         assertEquals("https://oss.com/images/1.png,https://oss.com/images/2.png", supplier.getMaterialSupplierVerifyImageUrls());
         assertEquals(31L, supplier.getMaterialSupplierCreatorUserId().longValue());
         assertEquals("18900010001", supplier.getMaterialSupplierContactorPhone());
