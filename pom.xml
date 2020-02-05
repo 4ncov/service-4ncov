@@ -25,6 +25,8 @@
         <okhttp.version>4.3.1</okhttp.version>
         <commons-codec.version>1.13</commons-codec.version>
         <commons-io.version>2.6</commons-io.version>
+        <commons-lang3.version>3.9</commons-lang3.version>
+        <commons-collection4.version>4.4</commons-collection4.version>
         <awssdk.version>1.11.714</awssdk.version>
     </properties>
 
@@ -130,6 +132,16 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>${commons-io.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang3.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>${commons-collection4.version}</version>
         </dependency>
 
         <!-- kotlin -->

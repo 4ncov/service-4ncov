@@ -4,8 +4,9 @@ import com.ncov.module.common.SwaggerConstants;
 import com.ncov.module.controller.request.hospital.HospitalSignUpRequest;
 import com.ncov.module.controller.resp.RestResponse;
 import com.ncov.module.controller.resp.hospital.HospitalResponse;
+import com.ncov.module.service.HospitalInfoService;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,10 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/hospitals")
+@AllArgsConstructor
 public class HospitalController {
 
-    @Autowired
-    private HospitalInfoService hospitalInfoService;
+    private final HospitalInfoService hospitalInfoService;
 
     @ApiOperation(
             value = "Hospital signup.",
@@ -27,7 +28,6 @@ public class HospitalController {
     @PostMapping("/sign-up")
     public ResponseEntity<RestResponse<HospitalResponse>> signUp(@RequestBody HospitalSignUpRequest signupRequest) {
         HospitalResponse hospitalResponse = hospitalInfoService.signUp(signupRequest);
-        // TODO
         return new ResponseEntity<>(RestResponse.<HospitalResponse>builder()
                 .message("Hospital signed up.")
                 .data(hospitalResponse)

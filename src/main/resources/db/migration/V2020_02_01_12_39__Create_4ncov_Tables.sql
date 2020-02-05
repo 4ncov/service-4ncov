@@ -9,9 +9,9 @@ COMMENT = '系统中用户角色，目前包括（ID对应）\n\n1. 系统管理
 
 CREATE TABLE IF NOT EXISTS `user_info` (
   `id` BIGINT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `user_nick_name` VARCHAR(50) NOT NULL,
-  `user_salt` TEXT(256) COMMENT '目前暂时用不到，因为不需要设置密码，直接和手机号进行关联\n密码使用的随机salt，创建时CSPRNG 生成的随机数。',
-  `user_password_SHA256` TEXT(256) COMMENT '目前暂时用不到，因为不需要设置密码，直接和手机号进行关联',
+  `user_nick_name` VARCHAR(10) NOT NULL,
+  `user_salt` TEXT(256) NOT NULL COMMENT '目前暂时用不到，因为不需要设置密码，直接和手机号进行关联\n密码使用的随机salt，创建时CSPRNG 生成的随机数。',
+  `user_password_SHA256` TEXT(256) NOT NULL COMMENT '目前暂时用不到，因为不需要设置密码，直接和手机号进行关联',
   `gmt_created` VARCHAR(45) NOT NULL,
   `gmt_modified` VARCHAR(45) NULL,
   `user_phone` VARCHAR(20) NOT NULL,
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `hospital_info` (
   `id` BIGINT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `hospital_name` VARCHAR(200) NOT NULL,
   `gmt_created` DATETIME NOT NULL,
-  `gmt_modified` DATETIME ,
+  `gmt_modified` DATETIME NOT NULL,
   `hospital_uniform_social_credit_code` CHAR(18) NOT NULL,
   `hospital_creator_user_id` BIGINT(10) UNSIGNED NOT NULL COMMENT '该医院负责用户在user_info表中的id,一个医院应该只有一个负责的用户',
   `hospital_detail_address` VARCHAR(100) NOT NULL,

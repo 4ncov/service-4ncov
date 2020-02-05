@@ -50,23 +50,7 @@ public class HospitalInfoService extends ServiceImpl<HospitalInfoMapper, Hospita
                 .hospitalUniformSocialCreditCode(hospitalSignUpRequest.getUniformSocialCreditCode())
                 .gmtCreated(new Date())
                 .build();
-
-        //判断是否有附件
-        if (imageUrls != null) {
-            int count = imageUrls.size();
-            for (int i = 0; i < 3; i++) {
-                if (count <= i) {
-                    break;
-                }
-                if (i == 0) {
-                    hospitalInfo.setHospitalVerifyInfoUrl1(imageUrls.get(i));
-                } else if (i == 1) {
-                    hospitalInfo.setHospitalVerifyInfoUrl2(imageUrls.get(i));
-                } else if (i == 2) {
-                    hospitalInfo.setHospitalVerifyInfoUrl3(imageUrls.get(i));
-                }
-            }
-        } // TODO update db to hold image urls in a text field
+        hospitalInfo.setHospitalVerifyImageUrls(imageUrls);
 
         this.save(hospitalInfo);
         return hospitalInfo;

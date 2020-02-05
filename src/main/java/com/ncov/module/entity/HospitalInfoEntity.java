@@ -1,46 +1,55 @@
 package com.ncov.module.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.ncov.module.common.Constants;
+import lombok.*;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @TableName("hospital_info")
 public class HospitalInfoEntity {
-    @TableId(value="id", type= IdType.AUTO)
+
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
-
     private String hospitalName;
-
+    private String hospitalUniformSocialCreditCode;
+    private Long hospitalCreatorUserId;
+    private String hospitalDetailAddress;
+    private String hospitalVerifyImageUrls;
+    private String hospitalContactorName;
+    private String hospitalContactorTelephone;
     private Date gmtCreated;
-
     private Date gmtModified;
 
-    private String hospitalUniformSocialCreditCode;
+    public List<String> getAllImageUrls() {
+        if (StringUtils.isEmpty(getHospitalVerifyImageUrls())) {
+            return Collections.emptyList();
+        }
+        return Arrays.stream(getHospitalVerifyImageUrls().split(Constants.DELIMITER_COMMA))
+                .collect(Collectors.toList());
+    }
 
-    private Long hospitalCreatorUserId;
+    public void setHospitalVerifyImageUrls(String hospitalVerifyImageUrls) {
+        this.hospitalVerifyImageUrls = hospitalVerifyImageUrls;
+    }
 
-    private String hospitalDetailAddress;
-    @TableField(value = "hospital_verify_info_url_1")
-    private String hospitalVerifyInfoUrl1;
-    @TableField(value = "hospital_verify_info_url_2")
-    private String hospitalVerifyInfoUrl2;
-    @TableField(value = "hospital_verify_info_url_3")
-    private String hospitalVerifyInfoUrl3;
-
-    private String hospitalContactorName;
-
-    private String hospitalContactorTelephone;
-
-    private String hospitalAddressCode;
+    public void setHospitalVerifyImageUrls(List<String> imageUrls) {
+        if (CollectionUtils.isEmpty(imageUrls)) {
+            setHospitalVerifyImageUrls("");
+        }
+        setHospitalVerifyImageUrls(String.join(Constants.DELIMITER_COMMA, imageUrls));
+    }
 }

@@ -51,22 +51,7 @@ public class SupplierService extends ServiceImpl<SupplierMapper, SupplierInfoEnt
                 .materialSupplierCreatorUserId(userId)
                 .gmtCreated(new Date())
                 .build();
-
-        if (imageUrls != null) {
-            int count = imageUrls.size();
-            for (int i = 0; i < 3; i++) {
-                if (count <= i) {
-                    break;
-                }
-                if (i == 0) {
-                    supplierInfo.setMaterialSupplierVerifyInfoUrl1(imageUrls.get(i));
-                } else if (i == 1) {
-                    supplierInfo.setMaterialSupplierVerifyInfoUrl2(imageUrls.get(i));
-                } else if (i == 2) {
-                    supplierInfo.setMaterialSupplierVerifyInfoUrl3(imageUrls.get(i));
-                }
-            }
-        } // TODO
+        supplierInfo.setMaterialSupplierVerifyImageUrls(imageUrls);
 
         this.save(supplierInfo);
         return supplierInfo;
