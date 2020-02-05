@@ -19,7 +19,7 @@ import java.util.List;
 @Service("hospitalInfoService")
 @Slf4j
 @AllArgsConstructor
-public class HospitalInfoService extends ServiceImpl<HospitalInfoMapper, HospitalInfoEntity> {
+public class HospitalService extends ServiceImpl<HospitalInfoMapper, HospitalInfoEntity> {
 
     private final UserInfoService userInfoService;
 

@@ -14,7 +14,6 @@ public class HospitalResponse {
     private String name;
     private String uniformSocialCreditCode;
     private String address;
-    private String addressCode;
     private String contactorName;
     private String contactorTelephone;
     private Date gmtCreated;
