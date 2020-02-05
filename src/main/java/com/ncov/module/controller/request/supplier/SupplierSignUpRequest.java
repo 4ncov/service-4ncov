@@ -1,6 +1,6 @@
 package com.ncov.module.controller.request.supplier;
 
-import com.baomidou.mybatisplus.annotation.TableField;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import java.util.List;
@@ -10,20 +10,18 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class SupplierSignUpRequest {
-    //名称
+    @ApiModelProperty(value = "供应商公司名称")
     private String name;
-    //统一社会信用代码
+    @ApiModelProperty(value = "申请人身份证号")
     private String uniformSocialCreditCode;
-    //发货地址
-    private String address;
-    //资质图片地址
+    @ApiModelProperty(value = "供应商图片上传, 支持多张图片")
     private List<String> imageUrls;
-    //联系人
+    @ApiModelProperty(value = "联系人")
     private String contactorName;
-    //联系电话
+    @ApiModelProperty(value = "联系电话")
     private String contactorTelephone;
-    //密码
+    @ApiModelProperty(value = "登录密码")
     private String password;
-    //是否有物流
+    @ApiModelProperty(value = "是否自备物流")
     private Boolean haveLogistics;
 }
