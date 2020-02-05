@@ -46,7 +46,6 @@ class HospitalServiceTest {
         HospitalResponse response = hospitalService.signUp(HospitalSignUpRequest.builder()
                 .name("Wuhan Test Hospital")
                 .uniformSocialCreditCode("123456789012345678")
-                .address("3 Test Road, Wuhan, Hubei, China")
                 .imageUrls(Collections.singletonList("https://oss.com/images/test.png"))
                 .contactorName("Test")
                 .contactorTelephone("18888888888")
@@ -56,7 +55,6 @@ class HospitalServiceTest {
         assertEquals(98L, response.getId().longValue());
         assertEquals("Wuhan Test Hospital", response.getName());
         assertEquals("123456789012345678", response.getUniformSocialCreditCode());
-        assertEquals("3 Test Road, Wuhan, Hubei, China", response.getAddress());
         assertEquals("Test", response.getContactorName());
         assertEquals("18888888888", response.getContactorTelephone());
         assertNotNull(response.getGmtCreated());
@@ -67,7 +65,6 @@ class HospitalServiceTest {
         hospitalService.signUp(HospitalSignUpRequest.builder()
                 .name("Wuhan Test Hospital")
                 .uniformSocialCreditCode("123456789012345678")
-                .address("3 Test Road, Wuhan, Hubei, China")
                 .imageUrls(Collections.singletonList("https://oss.com/images/test.png"))
                 .contactorName("Test")
                 .contactorTelephone("18888888888")
@@ -89,7 +86,6 @@ class HospitalServiceTest {
         hospitalService.signUp(HospitalSignUpRequest.builder()
                 .name("Wuhan Test Hospital")
                 .uniformSocialCreditCode("123456789012345678")
-                .address("3 Test Road, Wuhan, Hubei, China")
                 .imageUrls(Arrays.asList("https://oss.com/images/test.png", "https://oss.com/images/test-2.png"))
                 .contactorName("Test")
                 .contactorTelephone("18888888888")
@@ -102,7 +98,6 @@ class HospitalServiceTest {
         assertEquals("Wuhan Test Hospital", hospital.getHospitalName());
         assertEquals("123456789012345678", hospital.getHospitalUniformSocialCreditCode());
         assertEquals(32L, hospital.getHospitalCreatorUserId().longValue());
-        assertEquals("3 Test Road, Wuhan, Hubei, China", hospital.getHospitalDetailAddress());
         assertEquals("https://oss.com/images/test.png,https://oss.com/images/test-2.png", hospital.getHospitalVerifyImageUrls());
         assertEquals("Test", hospital.getHospitalContactorName());
         assertEquals("18888888888", hospital.getHospitalContactorTelephone());

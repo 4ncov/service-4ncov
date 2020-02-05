@@ -28,13 +28,12 @@ public class SupplierService extends ServiceImpl<SupplierMapper, SupplierInfoEnt
         SupplierInfoEntity supplierInfo = this.saveSupplierInfo(supplierSignUpRequest, userInfo.getId());
         return SupplierResponse.builder()
                 .id(supplierInfo.getId())
-                .address(supplierInfo.getMaterialSupplierCompanyAddress())
                 .contactorName(supplierInfo.getMaterialSupplierContactorName())
                 .gmtCreated(supplierInfo.getGmtCreated())
                 .haveLogistics(supplierInfo.getHaveLogistics())
                 .name(supplierInfo.getMaterialSupplierName())
                 .contactorTelephone(supplierInfo.getMaterialSupplierContactorPhone())
-                .uniformSocialCreditCode(supplierInfo.getMaterialSupplierUniformSocialCreditCode())
+                .identificationNumber(supplierInfo.getMaterialSupplierIdentificationNumber())
                 .gmtModified(supplierInfo.getGmtModified())
                 .build();
     }
@@ -45,8 +44,7 @@ public class SupplierService extends ServiceImpl<SupplierMapper, SupplierInfoEnt
                 .materialSupplierName(supplierSignUpRequest.getName())
                 .materialSupplierContactorName(supplierSignUpRequest.getContactorName())
                 .materialSupplierContactorPhone(supplierSignUpRequest.getContactorTelephone())
-                .materialSupplierCompanyAddress(supplierSignUpRequest.getAddress())
-                .materialSupplierUniformSocialCreditCode(supplierSignUpRequest.getUniformSocialCreditCode())
+                .materialSupplierIdentificationNumber(supplierSignUpRequest.getIdentificationNumber())
                 .materialSupplierCreatorUserId(userId)
                 .haveLogistics(supplierSignUpRequest.getHaveLogistics())
                 .gmtCreated(new Date())

@@ -1,0 +1,8 @@
+alter table hospital_info
+drop column hospital_detail_address;
+
+alter table material_supplier_info
+drop column material_supplier_company_address;
+
+alter table material_supplier_info
+change column material_supplier_uniform_social_credit_code material_supplier_identification_number char(18) not null;

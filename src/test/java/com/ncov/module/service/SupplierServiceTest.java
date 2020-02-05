@@ -46,8 +46,7 @@ class SupplierServiceTest {
     void should_return_supplier_response_when_sign_up_given_supplier_sign_up_request() {
         SupplierResponse response = supplierService.signUp(SupplierSignUpRequest.builder()
                 .name("Liangshan Haohan Supplier Pty Ltd")
-                .uniformSocialCreditCode("098765432109876543")
-                .address("3 Supplier Street, Beijing, China")
+                .identificationNumber("110301192001010001")
                 .imageUrls(Collections.singletonList("https://oss.com/images/1.png"))
                 .contactorName("Mock")
                 .contactorTelephone("18900010001")
@@ -57,8 +56,7 @@ class SupplierServiceTest {
 
         assertEquals(703L, response.getId().longValue());
         assertEquals("Liangshan Haohan Supplier Pty Ltd", response.getName());
-        assertEquals("098765432109876543", response.getUniformSocialCreditCode());
-        assertEquals("3 Supplier Street, Beijing, China", response.getAddress());
+        assertEquals("110301192001010001", response.getIdentificationNumber());
         assertEquals("Mock", response.getContactorName());
         assertEquals("18900010001", response.getContactorTelephone());
         assertTrue(response.getHaveLogistics());
@@ -69,8 +67,7 @@ class SupplierServiceTest {
     void should_create_user_when_sign_up() {
         supplierService.signUp(SupplierSignUpRequest.builder()
                 .name("Liangshan Haohan Supplier Pty Ltd")
-                .uniformSocialCreditCode("098765432109876543")
-                .address("3 Supplier Street, Beijing, China")
+                .identificationNumber("110301192001010001")
                 .imageUrls(Collections.singletonList("https://oss.com/images/1.png"))
                 .contactorName("Mock")
                 .contactorTelephone("18900010001")
@@ -92,8 +89,7 @@ class SupplierServiceTest {
     void should_save_supplier_when_sign_up() {
         supplierService.signUp(SupplierSignUpRequest.builder()
                 .name("Liangshan Haohan Supplier Pty Ltd")
-                .uniformSocialCreditCode("098765432109876543")
-                .address("3 Supplier Street, Beijing, China")
+                .identificationNumber("110301192001010001")
                 .imageUrls(Arrays.asList("https://oss.com/images/1.png", "https://oss.com/images/2.png"))
                 .contactorName("Mock")
                 .contactorTelephone("18900010001")
@@ -106,8 +102,7 @@ class SupplierServiceTest {
         SupplierInfoEntity supplier = supplierCaptor.getValue();
         assertEquals("Liangshan Haohan Supplier Pty Ltd", supplier.getMaterialSupplierName());
         assertEquals("Mock", supplier.getMaterialSupplierContactorName());
-        assertEquals("098765432109876543", supplier.getMaterialSupplierUniformSocialCreditCode());
-        assertEquals("3 Supplier Street, Beijing, China", supplier.getMaterialSupplierCompanyAddress());
+        assertEquals("110301192001010001", supplier.getMaterialSupplierIdentificationNumber());
         assertEquals("https://oss.com/images/1.png,https://oss.com/images/2.png", supplier.getMaterialSupplierVerifyImageUrls());
         assertEquals(31L, supplier.getMaterialSupplierCreatorUserId().longValue());
         assertEquals("18900010001", supplier.getMaterialSupplierContactorPhone());

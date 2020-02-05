@@ -29,7 +29,6 @@ public class HospitalService extends ServiceImpl<HospitalInfoMapper, HospitalInf
         HospitalInfoEntity hospitalInfo = saveHospitalInfo(hospitalSignUpRequest, userInfo.getId());
         return HospitalResponse.builder()
                 .id(hospitalInfo.getId())
-                .address(hospitalInfo.getHospitalDetailAddress())
                 .contactorName(hospitalInfo.getHospitalContactorName())
                 .gmtCreated(hospitalInfo.getGmtCreated())
                 .name(hospitalInfo.getHospitalName())
@@ -45,7 +44,6 @@ public class HospitalService extends ServiceImpl<HospitalInfoMapper, HospitalInf
                 .hospitalContactorName(hospitalSignUpRequest.getContactorName())
                 .hospitalContactorTelephone(hospitalSignUpRequest.getContactorTelephone())
                 .hospitalCreatorUserId(userId)
-                .hospitalDetailAddress(hospitalSignUpRequest.getAddress())
                 .hospitalName(hospitalSignUpRequest.getName())
                 .hospitalUniformSocialCreditCode(hospitalSignUpRequest.getUniformSocialCreditCode())
                 .gmtCreated(new Date())

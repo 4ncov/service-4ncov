@@ -27,7 +27,6 @@ public class HospitalInfoEntity {
     private String hospitalName;
     private String hospitalUniformSocialCreditCode;
     private Long hospitalCreatorUserId;
-    private String hospitalDetailAddress;
     private String hospitalVerifyImageUrls;
     private String hospitalContactorName;
     private String hospitalContactorTelephone;

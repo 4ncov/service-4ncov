@@ -13,7 +13,7 @@ public class SupplierSignUpRequest {
     @ApiModelProperty(value = "供应商公司名称")
     private String name;
     @ApiModelProperty(value = "申请人身份证号")
-    private String uniformSocialCreditCode;
+    private String identificationNumber;
     @ApiModelProperty(value = "供应商图片上传, 支持多张图片")
     private List<String> imageUrls;
     @ApiModelProperty(value = "联系人")

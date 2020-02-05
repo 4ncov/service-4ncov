@@ -17,7 +17,7 @@ public class SupplierResponse {
     @ApiModelProperty(value = "供应商公司名称")
     private String name;
     @ApiModelProperty(value = "申请人身份证号")
-    private String uniformSocialCreditCode;
+    private String identificationNumber;
     @ApiModelProperty(value = "联系人")
     private String contactorName;
     @ApiModelProperty(value = "联系电话")
