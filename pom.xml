@@ -28,6 +28,7 @@
         <commons-lang3.version>3.9</commons-lang3.version>
         <commons-collection4.version>4.4</commons-collection4.version>
         <awssdk.version>1.11.714</awssdk.version>
+        <javax-validation.version>2.0.1.Final</javax-validation.version>
     </properties>
 
     <dependencies>
@@ -142,6 +143,13 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
             <version>${commons-collection4.version}</version>
+        </dependency>
+
+        <!-- validation -->
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>${javax-validation.version}</version>
         </dependency>
 
         <!-- kotlin -->

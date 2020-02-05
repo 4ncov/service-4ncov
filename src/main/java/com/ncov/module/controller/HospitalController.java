@@ -10,6 +10,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api/hospitals")
 @AllArgsConstructor
@@ -23,7 +25,7 @@ public class HospitalController {
     )
     @PostMapping("/sign-up")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public RestResponse<HospitalResponse> signUp(@RequestBody HospitalSignUpRequest signupRequest) {
+    public RestResponse<HospitalResponse> signUp(@RequestBody @Valid HospitalSignUpRequest signupRequest) {
         HospitalResponse hospitalResponse = hospitalService.signUp(signupRequest);
         return RestResponse.getResp("Hospital signed up.", hospitalResponse);
     }

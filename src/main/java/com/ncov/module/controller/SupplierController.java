@@ -10,6 +10,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api/suppliers")
 @AllArgsConstructor
@@ -23,7 +25,7 @@ public class SupplierController {
     )
     @PostMapping("/sign-up")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public RestResponse<SupplierResponse> signUp(@RequestBody SupplierSignUpRequest signUpRequest) {
+    public RestResponse<SupplierResponse> signUp(@RequestBody @Valid SupplierSignUpRequest signUpRequest) {
         SupplierResponse supplierResponse = supplierService.signUp(signUpRequest);
         return RestResponse.getResp("Supplier signed up.", supplierResponse);
     }
