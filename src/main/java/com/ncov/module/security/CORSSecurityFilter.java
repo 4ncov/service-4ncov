@@ -1,4 +1,4 @@
-package com.ncov.module.filter;
+package com.ncov.module.security;
 
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
