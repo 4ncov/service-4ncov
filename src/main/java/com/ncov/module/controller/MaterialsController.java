@@ -7,6 +7,7 @@ import com.ncov.module.controller.resp.Page;
 import com.ncov.module.controller.resp.RestResponse;
 import com.ncov.module.controller.resp.material.MaterialResponse;
 import com.ncov.module.security.UserContext;
+import com.ncov.module.service.MaterialRequiredService;
 import com.ncov.module.service.MaterialSuppliedService;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -26,6 +27,7 @@ public class MaterialsController {
 
     private final UserContext userContext;
     private final MaterialSuppliedService materialSuppliedService;
+    private final MaterialRequiredService materialRequiredService;
 
     @ApiOperation(
             value = "Create new required material.",
@@ -33,28 +35,8 @@ public class MaterialsController {
     )
     @PostMapping("/required-materials")
     @ResponseStatus(HttpStatus.CREATED)
-    public RestResponse<MaterialResponse> createRequiredMaterial(
-            @RequestBody MaterialRequest material) {
-        // TODO: 2020-01-29
-        return RestResponse.<MaterialResponse>builder()
-                .message("Required material created.")
-                .data(MaterialResponse.builder()
-                        .id(1L)
-                        .material(MaterialDto.builder()
-                                .name("N95口罩")
-                                .category("口罩")
-                                .quantity(100000.0)
-                                .standard("ISO-8859-1")
-                                .build())
-                        .address("湖北省武汉市东西湖区银潭路1号")
-                        .contactorName("张三")
-                        .contactorPhone("18801234567")
-                        .comment("医护人员急用")
-                        .status("PUBLISHED")
-                        .gmtCreated(new Date())
-                        .gmtModified(new Date())
-                        .build())
-                .build();
+    public RestResponse createRequiredMaterial(@RequestBody MaterialRequest material) {
+        return RestResponse.getResp("保存成功", materialRequiredService.saveRequiredInfo(material));
     }
 
     @ApiOperation(
@@ -66,46 +48,7 @@ public class MaterialsController {
     public Page<MaterialResponse> listRequiredMaterials(
             @RequestParam Integer page, @RequestParam Integer size,
             @RequestParam(name = "category", required = false) String category) {
-        // TODO: 2020-01-29
-        return Page.<MaterialResponse>builder()
-                .page(page)
-                .pageSize(size)
-                .total(2)
-                .data(Arrays.asList(
-                        MaterialResponse.builder()
-                                .id(1L)
-                                .material(MaterialDto.builder()
-                                        .name("N95口罩")
-                                        .category("口罩")
-                                        .quantity(100000.0)
-                                        .standard("ISO-8859-1")
-                                        .build())
-                                .address("湖北省武汉市东西湖区银潭路1号")
-                                .contactorName("张三")
-                                .contactorPhone("18801234567")
-                                .comment("医护人员急用")
-                                .status("PUBLISHED")
-                                .gmtCreated(new Date())
-                                .gmtModified(new Date())
-                                .build(),
-                        MaterialResponse.builder()
-                                .id(2L)
-                                .material(MaterialDto.builder()
-                                        .name("医用防护服")
-                                        .category("防护服")
-                                        .quantity(2000.0)
-                                        .standard("ISO-8859-10")
-                                        .build())
-                                .address("湖北省武汉市东西湖区银潭路1号")
-                                .contactorName("张三")
-                                .contactorPhone("18801234567")
-                                .comment("医护人员急用")
-                                .status("PUBLISHED")
-                                .gmtCreated(new Date())
-                                .gmtModified(new Date())
-                                .build()
-                ))
-                .build();
+        return materialRequiredService.getRequiredPageList(page, size, category);
     }
 
     @ApiOperation(
