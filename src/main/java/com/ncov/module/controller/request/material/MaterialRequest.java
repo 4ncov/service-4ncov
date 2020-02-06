@@ -15,7 +15,7 @@ public class MaterialRequest {
     @ApiModelProperty(value = "物资信息")
     private List<MaterialDto> materials;
     @ApiModelProperty(value = "发布/供货机构名称")
-    private String hospitalName;
+    private String organisationName;
     @ApiModelProperty(value = "收货/发货地址")
     private String address;
     @ApiModelProperty(value = "联系人")
