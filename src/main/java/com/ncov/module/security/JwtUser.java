@@ -13,4 +13,6 @@ public class JwtUser {
     private Long id;
     private String userNickName;
     private UserRole userRole;
+    private Long organisationId;
+    private String organisationName;
 }

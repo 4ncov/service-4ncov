@@ -60,6 +60,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     .id(jwtClaims.get("id", Long.class))
                     .userNickName(jwtClaims.get("userNickName", String.class))
                     .userRole(UserRole.valueOf(jwtClaims.get("userRole", String.class)))
+                    .organisationId(jwtClaims.get("organisationId", Long.class))
+                    .organisationName(jwtClaims.get("organisationName", String.class))
                     .build();
             SecurityContextHolder.getContext()
                     .setAuthentication(new PreAuthenticatedAuthenticationToken("X-JWT-TOKEN", jwtUser));

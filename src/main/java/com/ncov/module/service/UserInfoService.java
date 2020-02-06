@@ -5,8 +5,13 @@ import com.ncov.module.common.Constants;
 import com.ncov.module.common.enums.UserRole;
 import com.ncov.module.common.exception.DuplicateException;
 import com.ncov.module.controller.resp.user.SignInResponse;
+import com.ncov.module.entity.HospitalInfoEntity;
+import com.ncov.module.entity.SupplierInfoEntity;
 import com.ncov.module.entity.UserInfoEntity;
+import com.ncov.module.mapper.HospitalInfoMapper;
+import com.ncov.module.mapper.SupplierMapper;
 import com.ncov.module.mapper.UserInfoMapper;
+import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.DefaultJwtBuilder;
 import lombok.extern.slf4j.Slf4j;
@@ -24,13 +29,19 @@ import java.util.UUID;
 public class UserInfoService extends ServiceImpl<UserInfoMapper, UserInfoEntity> {
 
     private final UserInfoMapper userInfoMapper;
+    private final HospitalInfoMapper hospitalInfoMapper;
+    private final SupplierMapper supplierMapper;
     private final String jwtSecret;
     private final Long jwtExpirationInMs;
 
     public UserInfoService(UserInfoMapper userInfoMapper,
+                           HospitalInfoMapper hospitalInfoMapper,
+                           SupplierMapper supplierMapper,
                            @Value("${security.jwtSecret}") String jwtSecret,
                            @Value("${security.jwtExpirationInMs}") Long jwtExpirationInMs) {
         this.userInfoMapper = userInfoMapper;
+        this.hospitalInfoMapper = hospitalInfoMapper;
+        this.supplierMapper = supplierMapper;
         this.jwtSecret = jwtSecret;
         this.jwtExpirationInMs = jwtExpirationInMs;
     }
@@ -55,10 +66,14 @@ public class UserInfoService extends ServiceImpl<UserInfoMapper, UserInfoEntity>
             throw new BadCredentialsException("Incorrect password");
         }
 
+        JwtBuilder jwtBuilder = new DefaultJwtBuilder()
+                .signWith(SignatureAlgorithm.HS256, jwtSecret);
+
+        addOrganisationClaimToJwt(user, jwtBuilder);
+
         Date now = new Date();
         Date jwtExpirationTime = new Date(now.getTime() + jwtExpirationInMs);
-        String token = new DefaultJwtBuilder()
-                .signWith(SignatureAlgorithm.HS256, jwtSecret)
+        String token = jwtBuilder
                 .setExpiration(jwtExpirationTime)
                 .setId(UUID.randomUUID().toString())
                 .setIssuer(Constants.JWT_ISSUER)
@@ -68,5 +83,19 @@ public class UserInfoService extends ServiceImpl<UserInfoMapper, UserInfoEntity>
                 .claim("id", user.getId())
                 .compact();
         return SignInResponse.builder().token(token).expiresAt(jwtExpirationTime).build();
+    }
+
+    private void addOrganisationClaimToJwt(UserInfoEntity user, JwtBuilder jwtBuilder) {
+        if (user.isHospital()) {
+            HospitalInfoEntity hospital = hospitalInfoMapper.selectByHospitalCreatorUserId(user.getId());
+            jwtBuilder.claim("organisationId", hospital.getId());
+            jwtBuilder.claim("organisationName", hospital.getHospitalName());
+            return;
+        }
+        if (user.isSupplier()) {
+            SupplierInfoEntity supplier = supplierMapper.selectByMaterialSupplierCreatorUserId(user.getId());
+            jwtBuilder.claim("organisationId", supplier.getId());
+            jwtBuilder.claim("organisationName", supplier.getMaterialSupplierName());
+        }
     }
 }

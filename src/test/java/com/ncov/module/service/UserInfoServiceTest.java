@@ -3,7 +3,11 @@ package com.ncov.module.service;
 import com.ncov.module.common.enums.UserRole;
 import com.ncov.module.common.exception.DuplicateException;
 import com.ncov.module.controller.resp.user.SignInResponse;
+import com.ncov.module.entity.HospitalInfoEntity;
+import com.ncov.module.entity.SupplierInfoEntity;
 import com.ncov.module.entity.UserInfoEntity;
+import com.ncov.module.mapper.HospitalInfoMapper;
+import com.ncov.module.mapper.SupplierMapper;
 import com.ncov.module.mapper.UserInfoMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.impl.DefaultJwtParser;
@@ -26,6 +30,10 @@ class UserInfoServiceTest {
 
     @Mock
     private UserInfoMapper userInfoMapper;
+    @Mock
+    private HospitalInfoMapper hospitalInfoMapper;
+    @Mock
+    private SupplierMapper supplierMapper;
     @InjectMocks
     private UserInfoService userInfoService;
 
@@ -36,6 +44,8 @@ class UserInfoServiceTest {
         ReflectionTestUtils.setField(userInfoService, "jwtSecret", "123456");
         ReflectionTestUtils.setField(userInfoService, "jwtExpirationInMs", 259200000L);
         when(userInfoMapper.findByUserPhone(anyString())).thenReturn(UserInfoEntity.builder().id(3L).userRoleId(2).userNickName("Nick test").userPasswordSHA256(DigestUtils.sha256Hex("password")).build());
+        when(hospitalInfoMapper.selectByHospitalCreatorUserId(anyLong())).thenReturn(HospitalInfoEntity.builder().id(101L).hospitalName("测试医院").build());
+        when(supplierMapper.selectByMaterialSupplierCreatorUserId(anyLong())).thenReturn(SupplierInfoEntity.builder().id(102L).materialSupplierName("测试供应商").build());
     }
 
     @Test
@@ -65,6 +75,26 @@ class UserInfoServiceTest {
         assertEquals(3L, jwtClaims.get("id", Long.class).longValue());
         assertEquals("Nick test", jwtClaims.get("userNickName", String.class));
         assertEquals(UserRole.SUPPLIER.name(), jwtClaims.get("userRole", String.class));
+    }
+
+    @Test
+    void should_return_hospital_info_in_token_when_sign_in_given_user_is_a_hospital() {
+        when(userInfoMapper.findByUserPhone(anyString())).thenReturn(UserInfoEntity.builder().id(3L).userRoleId(3).userNickName("Nick test").userPasswordSHA256(DigestUtils.sha256Hex("password")).build());
+
+        SignInResponse response = userInfoService.signIn("18800001111", "password");
+        String token = response.getToken();
+        Claims jwtClaims = new DefaultJwtParser().setSigningKey("123456").parseClaimsJws(response.getToken()).getBody();
+        assertEquals(101L, jwtClaims.get("organisationId", Long.class).longValue());
+        assertEquals("测试医院", jwtClaims.get("organisationName", String.class));
+    }
+
+    @Test
+    void should_return_supplier_info_in_token_when_sign_in_given_user_is_a_supplier() {
+        SignInResponse response = userInfoService.signIn("18800001111", "password");
+        String token = response.getToken();
+        Claims jwtClaims = new DefaultJwtParser().setSigningKey("123456").parseClaimsJws(response.getToken()).getBody();
+        assertEquals(102L, jwtClaims.get("organisationId", Long.class).longValue());
+        assertEquals("测试供应商", jwtClaims.get("organisationName", String.class));
     }
 
     @Test

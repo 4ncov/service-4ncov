@@ -11,11 +11,11 @@ public class UserContext {
         return ((JwtUser) SecurityContextHolder.getContext().getAuthentication().getCredentials()).getId();
     }
 
-    public String getUserNickName() {
-        return ((JwtUser) SecurityContextHolder.getContext().getAuthentication().getCredentials()).getUserNickName();
-    }
-
     public UserRole getUserRole() {
         return ((JwtUser) SecurityContextHolder.getContext().getAuthentication().getCredentials()).getUserRole();
+    }
+
+    public Long getOrganisationId() {
+        return ((JwtUser) SecurityContextHolder.getContext().getAuthentication().getCredentials()).getOrganisationId();
     }
 }

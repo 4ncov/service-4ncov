@@ -55,6 +55,9 @@ security:
   # 一个月
   jwtExpirationInMs: 259200000
   endpointsIgnoreToken:
+    - path: /api/images
+      methods:
+        - POST
     - path: /api/hospitals/sign-up
       methods:
         - POST
