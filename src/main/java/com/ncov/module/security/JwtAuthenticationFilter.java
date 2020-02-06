@@ -8,6 +8,7 @@ import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.core.env.Environment;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -20,6 +21,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Optional;
+
+import static java.util.Collections.singletonList;
 
 /**
  * @author JackJun
@@ -63,8 +66,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     .organisationId(jwtClaims.get("organisationId", Long.class))
                     .organisationName(jwtClaims.get("organisationName", String.class))
                     .build();
-            SecurityContextHolder.getContext()
-                    .setAuthentication(new PreAuthenticatedAuthenticationToken("X-JWT-TOKEN", jwtUser));
+            SecurityContextHolder.getContext().setAuthentication(new PreAuthenticatedAuthenticationToken(
+                    "X-JWT-TOKEN", jwtUser,
+                    singletonList(new SimpleGrantedAuthority("ROLE_" + jwtUser.getUserRole().name()))));
             log.debug("Jwt user set to security context holder, userId=[{}]", jwtUser.getId());
         } catch (Exception ex) {
             log.warn("Token validation failed", ex);

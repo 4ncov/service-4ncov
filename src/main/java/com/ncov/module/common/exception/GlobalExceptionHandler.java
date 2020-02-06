@@ -4,6 +4,7 @@ import com.ncov.module.controller.resp.RestResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -55,6 +56,13 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public RestResponse loginFailure(BadCredentialsException e) {
         return RestResponse.getResp("账号或密码错误！");
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public RestResponse processAccessDeniedException(AccessDeniedException e) {
+        return RestResponse.getResp("当前帐号无权访问.");
     }
 
     @ExceptionHandler(Exception.class)
