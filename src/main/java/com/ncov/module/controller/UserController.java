@@ -36,6 +36,7 @@ public class UserController {
             value = "Reset password.",
             tags = SwaggerConstants.TAG_USERS
     )
+    @PostMapping("/reset-password")
     @ResponseStatus(code = HttpStatus.OK)
     public RestResponse<Object> resetPassword(@RequestBody PasswordResetRequest passwordResetRequest) {
         return RestResponse.getResp("Password reset successful.");
