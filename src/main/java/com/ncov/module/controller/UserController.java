@@ -5,15 +5,21 @@ import com.ncov.module.controller.request.user.PasswordResetRequest;
 import com.ncov.module.controller.request.user.SignInRequest;
 import com.ncov.module.controller.resp.RestResponse;
 import com.ncov.module.controller.resp.user.SignInResponse;
+import com.ncov.module.service.UserInfoService;
 import io.swagger.annotations.ApiOperation;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Date;
 
 @RestController
 @RequestMapping("/api/users")
+@AllArgsConstructor
 public class UserController {
+
+    private final UserInfoService userInfoService;
 
     @ApiOperation(
             value = "User sign in.",
@@ -21,9 +27,9 @@ public class UserController {
     )
     @PostMapping("/sign-in")
     @ResponseStatus(code = HttpStatus.OK)
-    public RestResponse<SignInResponse> signIn(@RequestBody SignInRequest signInRequest) {
-        return RestResponse.getResp("Sign-in successful.",
-                SignInResponse.builder().token("token123456").expiresAt(new Date()).build());
+    public RestResponse<SignInResponse> signIn(@RequestBody @Valid SignInRequest signInRequest) {
+        SignInResponse response = userInfoService.signIn(signInRequest.getTelephone(), signInRequest.getPassword());
+        return RestResponse.getResp("Sign-in successful.", response);
     }
 
     @ApiOperation(

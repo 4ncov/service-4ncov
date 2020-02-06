@@ -54,6 +54,28 @@ security:
   jwtSecret: ${JWT_SECRET}
   # 一个月
   jwtExpirationInMs: 259200000
+  endpointsIgnoreToken:
+    - path: /api/images
+      methods:
+        - POST
+    - path: /api/hospitals/sign-up
+      methods:
+        - POST
+    - path: /api/suppliers/sign-up
+      methods:
+        - POST
+    - path: /api/users/sign-in
+      methods:
+        - POST
+    - path: /api/users/reset-password
+      methods:
+        - POST
+    - path: /api/required-materials
+      methods:
+        - GET
+    - path: /api/supplied-materials
+      methods:
+        - GET
 
 oss:
   endpoint: ${OSS_ENDPOINT}

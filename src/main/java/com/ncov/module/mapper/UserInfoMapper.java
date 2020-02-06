@@ -10,4 +10,6 @@ public interface UserInfoMapper extends BaseMapper<UserInfoEntity> {
 
     Integer selectCountByPhoneOrNickName(@Param("userPhone") String userPhone,
                                          @Param("userNickName") String userNickName);
+
+    UserInfoEntity findByUserPhone(String userPhone);
 }

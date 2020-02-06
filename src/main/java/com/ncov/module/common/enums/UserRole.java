@@ -4,6 +4,10 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.Arrays;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public enum UserRole {
@@ -12,4 +16,10 @@ public enum UserRole {
 
     private Integer roleId;
     private String roleDescription;
+
+    public static UserRole getRoleById(Integer id) {
+        return Arrays.stream(UserRole.values())
+                .collect(Collectors.toMap(UserRole::getRoleId, Function.identity()))
+                .get(id);
+    }
 }

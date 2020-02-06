@@ -7,4 +7,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface SupplierMapper extends BaseMapper<SupplierInfoEntity> {
 
+    SupplierInfoEntity selectByMaterialSupplierCreatorUserId(Long materialSupplierCreatorUserId);
 }

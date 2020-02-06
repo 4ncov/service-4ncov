@@ -7,4 +7,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface HospitalInfoMapper extends BaseMapper<HospitalInfoEntity> {
 
+    HospitalInfoEntity selectByHospitalCreatorUserId(Long hospitalCreatorUserId);
 }

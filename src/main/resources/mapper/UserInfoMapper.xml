@@ -9,4 +9,12 @@
             user_nick_name = #{userNickName} or user_phone = #{userPhone}
         </where>
     </select>
+
+    <select id="findByUserPhone" parameterType="java.lang.String" resultType="UserInfoEntity">
+        select *
+        from user_info
+        <where>
+            user_phone = #{userPhone}
+        </where>
+    </select>
 </mapper>
