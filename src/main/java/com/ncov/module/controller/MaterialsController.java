@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -35,7 +36,7 @@ public class MaterialsController {
     @PreAuthorize("hasRole('ROLE_HOSPITAL')")
     @PostMapping("/required-materials")
     @ResponseStatus(HttpStatus.CREATED)
-    public RestResponse createRequiredMaterial(@RequestBody MaterialRequest material) {
+    public RestResponse createRequiredMaterial(@RequestBody @Valid MaterialRequest material) {
         return RestResponse.getResp("保存成功", materialRequiredService.saveRequiredInfo(material,
                 userContext.getOrganisationId(), userContext.getUserId()));
     }
@@ -44,7 +45,6 @@ public class MaterialsController {
             value = "List required materials.",
             tags = SwaggerConstants.TAG_REQUIRED_MATERIALS
     )
-    @PreAuthorize("hasRole('ROLE_HOSPITAL')")
     @GetMapping("/required-materials")
     @ResponseStatus(HttpStatus.OK)
     public Page<MaterialResponse> listRequiredMaterials(
@@ -109,8 +109,7 @@ public class MaterialsController {
     @PostMapping("/supplied-materials")
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ROLE_SUPPLIER')")
-    public RestResponse<List<MaterialResponse>> createSuppliedMaterial(
-            @RequestBody MaterialRequest material) {
+    public RestResponse<List<MaterialResponse>> createSuppliedMaterial(@RequestBody @Valid MaterialRequest material) {
         List<MaterialResponse> responses = materialSuppliedService.create(material,
                 userContext.getOrganisationId(), userContext.getUserId());
         return RestResponse.getResp("Supplied materials created.", responses);

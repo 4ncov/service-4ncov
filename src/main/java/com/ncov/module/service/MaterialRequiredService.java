@@ -9,9 +9,8 @@ import com.ncov.module.controller.request.material.MaterialRequest;
 import com.ncov.module.controller.resp.material.MaterialResponse;
 import com.ncov.module.entity.MaterialRequiredEntity;
 import com.ncov.module.mapper.MaterialRequiredMapper;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,10 +25,9 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service
-@NoArgsConstructor
-@AllArgsConstructor
 public class MaterialRequiredService extends ServiceImpl<MaterialRequiredMapper, MaterialRequiredEntity> {
 
+    @Autowired
     private MaterialRequiredMapper materialRequiredMapper;
 
     /**
@@ -74,7 +72,7 @@ public class MaterialRequiredService extends ServiceImpl<MaterialRequiredMapper,
                         .contactorPhone(materialRequiredEntity.getMaterialRequiredContactorPhone())
                         .gmtCreated(materialRequiredEntity.getGmtCreated())
                         .organisationName(materialRequiredEntity.getMaterialSuppliedOrganizationName())
-                        .status(materialRequiredEntity.getMaterialRequireStatus())
+                        .status(materialRequiredEntity.getMaterialRequiredStatus())
                         .material(MaterialDto.builder()
                                 .category(materialRequiredEntity.getMaterialSuppliedCategory())
                                 .name(materialRequiredEntity.getMaterialSuppliedName())
@@ -103,7 +101,7 @@ public class MaterialRequiredService extends ServiceImpl<MaterialRequiredMapper,
             materialDto.setStandard(source.get(i).getMaterialSuppliedStandard());
             materialResponse.setMaterial(materialDto);
             materialResponse.setOrganisationName(source.get(i).getMaterialSuppliedOrganizationName());
-            materialResponse.setStatus(source.get(i).getMaterialRequireStatus());
+            materialResponse.setStatus(source.get(i).getMaterialRequiredStatus());
             target.add(materialResponse);
         }
         return target;

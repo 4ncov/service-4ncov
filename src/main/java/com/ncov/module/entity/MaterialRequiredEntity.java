@@ -78,7 +78,7 @@ public class MaterialRequiredEntity {
     /**
      * 物资寻求状态
      */
-    private String materialRequireStatus;
+    private String materialRequiredStatus;
 
     private Date gmtCreated;
     private Date gmtModified;
@@ -95,7 +95,7 @@ public class MaterialRequiredEntity {
     public static List<MaterialRequiredEntity> createList(MaterialRequest materialRequest, Long organizationId, Long userId) {
         return materialRequest.getMaterials().stream().map(material -> MaterialRequiredEntity.builder()
                 .materialRequiredReceivedAddress(materialRequest.getAddress())
-                .materialRequireStatus(MaterialStatus.PENDING.name())
+                .materialRequiredStatus(MaterialStatus.PENDING.name())
                 .materialRequiredContactorName(materialRequest.getContactorName())
                 .materialRequiredContactorPhone(materialRequest.getContactorPhone())
                 .materialSuppliedOrganizationName(materialRequest.getOrganisationName())
