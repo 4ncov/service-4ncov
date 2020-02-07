@@ -43,7 +43,7 @@ public class MaterialRequiredService extends ServiceImpl<MaterialRequiredMapper,
                         .setPages(pageNum)
                         .setSize(pageSize),
                 isNotEmpty(category) ? new LambdaQueryWrapper<MaterialRequiredEntity>()
-                        .eq(MaterialRequiredEntity::getMaterialSuppliedCategory, category) : null);
+                        .eq(MaterialRequiredEntity::getMaterialRequiredCategory, category) : null);
         com.ncov.module.controller.resp.Page<MaterialResponse> page = new com.ncov.module.controller.resp.Page<>();
         page.setData(this.carry(result.getRecords()));
         page.setPage(pageNum);
@@ -72,12 +72,12 @@ public class MaterialRequiredService extends ServiceImpl<MaterialRequiredMapper,
                         .contactorName(materialRequiredEntity.getMaterialRequiredContactorName())
                         .contactorPhone(materialRequiredEntity.getMaterialRequiredContactorPhone())
                         .gmtCreated(materialRequiredEntity.getGmtCreated())
-                        .organisationName(materialRequiredEntity.getMaterialSuppliedOrganizationName())
+                        .organisationName(materialRequiredEntity.getMaterialRequiredOrganizationName())
                         .status(materialRequiredEntity.getMaterialRequiredStatus())
                         .material(MaterialDto.builder()
-                                .category(materialRequiredEntity.getMaterialSuppliedCategory())
-                                .name(materialRequiredEntity.getMaterialSuppliedName())
-                                .standard(materialRequiredEntity.getMaterialSuppliedStandard())
+                                .category(materialRequiredEntity.getMaterialRequiredCategory())
+                                .name(materialRequiredEntity.getMaterialRequiredName())
+                                .standard(materialRequiredEntity.getMaterialRequiredStandard())
                                 .quantity(materialRequiredEntity.getMaterialRequiredQuantity()).build())
                         .build()
         ).collect(Collectors.toList());
@@ -94,12 +94,12 @@ public class MaterialRequiredService extends ServiceImpl<MaterialRequiredMapper,
                         .gmtModified(material.getGmtModified())
                         .id(material.getId())
                         .material(MaterialDto.builder()
-                                .category(material.getMaterialSuppliedCategory())
-                                .standard(material.getMaterialSuppliedStandard())
+                                .category(material.getMaterialRequiredCategory())
+                                .standard(material.getMaterialRequiredStandard())
                                 .quantity(material.getMaterialRequiredQuantity())
-                                .name(material.getMaterialSuppliedName())
+                                .name(material.getMaterialRequiredName())
                                 .build())
-                        .organisationName(material.getMaterialSuppliedOrganizationName())
+                        .organisationName(material.getMaterialRequiredOrganizationName())
                         .status(material.getMaterialRequiredStatus())
                         .build())
                 .collect(Collectors.toList());

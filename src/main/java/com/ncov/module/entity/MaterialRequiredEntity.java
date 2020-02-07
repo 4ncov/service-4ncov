@@ -57,23 +57,23 @@ public class MaterialRequiredEntity {
     /**
      * 图片地址
      */
-    private String materialSuppliedImageUrls;
+    private String materialRequiredImageUrls;
     /**
      * 物资名称
      */
-    private String materialSuppliedName;
+    private String materialRequiredName;
     /**
      * 物资类别
      */
-    private String materialSuppliedCategory;
+    private String materialRequiredCategory;
     /**
      * 执行标准
      */
-    private String materialSuppliedStandard;
+    private String materialRequiredStandard;
     /**
      * 供货方机构名称
      */
-    private String materialSuppliedOrganizationName;
+    private String materialRequiredOrganizationName;
 
     /**
      * 物资寻求状态
@@ -98,15 +98,15 @@ public class MaterialRequiredEntity {
                 .materialRequiredStatus(MaterialStatus.PENDING.name())
                 .materialRequiredContactorName(materialRequest.getContactorName())
                 .materialRequiredContactorPhone(materialRequest.getContactorPhone())
-                .materialSuppliedOrganizationName(materialRequest.getOrganisationName())
+                .materialRequiredOrganizationName(materialRequest.getOrganisationName())
                 .materialRequiredComment(materialRequest.getComment())
-                .materialSuppliedImageUrls(Joiner.on(",").join(materialRequest.getImageUrls()))
+                .materialRequiredImageUrls(Joiner.on(",").join(materialRequest.getImageUrls()))
                 .materialRequiredOrganizationId(organizationId)
                 .materialRequiredUserId(userId)
-                .materialSuppliedName(material.getName())
-                .materialSuppliedCategory(material.getCategory())
+                .materialRequiredName(material.getName())
+                .materialRequiredCategory(material.getCategory())
                 .materialRequiredQuantity(material.getQuantity())
-                .materialSuppliedStandard(material.getStandard())
+                .materialRequiredStandard(material.getStandard())
                 .gmtCreated(new Date()).build()
         ).collect(Collectors.toList());
 
