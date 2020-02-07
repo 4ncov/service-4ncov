@@ -10,6 +10,7 @@ import com.ncov.module.controller.resp.material.MaterialResponse;
 import com.ncov.module.entity.MaterialRequiredEntity;
 import com.ncov.module.mapper.MaterialRequiredMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
  * 物料寻求服务
@@ -41,8 +44,8 @@ public class MaterialRequiredService extends ServiceImpl<MaterialRequiredMapper,
                 new Page<MaterialRequiredEntity>()
                         .setPages(pageNum)
                         .setSize(pageSize),
-                new LambdaQueryWrapper<MaterialRequiredEntity>()
-                        .eq(MaterialRequiredEntity::getMaterialSuppliedCategory, category));
+                isNotEmpty(category) ? new LambdaQueryWrapper<MaterialRequiredEntity>()
+                        .eq(MaterialRequiredEntity::getMaterialSuppliedCategory, category) : null);
         com.ncov.module.controller.resp.Page<MaterialResponse> page = new com.ncov.module.controller.resp.Page<>();
         page.setData(this.carry(result.getRecords()));
         page.setPage(pageNum);
