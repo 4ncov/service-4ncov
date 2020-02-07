@@ -14,7 +14,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.Date;
@@ -124,46 +123,7 @@ public class MaterialsController {
     public Page<MaterialResponse> listSuppliedMaterials(
             @RequestParam Integer page, @RequestParam Integer size,
             @RequestParam(name = "category", required = false) String category) {
-        // TODO: 2020-01-29
-        return Page.<MaterialResponse>builder()
-                .page(page)
-                .pageSize(size)
-                .total(2L)
-                .data(Arrays.asList(
-                        MaterialResponse.builder()
-                                .id(1L)
-                                .material(MaterialDto.builder()
-                                        .name("N95口罩")
-                                        .category("口罩")
-                                        .quantity(100000.0)
-                                        .standard("ISO-8859-1")
-                                        .build())
-                                .address("湖北省武汉市东西湖区银潭路1号")
-                                .contactorName("张三")
-                                .contactorPhone("18801234567")
-                                .comment("医护人员急用")
-                                .status("PUBLISHED")
-                                .gmtCreated(new Date())
-                                .gmtModified(new Date())
-                                .build(),
-                        MaterialResponse.builder()
-                                .id(2L)
-                                .material(MaterialDto.builder()
-                                        .name("医用防护服")
-                                        .category("防护服")
-                                        .quantity(2000.0)
-                                        .standard("ISO-8859-10")
-                                        .build())
-                                .address("湖北省武汉市东西湖区银潭路1号")
-                                .contactorName("张三")
-                                .contactorPhone("18801234567")
-                                .comment("医护人员急用")
-                                .status("PUBLISHED")
-                                .gmtCreated(new Date())
-                                .gmtModified(new Date())
-                                .build()
-                ))
-                .build();
+        return materialSuppliedService.getSuppliedPageList(page, size, category);
     }
 
     @ApiOperation(
