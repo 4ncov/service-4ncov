@@ -2,6 +2,7 @@ package com.ncov.module.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.google.common.base.Joiner;
+import com.ncov.module.common.enums.MaterialStatus;
 import com.ncov.module.controller.request.material.MaterialRequest;
 import lombok.*;
 
@@ -11,6 +12,7 @@ import java.util.stream.Collectors;
 
 /**
  * 物资寻求 数据表的实体对象
+ *
  * @author lucas
  */
 @Data
@@ -84,27 +86,28 @@ public class MaterialRequiredEntity {
 
     /**
      * 把请求带过来的对象转为实体集合
+     *
      * @param materialRequest
      * @param organizationId
      * @param userId
      * @return
      */
-    public static List<MaterialRequiredEntity> createList(MaterialRequest materialRequest, Long organizationId, Long userId){
+    public static List<MaterialRequiredEntity> createList(MaterialRequest materialRequest, Long organizationId, Long userId) {
         return materialRequest.getMaterials().stream().map(material -> MaterialRequiredEntity.builder()
-                    .materialRequiredReceivedAddress(materialRequest.getAddress())
-                    .materialRequireStatus("PUBLISHED")
-                    .materialRequiredContactorName(materialRequest.getContactorName())
-                    .materialRequiredContactorPhone(materialRequest.getContactorPhone())
-                    .materialSuppliedOrganizationName(materialRequest.getOrganisationName())
-                    .materialRequiredComment(materialRequest.getComment())
-                    .materialSuppliedImageUrls(Joiner.on(",").join(materialRequest.getImageUrls()))
-                    .materialRequiredOrganizationId(organizationId)
-                    .materialRequiredUserId(userId)
-                    .materialSuppliedName(material.getName())
-                    .materialSuppliedCategory(material.getCategory())
-                    .materialRequiredQuantity(material.getQuantity())
-                    .materialSuppliedStandard(material.getStandard())
-                    .gmtCreated(new Date()).build()
+                .materialRequiredReceivedAddress(materialRequest.getAddress())
+                .materialRequireStatus(MaterialStatus.PENDING.name())
+                .materialRequiredContactorName(materialRequest.getContactorName())
+                .materialRequiredContactorPhone(materialRequest.getContactorPhone())
+                .materialSuppliedOrganizationName(materialRequest.getOrganisationName())
+                .materialRequiredComment(materialRequest.getComment())
+                .materialSuppliedImageUrls(Joiner.on(",").join(materialRequest.getImageUrls()))
+                .materialRequiredOrganizationId(organizationId)
+                .materialRequiredUserId(userId)
+                .materialSuppliedName(material.getName())
+                .materialSuppliedCategory(material.getCategory())
+                .materialRequiredQuantity(material.getQuantity())
+                .materialSuppliedStandard(material.getStandard())
+                .gmtCreated(new Date()).build()
         ).collect(Collectors.toList());
 
     }

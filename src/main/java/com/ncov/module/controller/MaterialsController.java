@@ -36,7 +36,8 @@ public class MaterialsController {
     @PostMapping("/required-materials")
     @ResponseStatus(HttpStatus.CREATED)
     public RestResponse createRequiredMaterial(@RequestBody MaterialRequest material) {
-        return RestResponse.getResp("保存成功", materialRequiredService.saveRequiredInfo(material));
+        return RestResponse.getResp("保存成功", materialRequiredService.saveRequiredInfo(material,
+                userContext.getOrganisationId(), userContext.getUserId()));
     }
 
     @ApiOperation(

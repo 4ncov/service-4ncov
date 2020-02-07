@@ -9,8 +9,8 @@ import com.ncov.module.controller.request.material.MaterialRequest;
 import com.ncov.module.controller.resp.material.MaterialResponse;
 import com.ncov.module.entity.MaterialRequiredEntity;
 import com.ncov.module.mapper.MaterialRequiredMapper;
-import com.ncov.module.security.UserContext;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,21 +21,24 @@ import java.util.stream.Collectors;
 
 /**
  * 物料寻求服务
+ *
  * @author lucas
  */
 @Slf4j
 @Service
+@NoArgsConstructor
 @AllArgsConstructor
 public class MaterialRequiredService extends ServiceImpl<MaterialRequiredMapper, MaterialRequiredEntity> {
 
     private MaterialRequiredMapper materialRequiredMapper;
-    private UserContext userContext;
 
     /**
      * 根据相关条件，查询物料寻求分页列表
+     *
      * @return
      */
-    public com.ncov.module.controller.resp.Page<MaterialResponse> getRequiredPageList(int pageSize, int pageNums, String category){
+    public com.ncov.module.controller.resp.Page<MaterialResponse> getRequiredPageList(
+            int pageSize, int pageNums, String category) {
         IPage<MaterialRequiredEntity> result = materialRequiredMapper.selectPage(
                 new Page<MaterialRequiredEntity>()
                         .setPages(pageSize)
@@ -52,12 +55,15 @@ public class MaterialRequiredService extends ServiceImpl<MaterialRequiredMapper,
 
     /**
      * 保存物料寻求信息
+     *
      * @param materialRequest
      * @return
      */
     @Transactional(rollbackFor = Exception.class)
-    public List<MaterialResponse> saveRequiredInfo(MaterialRequest materialRequest){
-        List<MaterialRequiredEntity> materialRequiredEntities = MaterialRequiredEntity.createList(materialRequest, userContext.getOrganisationId(), userContext.getUserId());
+    public List<MaterialResponse> saveRequiredInfo(MaterialRequest materialRequest,
+                                                   Long organisationId, Long userId) {
+        List<MaterialRequiredEntity> materialRequiredEntities = MaterialRequiredEntity.createList(
+                materialRequest, organisationId, userId);
         saveBatch(materialRequiredEntities);
         return materialRequiredEntities.stream().map(materialRequiredEntity ->
                 MaterialResponse.builder()
@@ -78,7 +84,7 @@ public class MaterialRequiredService extends ServiceImpl<MaterialRequiredMapper,
         ).collect(Collectors.toList());
     }
 
-    private List<MaterialResponse> carry(List<MaterialRequiredEntity> source){
+    private List<MaterialResponse> carry(List<MaterialRequiredEntity> source) {
         List<MaterialResponse> target = new ArrayList<>();
         int size = source.size();
         for (int i = 0; i < size; i++) {
