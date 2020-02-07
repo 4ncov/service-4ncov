@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ncov.module.common.Constants;
 import com.ncov.module.common.enums.UserRole;
 import com.ncov.module.common.exception.DuplicateException;
+import com.ncov.module.common.exception.UserNotFoundException;
+import com.ncov.module.controller.request.user.PasswordResetRequest;
 import com.ncov.module.controller.resp.user.SignInResponse;
 import com.ncov.module.entity.HospitalInfoEntity;
 import com.ncov.module.entity.SupplierInfoEntity;
@@ -83,6 +85,20 @@ public class UserInfoService extends ServiceImpl<UserInfoMapper, UserInfoEntity>
                 .claim("id", user.getId())
                 .compact();
         return SignInResponse.builder().token(token).expiresAt(jwtExpirationTime).build();
+    }
+
+    public void resetPassword(PasswordResetRequest request) {
+        log.info("Resetting password, phone=[{}]", request.getTelephone());
+        UserInfoEntity user = Optional.ofNullable(userInfoMapper.findByUserPhone(request.getTelephone()))
+                .orElseThrow(UserNotFoundException::new);
+        if (!user.isAbleToResetPassword(request.getTelephone(), request.getIdentificationNumber())) {
+            log.warn("Telephone and identification number not match, cannot reset password");
+            throw new UserNotFoundException("Identification number not match");
+        }
+
+        user.changePassword(request.getPassword());
+        updateById(user);
+        log.info("Password reset, phone=[{}]", request.getTelephone());
     }
 
     private void addOrganisationClaimToJwt(UserInfoEntity user, JwtBuilder jwtBuilder) {

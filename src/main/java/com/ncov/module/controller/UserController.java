@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Date;
 
 @RestController
 @RequestMapping("/api/users")
@@ -38,7 +37,8 @@ public class UserController {
     )
     @PostMapping("/reset-password")
     @ResponseStatus(code = HttpStatus.OK)
-    public RestResponse<Object> resetPassword(@RequestBody PasswordResetRequest passwordResetRequest) {
+    public RestResponse<Object> resetPassword(@RequestBody @Valid PasswordResetRequest passwordResetRequest) {
+        userInfoService.resetPassword(passwordResetRequest);
         return RestResponse.getResp("Password reset successful.");
     }
 }

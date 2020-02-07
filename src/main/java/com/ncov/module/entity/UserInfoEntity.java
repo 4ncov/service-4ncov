@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.ncov.module.common.enums.UserRole;
 import lombok.*;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Date;
 
@@ -35,5 +37,14 @@ public class UserInfoEntity {
 
     public boolean isSupplier() {
         return UserRole.SUPPLIER.getRoleId().equals(getUserRoleId());
+    }
+
+    public boolean isAbleToResetPassword(String userPhone, String userIdentificationNumber) {
+        return StringUtils.equals(userPhone, getUserPhone())
+                && StringUtils.equals(userIdentificationNumber, getUserIdentificationNumber());
+    }
+
+    public void changePassword(String password) {
+        setUserPasswordSHA256(DigestUtils.sha256Hex(password));
     }
 }
