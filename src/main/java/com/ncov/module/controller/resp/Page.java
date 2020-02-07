@@ -16,9 +16,9 @@ import java.util.List;
 @Builder
 public class Page<T> {
     private List<T> data;
-    private long total;
-    private long pageSize;
-    private long page;
+    private Long total;
+    private Integer pageSize;
+    private Integer page;
 
     public List<T> getData() {
         return data;
@@ -28,27 +28,27 @@ public class Page<T> {
         this.data = data;
     }
 
-    public long getTotal() {
+    public Long getTotal() {
         return total;
     }
 
-    public void setTotal(long total) {
+    public void setTotal(Long total) {
         this.total = total;
     }
 
-    public long getPageSize() {
+    public Integer getPageSize() {
         return pageSize;
     }
 
-    public void setPageSize(long pageSize) {
+    public void setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
     }
 
-    public long getPage() {
+    public Integer getPage() {
         return page;
     }
 
-    public void setPage(long page) {
+    public void setPage(Integer page) {
         this.page = page;
     }
 }

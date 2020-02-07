@@ -36,18 +36,18 @@ public class MaterialRequiredService extends ServiceImpl<MaterialRequiredMapper,
      * @return
      */
     public com.ncov.module.controller.resp.Page<MaterialResponse> getRequiredPageList(
-            int pageSize, int pageNums, String category) {
+            Integer pageNum, Integer pageSize, String category) {
         IPage<MaterialRequiredEntity> result = materialRequiredMapper.selectPage(
                 new Page<MaterialRequiredEntity>()
-                        .setPages(pageSize)
-                        .setSize(pageNums),
+                        .setPages(pageNum)
+                        .setSize(pageSize),
                 new LambdaQueryWrapper<MaterialRequiredEntity>()
                         .eq(MaterialRequiredEntity::getMaterialSuppliedCategory, category));
         com.ncov.module.controller.resp.Page<MaterialResponse> page = new com.ncov.module.controller.resp.Page<>();
         page.setData(this.carry(result.getRecords()));
-        page.setPage(result.getPages());
+        page.setPage(pageNum);
         page.setTotal(result.getTotal());
-        page.setPageSize(result.getSize());
+        page.setPageSize(pageSize);
         return page;
     }
 

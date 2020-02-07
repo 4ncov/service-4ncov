@@ -64,7 +64,7 @@ public class MaterialsController {
         return Page.<MaterialResponse>builder()
                 .page(page)
                 .pageSize(size)
-                .total(2)
+                .total(2L)
                 .data(Arrays.asList(
                         MaterialResponse.builder()
                                 .id(1L)
@@ -128,7 +128,7 @@ public class MaterialsController {
         return Page.<MaterialResponse>builder()
                 .page(page)
                 .pageSize(size)
-                .total(2)
+                .total(2L)
                 .data(Arrays.asList(
                         MaterialResponse.builder()
                                 .id(1L)
@@ -177,7 +177,7 @@ public class MaterialsController {
         return Page.<MaterialResponse>builder()
                 .page(page)
                 .pageSize(size)
-                .total(2)
+                .total(2L)
                 .data(Arrays.asList(
                         MaterialResponse.builder()
                                 .id(1L)
