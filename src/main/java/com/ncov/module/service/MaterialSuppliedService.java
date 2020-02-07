@@ -7,16 +7,13 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ncov.module.controller.dto.MaterialDto;
 import com.ncov.module.controller.request.material.MaterialRequest;
 import com.ncov.module.controller.resp.material.MaterialResponse;
-import com.ncov.module.entity.MaterialRequiredEntity;
 import com.ncov.module.entity.MaterialSuppliedEntity;
-import com.ncov.module.mapper.MaterialRequiredMapper;
 import com.ncov.module.mapper.MaterialSuppliedMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -77,27 +74,24 @@ public class MaterialSuppliedService extends ServiceImpl<MaterialSuppliedMapper,
 
 
     private List<MaterialResponse> carry(List<MaterialSuppliedEntity> source) {
-        List<MaterialResponse> target = new ArrayList<>();
-        int size = source.size();
-        for (int i = 0; i < size; i++) {
-            MaterialResponse materialResponse = new MaterialResponse();
-            materialResponse.setAddress(source.get(i).getMaterialSuppliedAddress());
-            materialResponse.setComment(source.get(i).getMaterialSuppliedComment());
-            materialResponse.setContactorName(source.get(i).getMaterialSuppliedContactorName());
-            materialResponse.setContactorPhone(source.get(i).getMaterialSuppliedContactorPhone());
-            materialResponse.setGmtCreated(source.get(i).getGmtCreated());
-            materialResponse.setGmtModified(source.get(i).getGmtModified());
-            materialResponse.setId(source.get(i).getId());
-            MaterialDto materialDto = new MaterialDto();
-            materialDto.setCategory(source.get(i).getMaterialSuppliedCategory());
-            materialDto.setName(source.get(i).getMaterialSuppliedName());
-            materialDto.setQuantity(source.get(i).getMaterialSuppliedQuantity());
-            materialDto.setStandard(source.get(i).getMaterialSuppliedStandard());
-            materialResponse.setMaterial(materialDto);
-            materialResponse.setOrganisationName(source.get(i).getMaterialSuppliedOrganizationName());
-            materialResponse.setStatus(source.get(i).getMaterialSuppliedStatus());
-            target.add(materialResponse);
-        }
-        return target;
+        return source.stream()
+                .map(material -> MaterialResponse.builder()
+                        .address(material.getMaterialSuppliedAddress())
+                        .comment(material.getMaterialSuppliedComment())
+                        .contactorName(material.getMaterialSuppliedContactorName())
+                        .contactorPhone(material.getMaterialSuppliedContactorPhone())
+                        .gmtCreated(material.getGmtCreated())
+                        .gmtModified(material.getGmtModified())
+                        .id(material.getId())
+                        .material(MaterialDto.builder()
+                                .name(material.getMaterialSuppliedName())
+                                .quantity(material.getMaterialSuppliedQuantity())
+                                .standard(material.getMaterialSuppliedStandard())
+                                .category(material.getMaterialSuppliedCategory())
+                                .build())
+                        .organisationName(material.getMaterialSuppliedOrganizationName())
+                        .status(material.getMaterialSuppliedStatus())
+                        .build())
+                .collect(Collectors.toList());
     }
 }
