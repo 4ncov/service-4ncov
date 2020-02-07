@@ -1,4 +1,4 @@
-ALTER TABLE `4ncov`.`material_required`
+ALTER TABLE `material_required`
 DROP COLUMN `material_required_picture_url_1`,
 DROP COLUMN `material_required_picture_url_2`,
 DROP COLUMN `material_required_picture_url_3`,
@@ -10,5 +10,5 @@ ADD COLUMN `material_supplied_organization_name` varchar(100) CHARACTER SET utf8
 DROP PRIMARY KEY,
 ADD PRIMARY KEY (`id`) USING BTREE;
 
-ALTER TABLE `4ncov`.`material_required`
+ALTER TABLE `material_required`
 MODIFY COLUMN `id` bigint(10) UNSIGNED NOT NULL AUTO_INCREMENT FIRST;

@@ -4,21 +4,20 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.google.common.base.Joiner;
 import com.ncov.module.controller.dto.MaterialDto;
 import com.ncov.module.controller.request.material.MaterialRequest;
 import com.ncov.module.controller.resp.material.MaterialResponse;
 import com.ncov.module.entity.MaterialRequiredEntity;
 import com.ncov.module.mapper.MaterialRequiredMapper;
 import com.ncov.module.security.UserContext;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 物料寻求服务
@@ -26,11 +25,10 @@ import java.util.List;
  */
 @Slf4j
 @Service
+@AllArgsConstructor
 public class MaterialRequiredService extends ServiceImpl<MaterialRequiredMapper, MaterialRequiredEntity> {
 
-    @Autowired
     private MaterialRequiredMapper materialRequiredMapper;
-    @Autowired
     private UserContext userContext;
 
     /**
@@ -43,7 +41,7 @@ public class MaterialRequiredService extends ServiceImpl<MaterialRequiredMapper,
                         .setPages(pageSize)
                         .setSize(pageNums),
                 new LambdaQueryWrapper<MaterialRequiredEntity>()
-                        .like(MaterialRequiredEntity::getMaterialSuppliedCategory, category));
+                        .eq(MaterialRequiredEntity::getMaterialSuppliedCategory, category));
         com.ncov.module.controller.resp.Page<MaterialResponse> page = new com.ncov.module.controller.resp.Page<>();
         page.setData(this.carry(result.getRecords()));
         page.setPage(result.getPages());
@@ -58,26 +56,26 @@ public class MaterialRequiredService extends ServiceImpl<MaterialRequiredMapper,
      * @return
      */
     @Transactional(rollbackFor = Exception.class)
-    public MaterialRequiredEntity saveRequiredInfo(MaterialRequest materialRequest){
-        MaterialRequiredEntity materialRequiredEntity = MaterialRequiredEntity.builder()
-                .materialRequiredComment(materialRequest.getComment())
-                .materialRequiredContactorName(materialRequest.getContactorName())
-                .materialRequiredContactorPhone(materialRequest.getContactorPhone())
-                .materialRequiredOrganizationId(1L)
-                .materialRequiredUserId(1L)
-                .materialSuppliedOrganizationName(materialRequest.getOrganisationName())
-                .materialRequireStatus("PUBLISHED")
-                .materialRequiredReceivedAddress(materialRequest.getAddress())
-                .materialSuppliedImageUrls(Joiner.on(",").join(materialRequest.getImageUrls()))
-                .gmtCreated(new Date()).build();
-        materialRequest.getMaterials().stream().forEach(item->{
-            materialRequiredEntity.setMaterialSuppliedCategory(item.getCategory());
-            materialRequiredEntity.setMaterialSuppliedName(item.getName());
-            materialRequiredEntity.setMaterialSuppliedStandard(item.getStandard());
-            materialRequiredEntity.setMaterialRequiredQuantity(item.getQuantity());
-            materialRequiredMapper.insert(materialRequiredEntity);
-        });
-        return materialRequiredEntity;
+    public List<MaterialResponse> saveRequiredInfo(MaterialRequest materialRequest){
+        List<MaterialRequiredEntity> materialRequiredEntities = MaterialRequiredEntity.createList(materialRequest, userContext.getOrganisationId(), userContext.getUserId());
+        saveBatch(materialRequiredEntities);
+        return materialRequiredEntities.stream().map(materialRequiredEntity ->
+                MaterialResponse.builder()
+                        .id(materialRequiredEntity.getId())
+                        .address(materialRequiredEntity.getMaterialRequiredReceivedAddress())
+                        .comment(materialRequiredEntity.getMaterialRequiredComment())
+                        .contactorName(materialRequiredEntity.getMaterialRequiredContactorName())
+                        .contactorPhone(materialRequiredEntity.getMaterialRequiredContactorPhone())
+                        .gmtCreated(materialRequiredEntity.getGmtCreated())
+                        .organisationName(materialRequiredEntity.getMaterialSuppliedOrganizationName())
+                        .status(materialRequiredEntity.getMaterialRequireStatus())
+                        .material(MaterialDto.builder()
+                                .category(materialRequiredEntity.getMaterialSuppliedCategory())
+                                .name(materialRequiredEntity.getMaterialSuppliedName())
+                                .standard(materialRequiredEntity.getMaterialSuppliedStandard())
+                                .quantity(materialRequiredEntity.getMaterialRequiredQuantity()).build())
+                        .build()
+        ).collect(Collectors.toList());
     }
 
     private List<MaterialResponse> carry(List<MaterialRequiredEntity> source){

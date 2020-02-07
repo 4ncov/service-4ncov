@@ -26,8 +26,4 @@ public class MaterialRequest {
     private List<String> imageUrls;
     @ApiModelProperty(value = "备注")
     private String comment;
-    @ApiModelProperty(value = "第几页", notes = "只有分页查询才需要传入数据", required = false)
-    private Integer pageSize;
-    @ApiModelProperty(value = "每页行数", notes = "只有分页查询才需要传入数据", required = false)
-    private Integer pageNums;
 }

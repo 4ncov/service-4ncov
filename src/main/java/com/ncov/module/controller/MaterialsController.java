@@ -16,7 +16,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -33,6 +32,7 @@ public class MaterialsController {
             value = "Create new required material.",
             tags = SwaggerConstants.TAG_REQUIRED_MATERIALS
     )
+    @PreAuthorize("hasRole('ROLE_HOSPITAL')")
     @PostMapping("/required-materials")
     @ResponseStatus(HttpStatus.CREATED)
     public RestResponse createRequiredMaterial(@RequestBody MaterialRequest material) {
@@ -43,6 +43,7 @@ public class MaterialsController {
             value = "List required materials.",
             tags = SwaggerConstants.TAG_REQUIRED_MATERIALS
     )
+    @PreAuthorize("hasRole('ROLE_HOSPITAL')")
     @GetMapping("/required-materials")
     @ResponseStatus(HttpStatus.OK)
     public Page<MaterialResponse> listRequiredMaterials(
