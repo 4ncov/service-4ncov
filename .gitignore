@@ -1,6 +1,6 @@
 HELP.md
 target/*
-!target/4ncov-0.0.1-SNAPSHOT.jar
+!target/4ncov-*.jar
 !**/src/main/**
 !**/src/test/**
 
