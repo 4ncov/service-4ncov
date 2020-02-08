@@ -3,6 +3,7 @@ package com.ncov.module.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.google.common.base.Joiner;
 import com.ncov.module.common.enums.MaterialStatus;
+import com.ncov.module.common.util.ImageUtils;
 import com.ncov.module.controller.request.material.MaterialRequest;
 import lombok.*;
 
@@ -112,5 +113,8 @@ public class MaterialRequiredEntity {
 
     }
 
+    public List<String> getImageUrls() {
+        return ImageUtils.splitImageUrls(getMaterialRequiredImageUrls());
+    }
 
 }

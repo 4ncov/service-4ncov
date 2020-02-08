@@ -79,6 +79,7 @@ public class MaterialRequiredService extends ServiceImpl<MaterialRequiredMapper,
                                 .name(materialRequiredEntity.getMaterialRequiredName())
                                 .standard(materialRequiredEntity.getMaterialRequiredStandard())
                                 .quantity(materialRequiredEntity.getMaterialRequiredQuantity()).build())
+                        .imageUrls(materialRequiredEntity.getImageUrls())
                         .build()
         ).collect(Collectors.toList());
     }
@@ -101,6 +102,7 @@ public class MaterialRequiredService extends ServiceImpl<MaterialRequiredMapper,
                                 .build())
                         .organisationName(material.getMaterialRequiredOrganizationName())
                         .status(material.getMaterialRequiredStatus())
+                        .imageUrls(material.getImageUrls())
                         .build())
                 .collect(Collectors.toList());
     }
