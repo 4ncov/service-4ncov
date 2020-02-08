@@ -35,7 +35,7 @@ public class MaterialSuppliedService extends ServiceImpl<MaterialSuppliedMapper,
             Integer pageNum, Integer pageSize, String category) {
         IPage<MaterialSuppliedEntity> result = materialSuppliedMapper.selectPage(
                 new Page<MaterialSuppliedEntity>()
-                        .setPages(pageNum)
+                        .setCurrent(pageNum)
                         .setSize(pageSize),
                 isNotEmpty(category) ? new LambdaQueryWrapper<MaterialSuppliedEntity>()
                         .eq(MaterialSuppliedEntity::getMaterialSuppliedCategory, category) : null);
