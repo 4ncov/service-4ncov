@@ -18,4 +18,6 @@ public class SignInResponse {
     private String token;
     @ApiModelProperty(value = "token过期时间")
     private Date expiresAt;
+    @ApiModelProperty(value = "用户角色")
+    private String role;
 }

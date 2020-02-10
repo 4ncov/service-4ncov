@@ -75,16 +75,17 @@ public class UserInfoService extends ServiceImpl<UserInfoMapper, UserInfoEntity>
 
         Date now = new Date();
         Date jwtExpirationTime = new Date(now.getTime() + jwtExpirationInMs);
+        UserRole role = UserRole.getRoleById(user.getUserRoleId());
         String token = jwtBuilder
                 .setExpiration(jwtExpirationTime)
                 .setId(UUID.randomUUID().toString())
                 .setIssuer(Constants.JWT_ISSUER)
                 .setIssuedAt(now)
-                .claim("userRole", UserRole.getRoleById(user.getUserRoleId()))
+                .claim("userRole", role)
                 .claim("userNickName", user.getUserNickName())
                 .claim("id", user.getId())
                 .compact();
-        return SignInResponse.builder().token(token).expiresAt(jwtExpirationTime).build();
+        return SignInResponse.builder().token(token).expiresAt(jwtExpirationTime).role(role.name()).build();
     }
 
     public void resetPassword(PasswordResetRequest request) {

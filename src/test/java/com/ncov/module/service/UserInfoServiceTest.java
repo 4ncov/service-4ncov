@@ -74,6 +74,7 @@ class UserInfoServiceTest {
         assertTrue(StringUtils.isNotEmpty(response.getToken()));
         assertTrue(new Date().getTime() < response.getExpiresAt().getTime());
         assertTrue(new DefaultJwtParser().isSigned(response.getToken()));
+        assertEquals("SUPPLIER", response.getRole());
         Claims jwtClaims = new DefaultJwtParser().setSigningKey("123456").parseClaimsJws(response.getToken()).getBody();
         assertEquals(3L, jwtClaims.get("id", Long.class).longValue());
         assertEquals("Nick test", jwtClaims.get("userNickName", String.class));
