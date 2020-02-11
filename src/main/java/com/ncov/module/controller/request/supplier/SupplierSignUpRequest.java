@@ -23,7 +23,6 @@ public class SupplierSignUpRequest {
     @Size(min = 18, max = 18, message = "申请人身份证号必须为18位")
     private String identificationNumber;
     @ApiModelProperty(value = "供应商图片上传, 支持多张图片")
-    @NotEmpty(message = "必须上传至少一张公司资质图片")
     private List<String> imageUrls;
     @ApiModelProperty(value = "联系人")
     @NotEmpty(message = "联系人姓名不能为空")

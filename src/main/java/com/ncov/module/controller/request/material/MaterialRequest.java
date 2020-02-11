@@ -33,7 +33,6 @@ public class MaterialRequest {
     @NotEmpty(message = "联系电话不能为空")
     private String contactorPhone;
     @ApiModelProperty(value = "物资图片, 支持多张")
-    @NotEmpty(message = "需要至少一张物资图片")
     private List<String> imageUrls;
     @ApiModelProperty(value = "备注")
     private String comment;

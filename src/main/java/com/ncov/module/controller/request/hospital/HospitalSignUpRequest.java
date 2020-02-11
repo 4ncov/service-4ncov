@@ -23,7 +23,6 @@ public class HospitalSignUpRequest {
     @Size(min = 18, max = 18, message = "社会统一信用代码必须为18位")
     private String uniformSocialCreditCode;
     @ApiModelProperty(value = "上传的图片地址, 支持多个图片")
-    @NotEmpty(message = "必须上传至少一张申请人身份证明图片")
     private List<String> imageUrls;
     @ApiModelProperty(value = "申请人身份证号")
     @NotEmpty(message = "申请人身份证号不能为空")
