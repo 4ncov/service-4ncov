@@ -49,6 +49,10 @@ spring:
     locations: classpath:db/migration
     outOfOrder: true
     enabled: true
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
 
 security:
   jwtSecret: ${JWT_SECRET}
