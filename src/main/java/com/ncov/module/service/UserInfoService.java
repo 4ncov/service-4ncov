@@ -53,7 +53,7 @@ public class UserInfoService extends ServiceImpl<UserInfoMapper, UserInfoEntity>
                 user.getUserPhone(), user.getUserNickName());
         if (existingUserCount > 0) {
             log.warn("User already exist, phone=[{}], nickName=[{}]", user.getUserPhone(), user.getUserNickName());
-            throw new DuplicateException("该用户已经注册，请使用手机号登陆！");
+            throw new DuplicateException("该机构已有注册账号，不可重复注册");
         }
         save(user);
         return user;
