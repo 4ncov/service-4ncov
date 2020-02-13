@@ -2,8 +2,6 @@ package com.ncov.module.service;
 
 import com.ncov.module.common.enums.UserRole;
 import com.ncov.module.common.exception.DuplicateException;
-import com.ncov.module.common.exception.UserNotFoundException;
-import com.ncov.module.controller.request.user.PasswordResetRequest;
 import com.ncov.module.controller.resp.user.SignInResponse;
 import com.ncov.module.entity.HospitalInfoEntity;
 import com.ncov.module.entity.SupplierInfoEntity;
@@ -17,7 +15,6 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -46,7 +43,7 @@ class UserInfoServiceTest {
         ReflectionTestUtils.setField(userInfoService, "baseMapper", userInfoMapper);
         ReflectionTestUtils.setField(userInfoService, "jwtSecret", "123456");
         ReflectionTestUtils.setField(userInfoService, "jwtExpirationInMs", 259200000L);
-        when(userInfoMapper.findByUserPhone(anyString())).thenReturn(UserInfoEntity.builder().id(3L).userRoleId(2).userNickName("Nick test").userPasswordSHA256(DigestUtils.sha256Hex("password")).userIdentificationNumber("110102196001010001").userPhone("18810119999").build());
+        when(userInfoMapper.findByUserPhone(anyString())).thenReturn(UserInfoEntity.builder().id(3L).userRoleId(2).userNickName("Nick test").userPasswordSHA256(DigestUtils.sha256Hex("password")).userPhone("18810119999").build());
         when(hospitalInfoMapper.selectByHospitalCreatorUserId(anyLong())).thenReturn(HospitalInfoEntity.builder().id(101L).hospitalName("测试医院").build());
         when(supplierMapper.selectByMaterialSupplierCreatorUserId(anyLong())).thenReturn(SupplierInfoEntity.builder().id(102L).materialSupplierName("测试供应商").build());
     }
@@ -112,29 +109,5 @@ class UserInfoServiceTest {
         when(userInfoMapper.findByUserPhone(anyString())).thenReturn(UserInfoEntity.builder().userPasswordSHA256("correctpassword").build());
 
         assertThrows(BadCredentialsException.class, () -> userInfoService.signIn("18800001111", "wrongpassword"));
-    }
-
-    @Test
-    void should_have_password_reset_when_reset_password_given_request() {
-        userInfoService.resetPassword(PasswordResetRequest.builder().telephone("18810119999").identificationNumber("110102196001010001").password("changedPassword").build());
-
-        ArgumentCaptor<UserInfoEntity> userCaptor = ArgumentCaptor.forClass(UserInfoEntity.class);
-        verify(userInfoMapper).updateById(userCaptor.capture());
-        UserInfoEntity user = userCaptor.getValue();
-        assertEquals(DigestUtils.sha256Hex("changedPassword"), user.getUserPasswordSHA256());
-    }
-
-    @Test
-    void should_throw_user_not_found_exception_when_reset_password_given_phone_not_exist() {
-        when(userInfoMapper.findByUserPhone(anyString())).thenReturn(null);
-
-        assertThrows(UserNotFoundException.class, () -> userInfoService.resetPassword(PasswordResetRequest.builder().telephone("18810119999").identificationNumber("110102196001010001").password("changedPassword").build()));
-    }
-
-    @Test
-    void should_throw_user_not_found_exception_when_reset_password_given_identification_number_not_match() {
-        when(userInfoMapper.findByUserPhone(anyString())).thenReturn(UserInfoEntity.builder().id(3L).userRoleId(2).userNickName("Nick test").userPasswordSHA256(DigestUtils.sha256Hex("password")).userIdentificationNumber("110102196001010002").userPhone("18810119999").build());
-
-        assertThrows(UserNotFoundException.class, () -> userInfoService.resetPassword(PasswordResetRequest.builder().telephone("18810119999").identificationNumber("110102196001010001").password("changedPassword").build()));
     }
 }

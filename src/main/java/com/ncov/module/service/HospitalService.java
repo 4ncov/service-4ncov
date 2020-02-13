@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
-import java.util.List;
 
 @Service("hospitalInfoService")
 @Slf4j
@@ -35,12 +34,10 @@ public class HospitalService extends ServiceImpl<HospitalInfoMapper, HospitalInf
                 .contactorTelephone(hospitalInfo.getHospitalContactorTelephone())
                 .uniformSocialCreditCode(hospitalInfo.getHospitalUniformSocialCreditCode())
                 .gmtModified(hospitalInfo.getGmtModified())
-                .identificationNumber(userInfo.getUserIdentificationNumber())
                 .build();
     }
 
     private HospitalInfoEntity saveHospitalInfo(HospitalSignUpRequest hospitalSignUpRequest, Long userId) {
-        List<String> imageUrls = hospitalSignUpRequest.getImageUrls();
         HospitalInfoEntity hospitalInfo = HospitalInfoEntity.builder()
                 .hospitalContactorName(hospitalSignUpRequest.getContactorName())
                 .hospitalContactorTelephone(hospitalSignUpRequest.getContactorTelephone())
@@ -49,7 +46,6 @@ public class HospitalService extends ServiceImpl<HospitalInfoMapper, HospitalInf
                 .hospitalUniformSocialCreditCode(hospitalSignUpRequest.getUniformSocialCreditCode())
                 .gmtCreated(new Date())
                 .build();
-        hospitalInfo.setHospitalVerifyImageUrls(imageUrls);
 
         this.save(hospitalInfo);
         return hospitalInfo;
@@ -61,7 +57,6 @@ public class HospitalService extends ServiceImpl<HospitalInfoMapper, HospitalInf
                 .userPhone(hospitalSignUpRequest.getContactorTelephone())
                 .userRoleId(UserRole.HOSPITAL.getRoleId())
                 .userPasswordSHA256(DigestUtils.sha256Hex(hospitalSignUpRequest.getPassword()))
-                .userIdentificationNumber(hospitalSignUpRequest.getIdentificationNumber())
                 .gmtCreated(new Date())
                 .build());
     }

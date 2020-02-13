@@ -19,8 +19,6 @@ public class HospitalResponse {
     private String uniformSocialCreditCode;
     @ApiModelProperty(value = "需求方联系人")
     private String contactorName;
-    @ApiModelProperty(value = "申请人身份证号")
-    private String identificationNumber;
     @ApiModelProperty(value = "需求方联系电话")
     private String contactorTelephone;
     @ApiModelProperty(value = "创建时间")

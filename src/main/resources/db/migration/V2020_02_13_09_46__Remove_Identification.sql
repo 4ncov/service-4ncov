@@ -1,0 +1,2 @@
+alter table user_info
+drop column user_identification_number;

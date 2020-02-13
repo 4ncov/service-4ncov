@@ -6,7 +6,6 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -22,11 +21,6 @@ public class HospitalSignUpRequest {
     @NotEmpty(message = "社会统一信用代码不能为空")
     @Size(min = 18, max = 18, message = "社会统一信用代码必须为18位")
     private String uniformSocialCreditCode;
-    @ApiModelProperty(value = "上传的图片地址, 支持多个图片")
-    private List<String> imageUrls;
-    @ApiModelProperty(value = "申请人身份证号")
-    @NotEmpty(message = "申请人身份证号不能为空")
-    private String identificationNumber;
     @ApiModelProperty(value = "需求方联系人")
     @NotEmpty(message = "联系人姓名不能为空")
     private String contactorName;

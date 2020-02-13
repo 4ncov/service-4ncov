@@ -6,7 +6,6 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.List;
 
 @Data
@@ -18,10 +17,6 @@ public class SupplierSignUpRequest {
     @ApiModelProperty(value = "供应商公司名称")
     @NotEmpty(message = "供应商公司名称不能为空")
     private String name;
-    @ApiModelProperty(value = "申请人身份证号")
-    @NotEmpty(message = "申请人身份证号不能为空")
-    @Size(min = 18, max = 18, message = "申请人身份证号必须为18位")
-    private String identificationNumber;
     @ApiModelProperty(value = "供应商图片上传, 支持多张图片")
     private List<String> imageUrls;
     @ApiModelProperty(value = "联系人")

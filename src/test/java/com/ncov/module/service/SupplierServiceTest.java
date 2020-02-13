@@ -35,7 +35,7 @@ class SupplierServiceTest {
     void setUp() {
         MockitoAnnotations.initMocks(this);
         ReflectionTestUtils.setField(supplierService, "baseMapper", supplierMapper);
-        when(userInfoService.createUniqueUser(any(UserInfoEntity.class))).thenReturn(UserInfoEntity.builder().id(31L).userIdentificationNumber("110301192001010001").build());
+        when(userInfoService.createUniqueUser(any(UserInfoEntity.class))).thenReturn(UserInfoEntity.builder().id(31L).build());
         when(supplierMapper.insert(any(SupplierInfoEntity.class))).then((mock) -> {
             ((SupplierInfoEntity) (mock.getArgument(0))).setId(703L);
             return 1;
@@ -46,7 +46,6 @@ class SupplierServiceTest {
     void should_return_supplier_response_when_sign_up_given_supplier_sign_up_request() {
         SupplierResponse response = supplierService.signUp(SupplierSignUpRequest.builder()
                 .name("Liangshan Haohan Supplier Pty Ltd")
-                .identificationNumber("110301192001010001")
                 .imageUrls(Collections.singletonList("https://oss.com/images/1.png"))
                 .contactorName("Mock")
                 .contactorTelephone("18900010001")
@@ -56,7 +55,6 @@ class SupplierServiceTest {
 
         assertEquals(703L, response.getId().longValue());
         assertEquals("Liangshan Haohan Supplier Pty Ltd", response.getName());
-        assertEquals("110301192001010001", response.getIdentificationNumber());
         assertEquals("Mock", response.getContactorName());
         assertEquals("18900010001", response.getContactorTelephone());
         assertTrue(response.getHaveLogistics());
@@ -67,7 +65,6 @@ class SupplierServiceTest {
     void should_create_user_when_sign_up() {
         supplierService.signUp(SupplierSignUpRequest.builder()
                 .name("Liangshan Haohan Supplier Pty Ltd")
-                .identificationNumber("110301192001010001")
                 .imageUrls(Collections.singletonList("https://oss.com/images/1.png"))
                 .contactorName("Mock")
                 .contactorTelephone("18900010001")
@@ -82,7 +79,6 @@ class SupplierServiceTest {
         assertEquals(DigestUtils.sha256Hex("87654321"), user.getUserPasswordSHA256());
         assertEquals("18900010001", user.getUserPhone());
         assertEquals(UserRole.SUPPLIER.getRoleId(), user.getUserRoleId());
-        assertEquals("110301192001010001", user.getUserIdentificationNumber());
         assertNotNull(user.getGmtCreated());
     }
 
@@ -90,7 +86,6 @@ class SupplierServiceTest {
     void should_save_supplier_when_sign_up() {
         supplierService.signUp(SupplierSignUpRequest.builder()
                 .name("Liangshan Haohan Supplier Pty Ltd")
-                .identificationNumber("110301192001010001")
                 .imageUrls(Arrays.asList("https://oss.com/images/1.png", "https://oss.com/images/2.png"))
                 .contactorName("Mock")
                 .contactorTelephone("18900010001")
