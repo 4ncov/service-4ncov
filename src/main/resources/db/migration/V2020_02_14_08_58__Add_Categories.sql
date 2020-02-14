@@ -5,7 +5,7 @@ create table material_category (
     gmt_created datetime not null
 );
 
-insert into material_category (`name`, unit) values
+insert into material_category (`name`, unit, gmt_created) values
 ('医用防护服','套',now()),
 ('N95口罩','个',now()),
 ('N95口罩-3M','个',now()),
