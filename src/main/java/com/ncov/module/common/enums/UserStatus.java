@@ -6,12 +6,9 @@ import lombok.Getter;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-public enum MaterialStatus {
+public enum UserStatus {
 
-    PENDING("待审核"),
-    PUBLISHED("已发布"),
-    PROCESSING("处理中"),
-    COMPLETED("已完成");
+    PENDING("待审核"), ACTIVE("使用中"), SUSPENDED("已注销");
 
     private String description;
 }

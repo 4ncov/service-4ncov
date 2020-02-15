@@ -20,4 +20,5 @@ public class MaterialCategoryEntity {
     private String name;
     private String unit;
     private Date gmtCreated;
+    private Short deleted;
 }

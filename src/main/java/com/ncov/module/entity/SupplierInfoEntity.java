@@ -1,9 +1,6 @@
 package com.ncov.module.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import com.ncov.module.common.Constants;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,6 +32,7 @@ public class SupplierInfoEntity {
     private Boolean haveLogistics;
     private Date gmtCreated;
     private Date gmtModified;
+    private Short deleted;
 
     public List<String> getAllImageUrls() {
         if (StringUtils.isEmpty(getMaterialSupplierVerifyImageUrls())) {

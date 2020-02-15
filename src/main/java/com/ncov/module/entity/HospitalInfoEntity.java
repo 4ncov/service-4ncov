@@ -32,6 +32,7 @@ public class HospitalInfoEntity {
     private String hospitalContactorTelephone;
     private Date gmtCreated;
     private Date gmtModified;
+    private Short deleted;
 
     public List<String> getAllImageUrls() {
         if (StringUtils.isEmpty(getHospitalVerifyImageUrls())) {

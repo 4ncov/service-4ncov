@@ -83,6 +83,7 @@ public class MaterialRequiredEntity {
 
     private Date gmtCreated;
     private Date gmtModified;
+    private Short deleted;
 
 
     /**

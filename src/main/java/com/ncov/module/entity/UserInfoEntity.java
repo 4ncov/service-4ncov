@@ -28,6 +28,8 @@ public class UserInfoEntity {
     private Date gmtModified;
     private String userPhone;
     private Integer userRoleId;
+    private Short deleted;
+    private String status;
 
     public boolean isHospital() {
         return UserRole.HOSPITAL.getRoleId().equals(getUserRoleId());

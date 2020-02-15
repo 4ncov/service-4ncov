@@ -38,6 +38,7 @@ public class MaterialSuppliedEntity {
     private String materialSuppliedImageUrls;
     private Date gmtCreated;
     private Date gmtModified;
+    private Short deleted;
 
     public static List<MaterialSuppliedEntity> create(MaterialRequest request,
                                                       Long organisationId, Long userId) {
