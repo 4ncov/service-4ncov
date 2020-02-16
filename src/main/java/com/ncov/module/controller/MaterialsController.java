@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.Date;
@@ -41,6 +42,30 @@ public class MaterialsController {
     }
 
     @ApiOperation(
+            value = "Approve a required material.",
+            tags = SwaggerConstants.TAG_REQUIRED_MATERIALS
+    )
+    @PreAuthorize("hasRole('ROLE_SYSADMIN')")
+    @PatchMapping("/required-materials/{id}:approve")
+    @ResponseStatus(HttpStatus.OK)
+    public RestResponse approveRequiredMaterial(@PathVariable Long id) {
+        materialRequiredService.approve(id);
+        return RestResponse.getResp("保存成功");
+    }
+
+    @ApiOperation(
+            value = "Reject a required material.",
+            tags = SwaggerConstants.TAG_REQUIRED_MATERIALS
+    )
+    @PreAuthorize("hasRole('ROLE_SYSADMIN')")
+    @PatchMapping("/required-materials/{id}:reject")
+    @ResponseStatus(HttpStatus.OK)
+    public RestResponse rejectRequiredMaterial(@PathVariable Long id, @RequestParam String reviewMessage) {
+        materialRequiredService.reject(id, reviewMessage);
+        return RestResponse.getResp("保存成功");
+    }
+
+    @ApiOperation(
             value = "List required materials.",
             tags = SwaggerConstants.TAG_REQUIRED_MATERIALS
     )
@@ -50,6 +75,20 @@ public class MaterialsController {
             @RequestParam Integer page, @RequestParam Integer size,
             @RequestParam(name = "category", required = false) String category) {
         return materialRequiredService.getRequiredPageList(page, size, category);
+    }
+
+    @ApiOperation(
+            value = "List all required materials (admin only).",
+            tags = SwaggerConstants.TAG_REQUIRED_MATERIALS
+    )
+    @PreAuthorize("hasRole('ROLE_SYSADMIN')")
+    @GetMapping("/required-materials/all")
+    @ResponseStatus(HttpStatus.OK)
+    public Page<MaterialResponse> listAllRequiredMaterials(
+            @RequestParam Integer page, @RequestParam Integer size,
+            @RequestParam(name = "category", required = false) String category,
+            @RequestParam(name = "status", required = false) String status) {
+        return materialRequiredService.getAllRequiredMaterialsPage(page, size, category, status);
     }
 
     @ApiOperation(
@@ -115,6 +154,30 @@ public class MaterialsController {
     }
 
     @ApiOperation(
+            value = "Admin approve a supplied material.",
+            tags = SwaggerConstants.TAG_SUPPLIED_MATERIALS
+    )
+    @PatchMapping("/supplied-materials/{id}:approve")
+    @PreAuthorize("hasRole('ROLE_SYSADMIN')")
+    @ResponseStatus(HttpStatus.OK)
+    public RestResponse approveSuppliedMaterial(@PathVariable Long id) {
+        materialSuppliedService.approve(id);
+        return RestResponse.getResp("保存成功");
+    }
+
+    @ApiOperation(
+            value = "Admin reject a supplied material.",
+            tags = SwaggerConstants.TAG_SUPPLIED_MATERIALS
+    )
+    @PatchMapping("/supplied-materials/{id}:reject")
+    @PreAuthorize("hasRole('ROLE_SYSADMIN')")
+    @ResponseStatus(HttpStatus.OK)
+    public RestResponse rejectSuppliedMaterial(@PathVariable Long id, @RequestParam String reviewMessage) {
+        materialSuppliedService.reject(id, reviewMessage);
+        return RestResponse.getResp("保存成功");
+    }
+
+    @ApiOperation(
             value = "List supplied materials.",
             tags = SwaggerConstants.TAG_SUPPLIED_MATERIALS
     )
@@ -124,6 +187,20 @@ public class MaterialsController {
             @RequestParam Integer page, @RequestParam Integer size,
             @RequestParam(name = "category", required = false) String category) {
         return materialSuppliedService.getSuppliedPageList(page, size, category);
+    }
+
+    @ApiOperation(
+            value = "Admin list all supplied materials.",
+            tags = SwaggerConstants.TAG_SUPPLIED_MATERIALS
+    )
+    @GetMapping("/supplied-materials/all")
+    @PreAuthorize("hasRole('ROLE_SYSADMIN')")
+    @ResponseStatus(HttpStatus.OK)
+    public Page<MaterialResponse> listAllSuppliedMaterials(
+            @RequestParam Integer page, @RequestParam Integer size,
+            @RequestParam(name = "category", required = false) String category,
+            @RequestParam(name = "status", required = false) String status) {
+        return materialSuppliedService.getAllSuppliedMaterialsPage(page, size, category, status);
     }
 
     @ApiOperation(

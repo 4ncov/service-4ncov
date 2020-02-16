@@ -81,6 +81,8 @@ public class MaterialRequiredEntity {
      */
     private String materialRequiredStatus;
 
+    private String reviewMessage;
+
     private Date gmtCreated;
     private Date gmtModified;
     private Short deleted;
@@ -118,4 +120,15 @@ public class MaterialRequiredEntity {
         return ImageUtils.splitImageUrls(getMaterialRequiredImageUrls());
     }
 
+    public void approve() {
+        setMaterialRequiredStatus(MaterialStatus.PUBLISHED.name());
+        setReviewMessage("");
+        setGmtModified(new Date());
+    }
+
+    public void reject(String message) {
+        setMaterialRequiredStatus(MaterialStatus.PENDING.name());
+        setReviewMessage(message);
+        setGmtModified(new Date());
+    }
 }

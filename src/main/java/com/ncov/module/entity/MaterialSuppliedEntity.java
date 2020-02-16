@@ -36,6 +36,7 @@ public class MaterialSuppliedEntity {
     private String materialSuppliedComment;
     private String materialSuppliedStatus;
     private String materialSuppliedImageUrls;
+    private String reviewMessage;
     private Date gmtCreated;
     private Date gmtModified;
     private Short deleted;
@@ -64,5 +65,17 @@ public class MaterialSuppliedEntity {
 
     public List<String> getImageUrls() {
         return ImageUtils.splitImageUrls(getMaterialSuppliedImageUrls());
+    }
+
+    public void approve() {
+        setMaterialSuppliedStatus(MaterialStatus.PUBLISHED.name());
+        setReviewMessage("");
+        setGmtModified(new Date());
+    }
+
+    public void reject(String message) {
+        setMaterialSuppliedStatus(MaterialStatus.PENDING.name());
+        setReviewMessage(message);
+        setGmtModified(new Date());
     }
 }

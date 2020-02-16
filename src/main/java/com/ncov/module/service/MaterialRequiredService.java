@@ -1,9 +1,10 @@
 package com.ncov.module.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ncov.module.common.enums.MaterialStatus;
+import com.ncov.module.common.exception.MaterialNotFoundException;
 import com.ncov.module.controller.dto.MaterialDto;
 import com.ncov.module.controller.request.material.MaterialRequest;
 import com.ncov.module.controller.resp.material.MaterialResponse;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
@@ -38,18 +40,21 @@ public class MaterialRequiredService extends ServiceImpl<MaterialRequiredMapper,
      */
     public com.ncov.module.controller.resp.Page<MaterialResponse> getRequiredPageList(
             Integer pageNum, Integer pageSize, String category) {
-        IPage<MaterialRequiredEntity> result = materialRequiredMapper.selectPage(
-                new Page<MaterialRequiredEntity>()
-                        .setCurrent(pageNum)
-                        .setSize(pageSize),
-                isNotEmpty(category) ? new LambdaQueryWrapper<MaterialRequiredEntity>()
-                        .eq(MaterialRequiredEntity::getMaterialRequiredCategory, category) : null);
-        com.ncov.module.controller.resp.Page<MaterialResponse> page = new com.ncov.module.controller.resp.Page<>();
-        page.setData(this.carry(result.getRecords()));
-        page.setPage(pageNum);
-        page.setTotal(result.getTotal());
-        page.setPageSize(pageSize);
-        return page;
+        LambdaQueryWrapper<MaterialRequiredEntity> queryWrapper = new LambdaQueryWrapper<MaterialRequiredEntity>()
+                .ne(MaterialRequiredEntity::getMaterialRequiredStatus, MaterialStatus.PENDING.name());
+        if (isNotEmpty(category)) {
+            queryWrapper = queryWrapper.eq(MaterialRequiredEntity::getMaterialRequiredCategory, category);
+        }
+
+        Page<MaterialRequiredEntity> results = materialRequiredMapper.selectPage(
+                new Page<MaterialRequiredEntity>().setCurrent(pageNum).setSize(pageSize),
+                queryWrapper);
+        return com.ncov.module.controller.resp.Page.<MaterialResponse>builder()
+                .data(carry(results.getRecords()))
+                .page(pageNum)
+                .pageSize(pageSize)
+                .total(results.getTotal())
+                .build();
     }
 
     /**
@@ -64,24 +69,54 @@ public class MaterialRequiredService extends ServiceImpl<MaterialRequiredMapper,
         List<MaterialRequiredEntity> materialRequiredEntities = MaterialRequiredEntity.createList(
                 materialRequest, organisationId, userId);
         saveBatch(materialRequiredEntities);
-        return materialRequiredEntities.stream().map(materialRequiredEntity ->
-                MaterialResponse.builder()
-                        .id(materialRequiredEntity.getId())
-                        .address(materialRequiredEntity.getMaterialRequiredReceivedAddress())
-                        .comment(materialRequiredEntity.getMaterialRequiredComment())
-                        .contactorName(materialRequiredEntity.getMaterialRequiredContactorName())
-                        .contactorPhone(materialRequiredEntity.getMaterialRequiredContactorPhone())
-                        .gmtCreated(materialRequiredEntity.getGmtCreated())
-                        .organisationName(materialRequiredEntity.getMaterialRequiredOrganizationName())
-                        .status(materialRequiredEntity.getMaterialRequiredStatus())
-                        .material(MaterialDto.builder()
-                                .category(materialRequiredEntity.getMaterialRequiredCategory())
-                                .name(materialRequiredEntity.getMaterialRequiredName())
-                                .standard(materialRequiredEntity.getMaterialRequiredStandard())
-                                .quantity(materialRequiredEntity.getMaterialRequiredQuantity()).build())
-                        .imageUrls(materialRequiredEntity.getImageUrls())
-                        .build()
-        ).collect(Collectors.toList());
+        return carry(materialRequiredEntities);
+    }
+
+    public com.ncov.module.controller.resp.Page<MaterialResponse> getAllRequiredMaterialsPage(
+            Integer page, Integer size, String category, String status) {
+        Page<MaterialRequiredEntity> results = materialRequiredMapper.selectPage(
+                new Page<MaterialRequiredEntity>().setCurrent(page).setSize(size),
+                getFilterQueryWrapper(category, status)
+        );
+        return com.ncov.module.controller.resp.Page.<MaterialResponse>builder()
+                .data(carry(results.getRecords()))
+                .page(page)
+                .pageSize(size)
+                .total(results.getTotal())
+                .build();
+    }
+
+    public MaterialResponse update(MaterialRequest request) {
+        // TODO
+        return null;
+    }
+
+    public void approve(Long id) {
+        MaterialRequiredEntity material = getById(id);
+        material.approve();
+        save(material);
+    }
+
+    public void reject(Long id, String message) {
+        MaterialRequiredEntity material = getById(id);
+        material.reject(message);
+        save(material);
+    }
+
+    private LambdaQueryWrapper<MaterialRequiredEntity> getFilterQueryWrapper(String category, String status) {
+        LambdaQueryWrapper<MaterialRequiredEntity> queryWrapper = new LambdaQueryWrapper<>();
+        if (isNotEmpty(category)) {
+            queryWrapper = queryWrapper.eq(MaterialRequiredEntity::getMaterialRequiredCategory, category);
+        }
+        if (isNotEmpty(status)) {
+            queryWrapper = queryWrapper.eq(MaterialRequiredEntity::getMaterialRequiredStatus, status);
+        }
+        return queryWrapper;
+    }
+
+    private MaterialRequiredEntity getById(Long id) {
+        return Optional.ofNullable(materialRequiredMapper.selectById(id))
+                .orElseThrow(MaterialNotFoundException::new);
     }
 
     private List<MaterialResponse> carry(List<MaterialRequiredEntity> source) {
