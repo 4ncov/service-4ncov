@@ -34,6 +34,8 @@ public class MaterialResponse {
     private String status;
     @ApiModelProperty(value = "图片URL列表")
     private List<String> imageUrls;
+    @ApiModelProperty(value = "审核意见")
+    private String reviewMessage;
     @ApiModelProperty(value = "创建时间")
     private Date gmtCreated;
     @ApiModelProperty(value = "上次更新时间")
