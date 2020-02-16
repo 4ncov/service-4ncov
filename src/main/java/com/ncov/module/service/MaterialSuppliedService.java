@@ -61,13 +61,13 @@ public class MaterialSuppliedService extends ServiceImpl<MaterialSuppliedMapper,
     public void approve(Long id) {
         MaterialSuppliedEntity material = getById(id);
         material.approve();
-        save(material);
+        updateById(material);
     }
 
     public void reject(Long id, String message) {
         MaterialSuppliedEntity material = getById(id);
         material.reject(message);
-        save(material);
+        updateById(material);
     }
 
     public com.ncov.module.controller.resp.Page<MaterialResponse> getAllSuppliedMaterialsPage(

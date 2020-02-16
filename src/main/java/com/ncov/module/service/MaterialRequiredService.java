@@ -94,13 +94,13 @@ public class MaterialRequiredService extends ServiceImpl<MaterialRequiredMapper,
     public void approve(Long id) {
         MaterialRequiredEntity material = getById(id);
         material.approve();
-        save(material);
+        updateById(material);
     }
 
     public void reject(Long id, String message) {
         MaterialRequiredEntity material = getById(id);
         material.reject(message);
-        save(material);
+        updateById(material);
     }
 
     private LambdaQueryWrapper<MaterialRequiredEntity> getFilterQueryWrapper(String category, String status) {
