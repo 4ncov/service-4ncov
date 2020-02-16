@@ -1,10 +1,12 @@
 package com.ncov.module.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ncov.module.common.Constants;
 import com.ncov.module.common.enums.UserRole;
 import com.ncov.module.common.exception.DuplicateException;
 import com.ncov.module.controller.resp.user.SignInResponse;
+import com.ncov.module.controller.resp.user.UserResponse;
 import com.ncov.module.entity.HospitalInfoEntity;
 import com.ncov.module.entity.SupplierInfoEntity;
 import com.ncov.module.entity.UserInfoEntity;
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service("userInfoService")
 @Slf4j
@@ -86,6 +89,17 @@ public class UserInfoService extends ServiceImpl<UserInfoMapper, UserInfoEntity>
         return SignInResponse.builder().token(token).expiresAt(jwtExpirationTime).role(role.name()).build();
     }
 
+    public com.ncov.module.controller.resp.Page<UserResponse> listAllUsers(Integer page, Integer size) {
+        Page<UserInfoEntity> results = userInfoMapper.selectPage(
+                new Page<UserInfoEntity>().setCurrent(page).setSize(size), null);
+        return com.ncov.module.controller.resp.Page.<UserResponse>builder()
+                .total(results.getTotal())
+                .page(page)
+                .pageSize(size)
+                .data(results.getRecords().stream().map(this::toResponse).collect(Collectors.toList()))
+                .build();
+    }
+
     private void addOrganisationClaimToJwt(UserInfoEntity user, JwtBuilder jwtBuilder) {
         if (user.isHospital()) {
             HospitalInfoEntity hospital = hospitalInfoMapper.selectByHospitalCreatorUserId(user.getId());
@@ -98,5 +112,17 @@ public class UserInfoService extends ServiceImpl<UserInfoMapper, UserInfoEntity>
             jwtBuilder.claim("organisationId", supplier.getId());
             jwtBuilder.claim("organisationName", supplier.getMaterialSupplierName());
         }
+    }
+
+    private UserResponse toResponse(UserInfoEntity user) {
+        return UserResponse.builder()
+                .id(user.getId().toString())
+                .nickName(user.getUserNickName())
+                .gmtCreated(user.getGmtCreated())
+                .gmtModified(user.getGmtModified())
+                .phone(user.getUserPhone())
+                .role(UserRole.getRoleById(user.getUserRoleId()).name())
+                .status(user.getStatus())
+                .build();
     }
 }
