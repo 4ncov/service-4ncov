@@ -12,7 +12,7 @@ import java.util.Date;
 public class HospitalResponse {
 
     @ApiModelProperty(value = "需求方唯一ID")
-    private Long id;
+    private String id;
     @ApiModelProperty(value = "需求方机构名称")
     private String name;
     @ApiModelProperty(value = "18位社会统一信用代码")

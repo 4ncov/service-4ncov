@@ -48,7 +48,7 @@ class MaterialSuppliedServiceTest {
 
         assertEquals(1, responses.size());
         MaterialResponse response = responses.get(0);
-        assertEquals(10L, response.getId().longValue());
+        assertEquals("10", response.getId());
         assertEquals(MaterialDto.builder().name("Materialname").quantity(200000.0).standard("ISO9001").category("Mask").build(), response.getMaterial());
         assertEquals("Supplier Organisation", response.getOrganisationName());
         assertEquals("1 Test Rd, Test, Test", response.getAddress());
@@ -112,7 +112,7 @@ class MaterialSuppliedServiceTest {
 
         assertEquals(2, responses.size());
         MaterialResponse response0 = responses.get(0);
-        assertEquals(10L, response0.getId().longValue());
+        assertEquals("10", response0.getId());
         assertEquals(MaterialDto.builder().name("Materialname").quantity(200000.0).standard("ISO9001").category("Mask").build(), response0.getMaterial());
         assertEquals("Supplier Organisation", response0.getOrganisationName());
         assertEquals("1 Test Rd, Test, Test", response0.getAddress());
@@ -122,7 +122,7 @@ class MaterialSuppliedServiceTest {
         assertEquals("PENDING", response0.getStatus());
         assertNotNull(response0.getGmtCreated());
         MaterialResponse response1 = responses.get(1);
-        assertEquals(11L, response1.getId().longValue());
+        assertEquals("11", response1.getId());
         assertEquals(MaterialDto.builder().name("Coat").quantity(3000.0).standard("ISO9002").category("Coat").build(), response1.getMaterial());
         assertEquals("Supplier Organisation", response1.getOrganisationName());
         assertEquals("1 Test Rd, Test, Test", response1.getAddress());

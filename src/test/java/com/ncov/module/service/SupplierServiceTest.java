@@ -53,7 +53,7 @@ class SupplierServiceTest {
                 .haveLogistics(true)
                 .build());
 
-        assertEquals(703L, response.getId().longValue());
+        assertEquals("703", response.getId());
         assertEquals("Liangshan Haohan Supplier Pty Ltd", response.getName());
         assertEquals("Mock", response.getContactorName());
         assertEquals("18900010001", response.getContactorTelephone());

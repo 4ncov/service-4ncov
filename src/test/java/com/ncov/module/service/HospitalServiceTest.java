@@ -48,7 +48,7 @@ class HospitalServiceTest {
                 .password("12345678")
                 .build());
 
-        assertEquals(98L, response.getId().longValue());
+        assertEquals("98", response.getId());
         assertEquals("Wuhan Test Hospital", response.getName());
         assertEquals("123456789012345678", response.getUniformSocialCreditCode());
         assertEquals("Test", response.getContactorName());

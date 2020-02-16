@@ -15,7 +15,7 @@ import java.util.Date;
 public class MaterialCategoryResponse {
 
     @ApiModelProperty(name = "类型唯一ID")
-    private Long id;
+    private String id;
     @ApiModelProperty(name = "类型名称")
     private String name;
     @ApiModelProperty(name = "类型单位")

@@ -13,7 +13,7 @@ import java.util.Date;
 public class SupplierResponse {
 
     @ApiModelProperty(value = "供应商唯一ID")
-    private Long id;
+    private String id;
     @ApiModelProperty(value = "供应商公司名称")
     private String name;
     @ApiModelProperty(value = "联系人")

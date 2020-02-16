@@ -109,7 +109,7 @@ public class MaterialSuppliedService extends ServiceImpl<MaterialSuppliedMapper,
                         .contactorPhone(material.getMaterialSuppliedContactorPhone())
                         .gmtCreated(material.getGmtCreated())
                         .gmtModified(material.getGmtModified())
-                        .id(material.getId())
+                        .id(material.getId().toString())
                         .material(MaterialDto.builder()
                                 .name(material.getMaterialSuppliedName())
                                 .quantity(material.getMaterialSuppliedQuantity())

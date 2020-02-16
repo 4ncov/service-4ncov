@@ -105,7 +105,7 @@ public class MaterialsController {
                 .total(2L)
                 .data(Arrays.asList(
                         MaterialResponse.builder()
-                                .id(1L)
+                                .id("1")
                                 .material(MaterialDto.builder()
                                         .name("N95口罩")
                                         .category("口罩")
@@ -121,7 +121,7 @@ public class MaterialsController {
                                 .gmtModified(new Date())
                                 .build(),
                         MaterialResponse.builder()
-                                .id(2L)
+                                .id("2")
                                 .material(MaterialDto.builder()
                                         .name("医用防护服")
                                         .category("防护服")
@@ -217,7 +217,7 @@ public class MaterialsController {
                 .total(2L)
                 .data(Arrays.asList(
                         MaterialResponse.builder()
-                                .id(1L)
+                                .id("1")
                                 .material(MaterialDto.builder()
                                         .name("N95口罩")
                                         .category("口罩")
@@ -233,7 +233,7 @@ public class MaterialsController {
                                 .gmtModified(new Date())
                                 .build(),
                         MaterialResponse.builder()
-                                .id(2L)
+                                .id("2")
                                 .material(MaterialDto.builder()
                                         .name("医用防护服")
                                         .category("防护服")

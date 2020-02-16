@@ -128,7 +128,7 @@ public class MaterialRequiredService extends ServiceImpl<MaterialRequiredMapper,
                         .contactorPhone(material.getMaterialRequiredContactorPhone())
                         .gmtCreated(material.getGmtCreated())
                         .gmtModified(material.getGmtModified())
-                        .id(material.getId())
+                        .id(material.getId().toString())
                         .material(MaterialDto.builder()
                                 .category(material.getMaterialRequiredCategory())
                                 .standard(material.getMaterialRequiredStandard())

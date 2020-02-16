@@ -27,7 +27,7 @@ public class SupplierService extends ServiceImpl<SupplierMapper, SupplierInfoEnt
         UserInfoEntity userInfo = this.saveUserInfo(supplierSignUpRequest);
         SupplierInfoEntity supplierInfo = this.saveSupplierInfo(supplierSignUpRequest, userInfo.getId());
         return SupplierResponse.builder()
-                .id(supplierInfo.getId())
+                .id(supplierInfo.getId().toString())
                 .contactorName(supplierInfo.getMaterialSupplierContactorName())
                 .gmtCreated(supplierInfo.getGmtCreated())
                 .haveLogistics(supplierInfo.getHaveLogistics())

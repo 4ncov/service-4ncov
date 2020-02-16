@@ -17,7 +17,7 @@ import java.util.List;
 public class MaterialResponse {
 
     @ApiModelProperty(value = "需求/供应物资唯一ID")
-    private Long id;
+    private String id;
     @ApiModelProperty(value = "物资信息")
     private MaterialDto material;
     @ApiModelProperty(value = "寻求方/供货方机构名称")
