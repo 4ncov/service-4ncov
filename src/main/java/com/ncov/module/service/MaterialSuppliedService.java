@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -71,10 +72,10 @@ public class MaterialSuppliedService extends ServiceImpl<MaterialSuppliedMapper,
     }
 
     public com.ncov.module.controller.resp.Page<MaterialResponse> getAllSuppliedMaterialsPage(
-            Integer page, Integer size, String category, String status) {
+            Integer page, Integer size, String category, String status, String contactPhone, Long userId) {
         Page<MaterialSuppliedEntity> results = materialSuppliedMapper.selectPage(
                 new Page<MaterialSuppliedEntity>().setCurrent(page).setSize(size),
-                getFilterQueryWrapper(category, status)
+                getFilterQueryWrapper(category, status, contactPhone, userId)
         );
         return com.ncov.module.controller.resp.Page.<MaterialResponse>builder()
                 .data(carry(results.getRecords()))
@@ -84,13 +85,22 @@ public class MaterialSuppliedService extends ServiceImpl<MaterialSuppliedMapper,
                 .build();
     }
 
-    private LambdaQueryWrapper<MaterialSuppliedEntity> getFilterQueryWrapper(String category, String status) {
+    private LambdaQueryWrapper<MaterialSuppliedEntity> getFilterQueryWrapper(String category,
+                                                                             String status,
+                                                                             String contactPhone,
+                                                                             Long userId) {
         LambdaQueryWrapper<MaterialSuppliedEntity> queryWrapper = new LambdaQueryWrapper<>();
         if (isNotEmpty(category)) {
             queryWrapper = queryWrapper.eq(MaterialSuppliedEntity::getMaterialSuppliedCategory, category);
         }
         if (isNotEmpty(status)) {
             queryWrapper = queryWrapper.eq(MaterialSuppliedEntity::getMaterialSuppliedStatus, status);
+        }
+        if (isNotEmpty(contactPhone)) {
+            queryWrapper = queryWrapper.eq(MaterialSuppliedEntity::getMaterialSuppliedContactorPhone, contactPhone);
+        }
+        if (Objects.nonNull(userId)) {
+            queryWrapper = queryWrapper.eq(MaterialSuppliedEntity::getMaterialSuppliedUserId, userId);
         }
         return queryWrapper;
     }

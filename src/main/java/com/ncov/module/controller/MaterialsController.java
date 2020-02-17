@@ -87,8 +87,10 @@ public class MaterialsController {
     public Page<MaterialResponse> listAllRequiredMaterials(
             @RequestParam Integer page, @RequestParam Integer size,
             @RequestParam(name = "category", required = false) String category,
-            @RequestParam(name = "status", required = false) String status) {
-        return materialRequiredService.getAllRequiredMaterialsPage(page, size, category, status);
+            @RequestParam(name = "status", required = false) String status,
+            @RequestParam(name = "contactPhone", required = false) String contactPhone,
+            @RequestParam(name = "userId", required = false) Long userId) {
+        return materialRequiredService.getAllRequiredMaterialsPage(page, size, category, status, contactPhone, userId);
     }
 
     @ApiOperation(
@@ -199,8 +201,10 @@ public class MaterialsController {
     public Page<MaterialResponse> listAllSuppliedMaterials(
             @RequestParam Integer page, @RequestParam Integer size,
             @RequestParam(name = "category", required = false) String category,
-            @RequestParam(name = "status", required = false) String status) {
-        return materialSuppliedService.getAllSuppliedMaterialsPage(page, size, category, status);
+            @RequestParam(name = "status", required = false) String status,
+            @RequestParam(name = "contactPhone", required = false) String contactPhone,
+            @RequestParam(name = "userId", required = false) Long userId) {
+        return materialSuppliedService.getAllSuppliedMaterialsPage(page, size, category, status, contactPhone, userId);
     }
 
     @ApiOperation(
