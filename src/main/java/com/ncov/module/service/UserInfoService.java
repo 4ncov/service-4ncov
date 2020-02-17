@@ -5,7 +5,11 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ncov.module.common.Constants;
 import com.ncov.module.common.enums.UserRole;
 import com.ncov.module.common.exception.DuplicateException;
+import com.ncov.module.common.exception.UserNotFoundException;
+import com.ncov.module.controller.resp.hospital.HospitalResponse;
+import com.ncov.module.controller.resp.supplier.SupplierResponse;
 import com.ncov.module.controller.resp.user.SignInResponse;
+import com.ncov.module.controller.resp.user.UserDetailResponse;
 import com.ncov.module.controller.resp.user.UserResponse;
 import com.ncov.module.entity.HospitalInfoEntity;
 import com.ncov.module.entity.SupplierInfoEntity;
@@ -26,6 +30,8 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static java.util.Objects.nonNull;
 
 @Service("userInfoService")
 @Slf4j
@@ -100,6 +106,19 @@ public class UserInfoService extends ServiceImpl<UserInfoMapper, UserInfoEntity>
                 .build();
     }
 
+    public UserDetailResponse getDetail(Long id) {
+        UserInfoEntity user = Optional.ofNullable(getById(id)).orElseThrow(UserNotFoundException::new);
+        HospitalInfoEntity hospital = null;
+        SupplierInfoEntity supplier = null;
+        if (user.isHospital()) {
+            hospital = hospitalInfoMapper.selectByHospitalCreatorUserId(user.getId());
+        }
+        if (user.isSupplier()) {
+            supplier = supplierMapper.selectByMaterialSupplierCreatorUserId(user.getId());
+        }
+        return toDetailResponse(user, hospital, supplier);
+    }
+
     private void addOrganisationClaimToJwt(UserInfoEntity user, JwtBuilder jwtBuilder) {
         if (user.isHospital()) {
             HospitalInfoEntity hospital = hospitalInfoMapper.selectByHospitalCreatorUserId(user.getId());
@@ -124,5 +143,41 @@ public class UserInfoService extends ServiceImpl<UserInfoMapper, UserInfoEntity>
                 .role(UserRole.getRoleById(user.getUserRoleId()).name())
                 .status(user.getStatus())
                 .build();
+    }
+
+    private UserDetailResponse toDetailResponse(UserInfoEntity user,
+                                                HospitalInfoEntity hospital,
+                                                SupplierInfoEntity supplier) {
+        UserDetailResponse.UserDetailResponseBuilder builder = UserDetailResponse.builder()
+                .id(user.getId().toString())
+                .nickName(user.getUserNickName())
+                .gmtCreated(user.getGmtCreated())
+                .gmtModified(user.getGmtModified())
+                .phone(user.getUserPhone())
+                .role(UserRole.getRoleById(user.getUserRoleId()).name())
+                .status(user.getStatus());
+        if (nonNull(hospital)) {
+            builder.hospital(HospitalResponse.builder()
+                    .id(hospital.getId().toString())
+                    .name(hospital.getHospitalName())
+                    .uniformSocialCreditCode(hospital.getHospitalUniformSocialCreditCode())
+                    .contactorName(hospital.getHospitalContactorName())
+                    .contactorTelephone(hospital.getHospitalContactorTelephone())
+                    .gmtCreated(hospital.getGmtCreated())
+                    .gmtModified(hospital.getGmtModified())
+                    .build());
+        }
+        if (nonNull(supplier)) {
+            builder.supplier(SupplierResponse.builder()
+                    .id(supplier.getId().toString())
+                    .name(supplier.getMaterialSupplierName())
+                    .contactorName(supplier.getMaterialSupplierContactorName())
+                    .contactorTelephone(supplier.getMaterialSupplierContactorPhone())
+                    .haveLogistics(supplier.getHaveLogistics())
+                    .gmtCreated(supplier.getGmtCreated())
+                    .gmtModified(supplier.getGmtModified())
+                    .build());
+        }
+        return builder.build();
     }
 }

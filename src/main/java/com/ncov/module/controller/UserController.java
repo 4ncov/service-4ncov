@@ -5,6 +5,7 @@ import com.ncov.module.controller.request.user.SignInRequest;
 import com.ncov.module.controller.resp.Page;
 import com.ncov.module.controller.resp.RestResponse;
 import com.ncov.module.controller.resp.user.SignInResponse;
+import com.ncov.module.controller.resp.user.UserDetailResponse;
 import com.ncov.module.controller.resp.user.UserResponse;
 import com.ncov.module.service.UserInfoService;
 import io.swagger.annotations.ApiOperation;
@@ -42,5 +43,16 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public Page<UserResponse> listAllUsers(@RequestParam Integer page, @RequestParam Integer size) {
         return userInfoService.listAllUsers(page, size);
+    }
+
+    @ApiOperation(
+            value = "Admin get user detail.",
+            tags = SwaggerConstants.TAG_USERS
+    )
+    @PreAuthorize("hasRole('ROLE_SYSADMIN')")
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public RestResponse<UserDetailResponse> getUser(@PathVariable Long id) {
+        return RestResponse.getResp("User fetched.", userInfoService.getDetail(id));
     }
 }
