@@ -1,5 +1,6 @@
 package com.ncov.module.service;
 
+import com.ncov.module.controller.dto.AddressDto;
 import com.ncov.module.controller.dto.MaterialDto;
 import com.ncov.module.controller.request.material.MaterialRequest;
 import com.ncov.module.controller.resp.material.MaterialResponse;
@@ -38,7 +39,13 @@ class MaterialSuppliedServiceTest {
                 MaterialRequest.builder()
                         .materials(Collections.singletonList(MaterialDto.builder().name("Materialname").quantity(200000.0).standard("ISO9001").category("Mask").build()))
                         .organisationName("Supplier Organisation")
-                        .address("1 Test Rd, Test, Test")
+                        .address(AddressDto.builder()
+                                .country("中国")
+                                .province("湖北省")
+                                .city("武汉市")
+                                .district("东西湖区")
+                                .streetAddress("银潭路1号")
+                                .build())
                         .contactorName("Test M")
                         .contactorPhone("18800001111")
                         .imageUrls(Arrays.asList("https://oss.com/images/1.png", "https://oss.com/images/2.png"))
@@ -51,7 +58,7 @@ class MaterialSuppliedServiceTest {
         assertEquals("10", response.getId());
         assertEquals(MaterialDto.builder().name("Materialname").quantity(200000.0).standard("ISO9001").category("Mask").build(), response.getMaterial());
         assertEquals("Supplier Organisation", response.getOrganisationName());
-        assertEquals("1 Test Rd, Test, Test", response.getAddress());
+        assertEquals(AddressDto.builder().country("中国").province("湖北省").city("武汉市").district("东西湖区").streetAddress("银潭路1号").build(), response.getAddress());
         assertEquals("Test M", response.getContactorName());
         assertEquals("18800001111", response.getContactorPhone());
         assertEquals("Test comment", response.getComment());
@@ -65,7 +72,13 @@ class MaterialSuppliedServiceTest {
                 MaterialRequest.builder()
                         .materials(Collections.singletonList(MaterialDto.builder().name("Materialname").quantity(200000.0).standard("ISO9001").category("Mask").build()))
                         .organisationName("Supplier Organisation")
-                        .address("1 Test Rd, Test, Test")
+                        .address(AddressDto.builder()
+                                .country("中国")
+                                .province("湖北省")
+                                .city("武汉市")
+                                .district("东西湖区")
+                                .streetAddress("银潭路1号")
+                                .build())
                         .contactorName("Test M")
                         .contactorPhone("18800001111")
                         .imageUrls(Arrays.asList("https://oss.com/images/1.png", "https://oss.com/images/2.png"))
@@ -83,7 +96,11 @@ class MaterialSuppliedServiceTest {
         assertEquals("ISO9001", material.getMaterialSuppliedStandard());
         assertEquals("Test M", material.getMaterialSuppliedContactorName());
         assertEquals("18800001111", material.getMaterialSuppliedContactorPhone());
-        assertEquals("1 Test Rd, Test, Test", material.getMaterialSuppliedAddress());
+        assertEquals("中国", material.getCountry());
+        assertEquals("湖北省", material.getProvince());
+        assertEquals("武汉市", material.getCity());
+        assertEquals("东西湖区", material.getDistrict());
+        assertEquals("银潭路1号", material.getStreetAddress());
         assertEquals(200000.0, material.getMaterialSuppliedQuantity().doubleValue());
         assertEquals("Supplier Organisation", material.getMaterialSuppliedOrganizationName());
         assertEquals(1L, material.getMaterialSupplierOrganizationId().longValue());
@@ -102,7 +119,13 @@ class MaterialSuppliedServiceTest {
                                 MaterialDto.builder().name("Coat").quantity(3000.0).standard("ISO9002").category("Coat").build()
                         ))
                         .organisationName("Supplier Organisation")
-                        .address("1 Test Rd, Test, Test")
+                        .address(AddressDto.builder()
+                                .country("中国")
+                                .province("湖北省")
+                                .city("武汉市")
+                                .district("东西湖区")
+                                .streetAddress("银潭路1号")
+                                .build())
                         .contactorName("Test M")
                         .contactorPhone("18800001111")
                         .imageUrls(Arrays.asList("https://oss.com/images/1.png", "https://oss.com/images/2.png"))
@@ -115,7 +138,13 @@ class MaterialSuppliedServiceTest {
         assertEquals("10", response0.getId());
         assertEquals(MaterialDto.builder().name("Materialname").quantity(200000.0).standard("ISO9001").category("Mask").build(), response0.getMaterial());
         assertEquals("Supplier Organisation", response0.getOrganisationName());
-        assertEquals("1 Test Rd, Test, Test", response0.getAddress());
+        assertEquals(AddressDto.builder()
+                .country("中国")
+                .province("湖北省")
+                .city("武汉市")
+                .district("东西湖区")
+                .streetAddress("银潭路1号")
+                .build(), response0.getAddress());
         assertEquals("Test M", response0.getContactorName());
         assertEquals("18800001111", response0.getContactorPhone());
         assertEquals("Test comment", response0.getComment());
@@ -125,7 +154,13 @@ class MaterialSuppliedServiceTest {
         assertEquals("11", response1.getId());
         assertEquals(MaterialDto.builder().name("Coat").quantity(3000.0).standard("ISO9002").category("Coat").build(), response1.getMaterial());
         assertEquals("Supplier Organisation", response1.getOrganisationName());
-        assertEquals("1 Test Rd, Test, Test", response1.getAddress());
+        assertEquals(AddressDto.builder()
+                .country("中国")
+                .province("湖北省")
+                .city("武汉市")
+                .district("东西湖区")
+                .streetAddress("银潭路1号")
+                .build(), response1.getAddress());
         assertEquals("Test M", response1.getContactorName());
         assertEquals("18800001111", response1.getContactorPhone());
         assertEquals("Test comment", response1.getComment());
@@ -142,7 +177,13 @@ class MaterialSuppliedServiceTest {
                                 MaterialDto.builder().name("Coat").quantity(3000.0).standard("ISO9002").category("Coat").build()
                         ))
                         .organisationName("Supplier Organisation")
-                        .address("1 Test Rd, Test, Test")
+                        .address(AddressDto.builder()
+                                .country("中国")
+                                .province("湖北省")
+                                .city("武汉市")
+                                .district("东西湖区")
+                                .streetAddress("银潭路1号")
+                                .build())
                         .contactorName("Test M")
                         .contactorPhone("18800001111")
                         .imageUrls(Arrays.asList("https://oss.com/images/1.png", "https://oss.com/images/2.png"))
@@ -160,7 +201,11 @@ class MaterialSuppliedServiceTest {
         assertEquals("ISO9001", material0.getMaterialSuppliedStandard());
         assertEquals("Test M", material0.getMaterialSuppliedContactorName());
         assertEquals("18800001111", material0.getMaterialSuppliedContactorPhone());
-        assertEquals("1 Test Rd, Test, Test", material0.getMaterialSuppliedAddress());
+        assertEquals("中国", material0.getCountry());
+        assertEquals("湖北省", material0.getProvince());
+        assertEquals("武汉市", material0.getCity());
+        assertEquals("东西湖区", material0.getDistrict());
+        assertEquals("银潭路1号", material0.getStreetAddress());
         assertEquals(200000.0, material0.getMaterialSuppliedQuantity().doubleValue());
         assertEquals("Supplier Organisation", material0.getMaterialSuppliedOrganizationName());
         assertEquals(1L, material0.getMaterialSupplierOrganizationId().longValue());
@@ -174,7 +219,11 @@ class MaterialSuppliedServiceTest {
         assertEquals("ISO9002", material1.getMaterialSuppliedStandard());
         assertEquals("Test M", material1.getMaterialSuppliedContactorName());
         assertEquals("18800001111", material1.getMaterialSuppliedContactorPhone());
-        assertEquals("1 Test Rd, Test, Test", material1.getMaterialSuppliedAddress());
+        assertEquals("中国", material1.getCountry());
+        assertEquals("湖北省", material1.getProvince());
+        assertEquals("武汉市", material1.getCity());
+        assertEquals("东西湖区", material1.getDistrict());
+        assertEquals("银潭路1号", material1.getStreetAddress());
         assertEquals(3000.0, material1.getMaterialSuppliedQuantity().doubleValue());
         assertEquals("Supplier Organisation", material1.getMaterialSuppliedOrganizationName());
         assertEquals(1L, material1.getMaterialSupplierOrganizationId().longValue());

@@ -27,7 +27,11 @@ public class MaterialSuppliedEntity {
     private String materialSuppliedStandard;
     private String materialSuppliedContactorName;
     private String materialSuppliedContactorPhone;
-    private String materialSuppliedAddress;
+    private String country;
+    private String province;
+    private String city;
+    private String district;
+    private String streetAddress;
     private Double materialSuppliedQuantity;
     private Long materialId;
     private String materialSuppliedOrganizationName;
@@ -50,7 +54,11 @@ public class MaterialSuppliedEntity {
                         .materialSuppliedStandard(material.getStandard())
                         .materialSuppliedContactorName(request.getContactorName())
                         .materialSuppliedContactorPhone(request.getContactorPhone())
-                        .materialSuppliedAddress(request.getAddress())
+                        .country(request.getAddress().getCountry())
+                        .province(request.getAddress().getProvince())
+                        .city(request.getAddress().getCity())
+                        .district(request.getAddress().getDistrict())
+                        .streetAddress(request.getAddress().getStreetAddress())
                         .materialSuppliedQuantity(material.getQuantity())
                         .materialSuppliedOrganizationName(request.getOrganisationName())
                         .materialSupplierOrganizationId(organisationId)

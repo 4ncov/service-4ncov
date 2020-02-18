@@ -1,5 +1,6 @@
 package com.ncov.module.controller.request.material;
 
+import com.ncov.module.controller.dto.AddressDto;
 import com.ncov.module.controller.dto.MaterialDto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -25,7 +26,8 @@ public class MaterialRequest {
     private String organisationName;
     @ApiModelProperty(value = "收货/发货地址")
     @NotEmpty(message = "地址不能为空")
-    private String address;
+    @Valid
+    private AddressDto address;
     @ApiModelProperty(value = "联系人")
     @NotEmpty(message = "联系人姓名不能为空")
     private String contactorName;

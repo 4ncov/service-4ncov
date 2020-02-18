@@ -1,5 +1,6 @@
 package com.ncov.module.service;
 
+import com.ncov.module.controller.dto.AddressDto;
 import com.ncov.module.controller.dto.MaterialDto;
 import com.ncov.module.controller.request.material.MaterialRequest;
 import com.ncov.module.controller.resp.material.MaterialResponse;
@@ -44,7 +45,13 @@ public class MaterialRequiredServiceTest {
                 .standard("ISO-8859-1")
                 .build();
         MaterialRequest request = MaterialRequest.builder()
-                .address("湖北省武汉市东西湖区银潭路1号")
+                .address(AddressDto.builder()
+                        .country("中国")
+                        .province("湖北省")
+                        .city("武汉市")
+                        .district("东西湖区")
+                        .streetAddress("银潭路1号")
+                        .build())
                 .contactorName("张三")
                 .contactorPhone("18801234567")
                 .comment("医护人员急用")
@@ -58,7 +65,7 @@ public class MaterialRequiredServiceTest {
         assertEquals(1, responses.size());
         MaterialResponse response = responses.get(0);
         assertEquals(materialDto, response.getMaterial());
-        assertEquals("湖北省武汉市东西湖区银潭路1号", response.getAddress());
+        assertEquals(AddressDto.builder().country("中国").province("湖北省").city("武汉市").district("东西湖区").streetAddress("银潭路1号").build(), response.getAddress());
         assertEquals("张三", response.getContactorName());
         assertEquals("18801234567", response.getContactorPhone());
         assertEquals("医护人员急用", response.getComment());
@@ -77,7 +84,13 @@ public class MaterialRequiredServiceTest {
     @Test
     void should_save_multiple_materials_when_save_required_info_given_request_containing_multiple_materials() {
         MaterialRequest request = MaterialRequest.builder()
-                .address("湖北省武汉市东西湖区银潭路1号")
+                .address(AddressDto.builder()
+                        .country("中国")
+                        .province("湖北省")
+                        .city("武汉市")
+                        .district("东西湖区")
+                        .streetAddress("银潭路1号")
+                        .build())
                 .contactorName("张三")
                 .contactorPhone("18801234567")
                 .comment("医护人员急用")

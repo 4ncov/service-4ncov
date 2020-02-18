@@ -34,7 +34,12 @@ public class MaterialRequiredEntity {
     /**
      * 物资寻求收货地址
      */
-    private String materialRequiredReceivedAddress;
+    private String country;
+    private String province;
+    private String city;
+    private String district;
+    private String streetAddress;
+
     /**
      * 物资寻求
      */
@@ -98,7 +103,11 @@ public class MaterialRequiredEntity {
      */
     public static List<MaterialRequiredEntity> createList(MaterialRequest materialRequest, Long organizationId, Long userId) {
         return materialRequest.getMaterials().stream().map(material -> MaterialRequiredEntity.builder()
-                .materialRequiredReceivedAddress(materialRequest.getAddress())
+                .country(materialRequest.getAddress().getCountry())
+                .province(materialRequest.getAddress().getProvince())
+                .city(materialRequest.getAddress().getCity())
+                .district(materialRequest.getAddress().getDistrict())
+                .streetAddress(materialRequest.getAddress().getStreetAddress())
                 .materialRequiredStatus(MaterialStatus.PENDING.name())
                 .materialRequiredContactorName(materialRequest.getContactorName())
                 .materialRequiredContactorPhone(materialRequest.getContactorPhone())

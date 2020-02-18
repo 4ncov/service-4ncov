@@ -1,5 +1,6 @@
 package com.ncov.module.controller.resp.material;
 
+import com.ncov.module.controller.dto.AddressDto;
 import com.ncov.module.controller.dto.MaterialDto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -23,7 +24,7 @@ public class MaterialResponse {
     @ApiModelProperty(value = "寻求方/供货方机构名称")
     private String organisationName;
     @ApiModelProperty(value = "收货/发货地址")
-    private String address;
+    private AddressDto address;
     @ApiModelProperty(value = "联系人")
     private String contactorName;
     @ApiModelProperty(value = "联系电话")

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ncov.module.common.enums.MaterialStatus;
 import com.ncov.module.common.exception.MaterialNotFoundException;
+import com.ncov.module.controller.dto.AddressDto;
 import com.ncov.module.controller.dto.MaterialDto;
 import com.ncov.module.controller.request.material.MaterialRequest;
 import com.ncov.module.controller.resp.material.MaterialResponse;
@@ -113,7 +114,13 @@ public class MaterialSuppliedService extends ServiceImpl<MaterialSuppliedMapper,
     private List<MaterialResponse> carry(List<MaterialSuppliedEntity> source) {
         return source.stream()
                 .map(material -> MaterialResponse.builder()
-                        .address(material.getMaterialSuppliedAddress())
+                        .address(AddressDto.builder()
+                                .country(material.getCountry())
+                                .province(material.getProvince())
+                                .city(material.getCity())
+                                .district(material.getDistrict())
+                                .streetAddress(material.getStreetAddress())
+                                .build())
                         .comment(material.getMaterialSuppliedComment())
                         .contactorName(material.getMaterialSuppliedContactorName())
                         .contactorPhone(material.getMaterialSuppliedContactorPhone())
