@@ -33,7 +33,7 @@ public class MaterialsController {
             value = "Create new required material.",
             tags = SwaggerConstants.TAG_REQUIRED_MATERIALS
     )
-    @PreAuthorize("hasRole('ROLE_HOSPITAL')")
+    @PreAuthorize("hasRole('ROLE_HOSPITAL') or hasRole('ROLE_SYSADMIN')")
     @PostMapping("/required-materials")
     @ResponseStatus(HttpStatus.CREATED)
     public RestResponse createRequiredMaterial(@RequestBody @Valid MaterialRequest material) {
@@ -146,7 +146,7 @@ public class MaterialsController {
     )
     @PostMapping("/supplied-materials")
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasRole('ROLE_SUPPLIER')")
+    @PreAuthorize("hasRole('ROLE_SUPPLIER') or hasRole('ROLE_SYSADMIN')")
     public RestResponse<List<MaterialResponse>> createSuppliedMaterial(@RequestBody @Valid MaterialRequest material) {
         List<MaterialResponse> responses = materialSuppliedService.create(material,
                 userContext.getOrganisationId(), userContext.getUserId());
