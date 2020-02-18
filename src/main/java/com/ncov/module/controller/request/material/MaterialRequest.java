@@ -34,8 +34,6 @@ public class MaterialRequest {
     @ApiModelProperty(value = "联系电话")
     @NotEmpty(message = "联系电话不能为空")
     private String contactorPhone;
-    @ApiModelProperty(value = "物资图片, 支持多张")
-    private List<String> imageUrls;
     @ApiModelProperty(value = "备注")
     private String comment;
 }

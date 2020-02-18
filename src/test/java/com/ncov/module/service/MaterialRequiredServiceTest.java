@@ -43,6 +43,7 @@ public class MaterialRequiredServiceTest {
                 .category("口罩")
                 .quantity(100000.0)
                 .standard("ISO-8859-1")
+                .imageUrls(Arrays.asList("https://oss.com/b.jpg", "https://oss.com/a.jpg"))
                 .build();
         MaterialRequest request = MaterialRequest.builder()
                 .address(AddressDto.builder()
@@ -55,7 +56,6 @@ public class MaterialRequiredServiceTest {
                 .contactorName("张三")
                 .contactorPhone("18801234567")
                 .comment("医护人员急用")
-                .imageUrls(Arrays.asList("https://oss.com/b.jpg", "https://oss.com/a.jpg"))
                 .materials(Collections.singletonList(materialDto))
                 .organisationName("哈哈")
                 .build();
@@ -94,10 +94,9 @@ public class MaterialRequiredServiceTest {
                 .contactorName("张三")
                 .contactorPhone("18801234567")
                 .comment("医护人员急用")
-                .imageUrls(Arrays.asList("https://oss.com/b.jpg", "https://oss.com/a.jpg"))
                 .materials(Arrays.asList(
-                        MaterialDto.builder().name("N95口罩").category("口罩").quantity(100000.0).standard("ISO-8859-1").build(),
-                        MaterialDto.builder().name("医用口罩").category("口罩").quantity(50000.0).standard("ISO-8859-1").build()
+                        MaterialDto.builder().name("N95口罩").category("口罩").quantity(100000.0).standard("ISO-8859-1").imageUrls(Arrays.asList("https://oss.com/b.jpg", "https://oss.com/a.jpg")).build(),
+                        MaterialDto.builder().name("医用口罩").category("口罩").quantity(50000.0).standard("ISO-8859-1").imageUrls(Arrays.asList("https://oss.com/b.jpg", "https://oss.com/a.jpg")).build()
                 ))
                 .organisationName("哈哈")
                 .build();

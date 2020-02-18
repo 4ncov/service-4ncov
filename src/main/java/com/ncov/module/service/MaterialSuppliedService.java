@@ -132,10 +132,10 @@ public class MaterialSuppliedService extends ServiceImpl<MaterialSuppliedMapper,
                                 .quantity(material.getMaterialSuppliedQuantity())
                                 .standard(material.getMaterialSuppliedStandard())
                                 .category(material.getMaterialSuppliedCategory())
+                                .imageUrls(material.getImageUrls())
                                 .build())
                         .organisationName(material.getMaterialSuppliedOrganizationName())
                         .status(material.getMaterialSuppliedStatus())
-                        .imageUrls(material.getImageUrls())
                         .reviewMessage(material.getReviewMessage())
                         .build())
                 .collect(Collectors.toList());

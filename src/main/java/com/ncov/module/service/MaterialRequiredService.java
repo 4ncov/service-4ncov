@@ -151,10 +151,10 @@ public class MaterialRequiredService extends ServiceImpl<MaterialRequiredMapper,
                                 .standard(material.getMaterialRequiredStandard())
                                 .quantity(material.getMaterialRequiredQuantity())
                                 .name(material.getMaterialRequiredName())
+                                .imageUrls(material.getImageUrls())
                                 .build())
                         .organisationName(material.getMaterialRequiredOrganizationName())
                         .status(material.getMaterialRequiredStatus())
-                        .imageUrls(material.getImageUrls())
                         .reviewMessage(material.getReviewMessage())
                         .build())
                 .collect(Collectors.toList());

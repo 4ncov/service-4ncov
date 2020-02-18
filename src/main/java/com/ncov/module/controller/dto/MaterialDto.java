@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.*;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -29,4 +30,5 @@ public class MaterialDto {
     @ApiModelProperty(value = "物资类别")
     @NotEmpty(message = "物资类别不能为空")
     private String category;
+    private List<String> imageUrls;
 }

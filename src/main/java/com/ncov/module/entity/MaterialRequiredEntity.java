@@ -1,7 +1,6 @@
 package com.ncov.module.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.google.common.base.Joiner;
 import com.ncov.module.common.enums.MaterialStatus;
 import com.ncov.module.common.util.ImageUtils;
 import com.ncov.module.controller.request.material.MaterialRequest;
@@ -113,7 +112,7 @@ public class MaterialRequiredEntity {
                 .materialRequiredContactorPhone(materialRequest.getContactorPhone())
                 .materialRequiredOrganizationName(materialRequest.getOrganisationName())
                 .materialRequiredComment(materialRequest.getComment())
-                .materialRequiredImageUrls(Joiner.on(",").join(materialRequest.getImageUrls()))
+                .materialRequiredImageUrls(ImageUtils.joinImageUrls(material.getImageUrls()))
                 .materialRequiredOrganizationId(organizationId)
                 .materialRequiredUserId(userId)
                 .materialRequiredName(material.getName())

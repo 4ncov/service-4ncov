@@ -65,7 +65,7 @@ public class MaterialSuppliedEntity {
                         .materialSuppliedUserId(userId)
                         .materialSuppliedComment(request.getComment())
                         .materialSuppliedStatus(MaterialStatus.PENDING.name())
-                        .materialSuppliedImageUrls(ImageUtils.joinImageUrls(request.getImageUrls()))
+                        .materialSuppliedImageUrls(ImageUtils.joinImageUrls(material.getImageUrls()))
                         .gmtCreated(new Date())
                         .build())
                 .collect(Collectors.toList());

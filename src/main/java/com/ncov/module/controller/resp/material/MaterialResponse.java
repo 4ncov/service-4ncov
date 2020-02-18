@@ -33,8 +33,6 @@ public class MaterialResponse {
     private String comment;
     @ApiModelProperty(value = "状态")
     private String status;
-    @ApiModelProperty(value = "图片URL列表")
-    private List<String> imageUrls;
     @ApiModelProperty(value = "审核意见")
     private String reviewMessage;
     @ApiModelProperty(value = "创建时间")
