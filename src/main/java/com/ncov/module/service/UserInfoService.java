@@ -107,7 +107,7 @@ public class UserInfoService extends ServiceImpl<UserInfoMapper, UserInfoEntity>
     }
 
     public UserDetailResponse getDetail(Long id) {
-        UserInfoEntity user = Optional.ofNullable(getById(id)).orElseThrow(UserNotFoundException::new);
+        UserInfoEntity user = getUser(id);
         HospitalInfoEntity hospital = null;
         SupplierInfoEntity supplier = null;
         if (user.isHospital()) {
@@ -117,6 +117,16 @@ public class UserInfoService extends ServiceImpl<UserInfoMapper, UserInfoEntity>
             supplier = supplierMapper.selectByMaterialSupplierCreatorUserId(user.getId());
         }
         return toDetailResponse(user, hospital, supplier);
+    }
+
+    public void verifyUser(Long id) {
+        UserInfoEntity user = getUser(id);
+        user.verify();
+        updateById(user);
+    }
+
+    private UserInfoEntity getUser(Long id) {
+        return Optional.ofNullable(getById(id)).orElseThrow(UserNotFoundException::new);
     }
 
     private void addOrganisationClaimToJwt(UserInfoEntity user, JwtBuilder jwtBuilder) {

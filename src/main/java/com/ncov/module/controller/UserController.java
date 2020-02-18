@@ -35,6 +35,18 @@ public class UserController {
     }
 
     @ApiOperation(
+            value = "Admin verify user.",
+            tags = SwaggerConstants.TAG_USERS
+    )
+    @PatchMapping("/{id}:verify")
+    @PreAuthorize("hasRole('ROLE_SYSADMIN')")
+    @ResponseStatus(HttpStatus.OK)
+    public RestResponse verify(@PathVariable Long id) {
+        userInfoService.verifyUser(id);
+        return RestResponse.getResp("认证成功.");
+    }
+
+    @ApiOperation(
             value = "Admin list all users.",
             tags = SwaggerConstants.TAG_USERS
     )

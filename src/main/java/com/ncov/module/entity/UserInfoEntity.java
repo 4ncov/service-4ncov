@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.ncov.module.common.enums.UserRole;
+import com.ncov.module.common.enums.UserStatus;
 import lombok.*;
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -41,5 +42,10 @@ public class UserInfoEntity {
 
     public void changePassword(String password) {
         setUserPasswordSHA256(DigestUtils.sha256Hex(password));
+    }
+
+    public void verify() {
+        setStatus(UserStatus.VERIFIED.name());
+        setGmtModified(new Date());
     }
 }
