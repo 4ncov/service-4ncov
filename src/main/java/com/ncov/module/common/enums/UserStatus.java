@@ -8,7 +8,7 @@ import lombok.Getter;
 @Getter
 public enum UserStatus {
 
-    PENDING("待审核"), ACTIVE("使用中"), SUSPENDED("已注销");
+    PENDING("未认证"), VERIFIED("已认证"), SUSPENDED("已注销");
 
     private String description;
 }

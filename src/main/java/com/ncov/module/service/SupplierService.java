@@ -1,6 +1,7 @@
 package com.ncov.module.service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ncov.module.common.enums.MaterialStatus;
 import com.ncov.module.common.enums.UserRole;
 import com.ncov.module.controller.request.supplier.SupplierSignUpRequest;
 import com.ncov.module.controller.resp.supplier.SupplierResponse;
@@ -60,6 +61,7 @@ public class SupplierService extends ServiceImpl<SupplierMapper, SupplierInfoEnt
                 .userPhone(supplierSignUpRequest.getContactorTelephone())
                 .userPasswordSHA256(DigestUtils.sha256Hex(supplierSignUpRequest.getPassword()))
                 .userRoleId(UserRole.SUPPLIER.getRoleId())
+                .status(MaterialStatus.PENDING.name())
                 .build());
     }
 }

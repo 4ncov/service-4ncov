@@ -1,6 +1,7 @@
 package com.ncov.module.service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ncov.module.common.enums.MaterialStatus;
 import com.ncov.module.common.enums.UserRole;
 import com.ncov.module.controller.request.hospital.HospitalSignUpRequest;
 import com.ncov.module.controller.resp.hospital.HospitalResponse;
@@ -56,6 +57,7 @@ public class HospitalService extends ServiceImpl<HospitalInfoMapper, HospitalInf
                 .userNickName(hospitalSignUpRequest.getName())
                 .userPhone(hospitalSignUpRequest.getContactorTelephone())
                 .userRoleId(UserRole.HOSPITAL.getRoleId())
+                .status(MaterialStatus.PENDING.name())
                 .userPasswordSHA256(DigestUtils.sha256Hex(hospitalSignUpRequest.getPassword()))
                 .gmtCreated(new Date())
                 .build());
