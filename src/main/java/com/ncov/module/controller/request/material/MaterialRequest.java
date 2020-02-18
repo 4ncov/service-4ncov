@@ -25,7 +25,6 @@ public class MaterialRequest {
     @NotEmpty(message = "机构名称不能为空")
     private String organisationName;
     @ApiModelProperty(value = "收货/发货地址")
-    @NotEmpty(message = "地址不能为空")
     @Valid
     private AddressDto address;
     @ApiModelProperty(value = "联系人")
