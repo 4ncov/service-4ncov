@@ -139,4 +139,8 @@ public class MaterialRequiredEntity {
         setReviewMessage(message);
         setGmtModified(new Date());
     }
+
+    public boolean isApproved() {
+        return !MaterialStatus.PENDING.name().equals(getMaterialRequiredStatus());
+    }
 }

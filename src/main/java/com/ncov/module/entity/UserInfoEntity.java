@@ -48,4 +48,8 @@ public class UserInfoEntity {
         setStatus(UserStatus.VERIFIED.name());
         setGmtModified(new Date());
     }
+
+    public boolean isVerified() {
+        return UserStatus.VERIFIED.name().equals(getStatus());
+    }
 }

@@ -125,7 +125,7 @@ public class UserInfoService extends ServiceImpl<UserInfoMapper, UserInfoEntity>
         updateById(user);
     }
 
-    private UserInfoEntity getUser(Long id) {
+    public UserInfoEntity getUser(Long id) {
         return Optional.ofNullable(getById(id)).orElseThrow(UserNotFoundException::new);
     }
 

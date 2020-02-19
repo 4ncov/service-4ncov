@@ -1,10 +1,13 @@
 package com.ncov.module.service;
 
+import com.ncov.module.common.enums.MaterialStatus;
+import com.ncov.module.common.enums.UserStatus;
 import com.ncov.module.controller.dto.AddressDto;
 import com.ncov.module.controller.dto.MaterialDto;
 import com.ncov.module.controller.request.material.MaterialRequest;
 import com.ncov.module.controller.resp.material.MaterialResponse;
 import com.ncov.module.entity.MaterialSuppliedEntity;
+import com.ncov.module.entity.UserInfoEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
@@ -18,7 +21,11 @@ import static org.mockito.Mockito.*;
 
 class MaterialSuppliedServiceTest {
 
+    @Mock
+    private UserInfoService userInfoService;
+
     @Spy
+    @InjectMocks
     private MaterialSuppliedService materialSuppliedService;
 
     @BeforeEach
@@ -31,6 +38,7 @@ class MaterialSuppliedServiceTest {
             }
             return true;
         }).when(materialSuppliedService).saveBatch(anyList());
+        when(userInfoService.getUser(anyLong())).thenReturn(UserInfoEntity.builder().status(MaterialStatus.PENDING.name()).build());
     }
 
     @Test
@@ -227,5 +235,35 @@ class MaterialSuppliedServiceTest {
         assertEquals("Test comment", material1.getMaterialSuppliedComment());
         assertEquals("PENDING", material1.getMaterialSuppliedStatus());
         assertNotNull(material1.getGmtCreated());
+    }
+
+    @Test
+    void should_save_materials_as_published_when_create_given_request_and_user_is_verified() {
+        when(userInfoService.getUser(anyLong())).thenReturn(UserInfoEntity.builder().status(UserStatus.VERIFIED.name()).build());
+        materialSuppliedService.create(
+                MaterialRequest.builder()
+                        .materials(Arrays.asList(
+                                MaterialDto.builder().name("Materialname").quantity(200000.0).standard("ISO9001").category("Mask").imageUrls(Arrays.asList("https://oss.com/images/1.png", "https://oss.com/images/2.png")).build(),
+                                MaterialDto.builder().name("Coat").quantity(3000.0).standard("ISO9002").category("Coat").imageUrls(Arrays.asList("https://oss.com/images/1.png", "https://oss.com/images/2.png")).build()
+                        ))
+                        .organisationName("Supplier Organisation")
+                        .address(AddressDto.builder()
+                                .country("中国")
+                                .province("湖北省")
+                                .city("武汉市")
+                                .district("东西湖区")
+                                .streetAddress("银潭路1号")
+                                .build())
+                        .contactorName("Test M")
+                        .contactorPhone("18800001111")
+                        .comment("Test comment")
+                        .build(),
+                1L, 2L);
+
+        ArgumentCaptor<List> materialsCaptor = ArgumentCaptor.forClass(List.class);
+        verify(materialSuppliedService).saveBatch(materialsCaptor.capture());
+        List<MaterialSuppliedEntity> materials = materialsCaptor.getValue();
+        assertEquals(2, materials.size());
+        assertTrue(materials.stream().allMatch(MaterialSuppliedEntity::isApproved));
     }
 }

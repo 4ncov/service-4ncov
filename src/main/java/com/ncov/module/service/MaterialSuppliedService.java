@@ -10,6 +10,7 @@ import com.ncov.module.controller.dto.MaterialDto;
 import com.ncov.module.controller.request.material.MaterialRequest;
 import com.ncov.module.controller.resp.material.MaterialResponse;
 import com.ncov.module.entity.MaterialSuppliedEntity;
+import com.ncov.module.entity.UserInfoEntity;
 import com.ncov.module.mapper.MaterialSuppliedMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ public class MaterialSuppliedService extends ServiceImpl<MaterialSuppliedMapper,
 
     @Autowired
     private MaterialSuppliedMapper materialSuppliedMapper;
+    @Autowired
+    private UserInfoService userInfoService;
 
     /**
      * 根据相关条件，查询物料供应分页列表
@@ -56,6 +59,10 @@ public class MaterialSuppliedService extends ServiceImpl<MaterialSuppliedMapper,
     @Transactional(rollbackFor = Exception.class)
     public List<MaterialResponse> create(MaterialRequest materialRequest, Long organisationId, Long userId) {
         List<MaterialSuppliedEntity> materials = MaterialSuppliedEntity.create(materialRequest, organisationId, userId);
+        UserInfoEntity user = userInfoService.getUser(userId);
+        if (user.isVerified()) {
+            materials.forEach(MaterialSuppliedEntity::approve);
+        }
         saveBatch(materials);
         return carry(materials);
     }
