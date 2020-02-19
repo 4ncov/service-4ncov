@@ -53,8 +53,11 @@ public class UserController {
     @PreAuthorize("hasRole('ROLE_SYSADMIN')")
     @GetMapping("/all")
     @ResponseStatus(HttpStatus.OK)
-    public Page<UserResponse> listAllUsers(@RequestParam Integer page, @RequestParam Integer size) {
-        return userInfoService.listAllUsers(page, size);
+    public Page<UserResponse> listAllUsers(@RequestParam Integer page, @RequestParam Integer size,
+                                           @RequestParam(name = "telephone", required = false) String telephone,
+                                           @RequestParam(name = "role", required = false) String role,
+                                           @RequestParam(name = "status", required = false) String status) {
+        return userInfoService.listAllUsers(page, size, telephone, role, status);
     }
 
     @ApiOperation(

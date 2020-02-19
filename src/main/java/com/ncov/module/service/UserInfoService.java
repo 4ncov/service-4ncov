@@ -1,5 +1,6 @@
 package com.ncov.module.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ncov.module.common.Constants;
@@ -32,6 +33,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.nonNull;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @Service("userInfoService")
 @Slf4j
@@ -95,9 +97,14 @@ public class UserInfoService extends ServiceImpl<UserInfoMapper, UserInfoEntity>
         return SignInResponse.builder().token(token).expiresAt(jwtExpirationTime).role(role.name()).build();
     }
 
-    public com.ncov.module.controller.resp.Page<UserResponse> listAllUsers(Integer page, Integer size) {
+    public com.ncov.module.controller.resp.Page<UserResponse> listAllUsers(Integer page, Integer size,
+                                                                           String telephone,
+                                                                           String role,
+                                                                           String status) {
+
         Page<UserInfoEntity> results = userInfoMapper.selectPage(
-                new Page<UserInfoEntity>().setCurrent(page).setSize(size), null);
+                new Page<UserInfoEntity>().setCurrent(page).setSize(size),
+                getFilterQuery(telephone, role, status));
         return com.ncov.module.controller.resp.Page.<UserResponse>builder()
                 .total(results.getTotal())
                 .page(page)
@@ -127,6 +134,20 @@ public class UserInfoService extends ServiceImpl<UserInfoMapper, UserInfoEntity>
 
     public UserInfoEntity getUser(Long id) {
         return Optional.ofNullable(getById(id)).orElseThrow(UserNotFoundException::new);
+    }
+
+    private LambdaQueryWrapper<UserInfoEntity> getFilterQuery(String telephone, String role, String status) {
+        LambdaQueryWrapper<UserInfoEntity> query = new LambdaQueryWrapper<>();
+        if (isNotEmpty(telephone)) {
+            query.eq(UserInfoEntity::getUserPhone, telephone);
+        }
+        if (isNotEmpty(role)) {
+            query.eq(UserInfoEntity::getUserRoleId, UserRole.valueOf(role).getRoleId());
+        }
+        if (isNotEmpty(status)) {
+            query.eq(UserInfoEntity::getStatus, status);
+        }
+        return query;
     }
 
     private void addOrganisationClaimToJwt(UserInfoEntity user, JwtBuilder jwtBuilder) {
