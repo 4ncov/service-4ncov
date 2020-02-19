@@ -147,6 +147,7 @@ public class UserInfoService extends ServiceImpl<UserInfoMapper, UserInfoEntity>
         if (isNotEmpty(status)) {
             query.eq(UserInfoEntity::getStatus, status);
         }
+        query.orderByDesc(UserInfoEntity::getGmtCreated);
         return query;
     }
 

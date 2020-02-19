@@ -41,9 +41,10 @@ public class MaterialSuppliedService extends ServiceImpl<MaterialSuppliedMapper,
     public com.ncov.module.controller.resp.Page<MaterialResponse> getSuppliedPageList(
             Integer pageNum, Integer pageSize, String category) {
         LambdaQueryWrapper<MaterialSuppliedEntity> queryWrapper = new LambdaQueryWrapper<MaterialSuppliedEntity>()
-                .ne(MaterialSuppliedEntity::getMaterialSuppliedStatus, MaterialStatus.PENDING.name());
+                .ne(MaterialSuppliedEntity::getMaterialSuppliedStatus, MaterialStatus.PENDING.name())
+                .orderByDesc(MaterialSuppliedEntity::getGmtCreated);
         if (isNotEmpty(category)) {
-            queryWrapper = queryWrapper.eq(MaterialSuppliedEntity::getMaterialSuppliedCategory, category);
+            queryWrapper.eq(MaterialSuppliedEntity::getMaterialSuppliedCategory, category);
         }
         Page<MaterialSuppliedEntity> results = materialSuppliedMapper.selectPage(
                 new Page<MaterialSuppliedEntity>().setCurrent(pageNum).setSize(pageSize),
@@ -97,18 +98,19 @@ public class MaterialSuppliedService extends ServiceImpl<MaterialSuppliedMapper,
                                                                              String status,
                                                                              String contactPhone,
                                                                              Long userId) {
-        LambdaQueryWrapper<MaterialSuppliedEntity> queryWrapper = new LambdaQueryWrapper<>();
+        LambdaQueryWrapper<MaterialSuppliedEntity> queryWrapper = new LambdaQueryWrapper<MaterialSuppliedEntity>()
+                .orderByDesc(MaterialSuppliedEntity::getGmtCreated);
         if (isNotEmpty(category)) {
-            queryWrapper = queryWrapper.eq(MaterialSuppliedEntity::getMaterialSuppliedCategory, category);
+            queryWrapper.eq(MaterialSuppliedEntity::getMaterialSuppliedCategory, category);
         }
         if (isNotEmpty(status)) {
-            queryWrapper = queryWrapper.eq(MaterialSuppliedEntity::getMaterialSuppliedStatus, status);
+            queryWrapper.eq(MaterialSuppliedEntity::getMaterialSuppliedStatus, status);
         }
         if (isNotEmpty(contactPhone)) {
-            queryWrapper = queryWrapper.eq(MaterialSuppliedEntity::getMaterialSuppliedContactorPhone, contactPhone);
+            queryWrapper.eq(MaterialSuppliedEntity::getMaterialSuppliedContactorPhone, contactPhone);
         }
         if (Objects.nonNull(userId)) {
-            queryWrapper = queryWrapper.eq(MaterialSuppliedEntity::getMaterialSuppliedUserId, userId);
+            queryWrapper.eq(MaterialSuppliedEntity::getMaterialSuppliedUserId, userId);
         }
         return queryWrapper;
     }
