@@ -19,5 +19,5 @@ public class ContactUsEntity {
     private Date gmtCreated;
     private Date gmtModified;
     private Short deleted;
-
+    private Long createUserId;
 }

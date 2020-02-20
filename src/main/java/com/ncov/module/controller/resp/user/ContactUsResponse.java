@@ -21,4 +21,5 @@ public class ContactUsResponse {
     private String content;
     private Date gmtCreated;
     private Date gmtModified;
+    private Long createUserId;
 }
