@@ -7,7 +7,7 @@
 ### 运行环境
 - Java 8
 - Spring Boot 2.1.0.RELEASE
-- MyBatis 3.1.0
+- MyBatis 3.3.0
 - Flyway 用于数据库DDL(Data Definition Language)脚本版本控制
 - MySQL 5.7
 - Docker
