@@ -37,7 +37,7 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @Service("userInfoService")
 @Slf4j
-public class UserInfoService extends ServiceImpl<UserInfoMapper, UserInfoEntity> {
+public class UserInfoService extends AbstractService<UserInfoMapper, UserInfoEntity> {
 
     private final UserInfoMapper userInfoMapper;
     private final HospitalInfoMapper hospitalInfoMapper;
