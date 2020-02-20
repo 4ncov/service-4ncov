@@ -77,6 +77,23 @@ public class UserController {
     }
 
     @ApiOperation(
+            value = "create contact us.",
+            tags = SwaggerConstants.TAG_USERS
+    )
+    @PostMapping("/contact-us")
+    @ResponseStatus(HttpStatus.OK)
+    public RestResponse createContactUs(@RequestBody @Valid ContactUsCreateRequest contactUsCreateRequest) {
+        Date now = new Date();
+        userInfoService.insert(ContactUsEntity.builder()
+                .userPhone(contactUsCreateRequest.getPhone())
+                .content(contactUsCreateRequest.getContent())
+                .gmtCreated(now)
+                .gmtModified(now)
+                .build());
+        return RestResponse.getResp("创建成功.");
+    }
+
+    @ApiOperation(
             value = "list contact us.",
             tags = SwaggerConstants.TAG_USERS
     )
