@@ -7,6 +7,7 @@ import com.ncov.module.controller.resp.RestResponse;
 import com.ncov.module.controller.resp.user.SignInResponse;
 import com.ncov.module.controller.resp.user.UserDetailResponse;
 import com.ncov.module.controller.resp.user.UserResponse;
+import com.ncov.module.security.UserContext;
 import com.ncov.module.service.UserInfoService;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -22,6 +23,7 @@ import javax.validation.Valid;
 public class UserController {
 
     private final UserInfoService userInfoService;
+    private final UserContext userContext;
 
     @ApiOperation(
             value = "User sign in.",
@@ -71,4 +73,14 @@ public class UserController {
         return RestResponse.getResp("User fetched.", userInfoService.getDetail(id));
     }
 
+    @ApiOperation(
+            value = "User get own details.",
+            tags = SwaggerConstants.TAG_USERS
+    )
+    @PreAuthorize("hasRole('ROLE_HOSPITAL') or hasRole('ROLE_SUPPLIER')")
+    @GetMapping("/me")
+    @ResponseStatus(HttpStatus.OK)
+    public RestResponse<UserDetailResponse> getMyDetails() {
+        return RestResponse.getResp("User fetched.", userInfoService.getDetail(userContext.getUserId()));
+    }
 }
