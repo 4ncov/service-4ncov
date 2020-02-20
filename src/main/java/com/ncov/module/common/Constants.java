@@ -37,7 +37,5 @@ public class Constants {
 
     public static final String DELIMITER_COMMA = ",";
 
-    public static final String PAGE_PARAM_NAME = "page";
-
     public static final String JWT_ISSUER = "4ncov.com";
 }
