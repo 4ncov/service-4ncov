@@ -18,7 +18,7 @@ public class ContactUsCreateRequest {
 
     @ApiModelProperty(value = "联系电话")
     @NotEmpty(message = "联系电话不能为空")
-    private String phone;
+    private String telephone;
 
     @ApiModelProperty(value = "联系内容")
     @NotEmpty(message = "联系内容不能为空")

@@ -1,16 +1,12 @@
 package com.ncov.module.controller;
 
 import com.ncov.module.common.SwaggerConstants;
-import com.ncov.module.controller.request.user.ContactUsCreateRequest;
 import com.ncov.module.controller.request.user.SignInRequest;
 import com.ncov.module.controller.resp.Page;
-import com.ncov.module.controller.resp.PageResponse;
 import com.ncov.module.controller.resp.RestResponse;
-import com.ncov.module.controller.resp.user.ContactUsResponse;
 import com.ncov.module.controller.resp.user.SignInResponse;
 import com.ncov.module.controller.resp.user.UserDetailResponse;
 import com.ncov.module.controller.resp.user.UserResponse;
-import com.ncov.module.entity.ContactUsEntity;
 import com.ncov.module.service.UserInfoService;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -19,7 +15,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Date;
 
 @RestController
 @RequestMapping("/api/users")
@@ -74,43 +69,6 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public RestResponse<UserDetailResponse> getUser(@PathVariable Long id) {
         return RestResponse.getResp("User fetched.", userInfoService.getDetail(id));
-    }
-
-    @ApiOperation(
-            value = "create contact us.",
-            tags = SwaggerConstants.TAG_USERS
-    )
-    @PostMapping("/contact-us")
-    @ResponseStatus(HttpStatus.OK)
-    public RestResponse createContactUs(@RequestBody @Valid ContactUsCreateRequest contactUsCreateRequest) {
-        Date now = new Date();
-        userInfoService.insert(ContactUsEntity.builder()
-                .userPhone(contactUsCreateRequest.getPhone())
-                .content(contactUsCreateRequest.getContent())
-                .gmtCreated(now)
-                .gmtModified(now)
-                .build());
-        return RestResponse.getResp("创建成功.");
-    }
-
-    @ApiOperation(
-            value = "list contact us.",
-            tags = SwaggerConstants.TAG_USERS
-    )
-    @GetMapping("/contact-us")
-    @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_SYSADMIN')")
-    public PageResponse<ContactUsResponse> listContactUs(@RequestParam Integer page, @RequestParam Integer size) {
-        Page<ContactUsResponse> responsePage = userInfoService.selectPage(ContactUsEntity.class
-                , page
-                , size
-                , null
-                , entity -> new ContactUsResponse(entity.getId()
-                        , entity.getUserPhone()
-                        , entity.getContent()
-                        , entity.getGmtCreated()
-                        , entity.getGmtModified()));
-        return PageResponse.getResp("请求成功.", responsePage);
     }
 
 }
