@@ -1,7 +1,6 @@
 package com.ncov.module.controller;
 
 import com.ncov.module.common.SwaggerConstants;
-import com.ncov.module.controller.dto.MaterialDto;
 import com.ncov.module.controller.request.material.MaterialRequest;
 import com.ncov.module.controller.resp.Page;
 import com.ncov.module.controller.resp.RestResponse;
@@ -16,8 +15,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -98,46 +95,10 @@ public class MaterialsController {
             tags = SwaggerConstants.TAG_REQUIRED_MATERIALS
     )
     @GetMapping("/required-materials/me")
+    @PreAuthorize("hasRole('ROLE_SYSADMIN') or hasRole('ROLE_HOSPITAL')")
     public Page<MaterialResponse> listMyRequiredMaterials(@RequestParam Integer page,
                                                           @RequestParam Integer size) {
-        // TODO: 2020-01-29
-        return Page.<MaterialResponse>builder()
-                .page(page)
-                .pageSize(size)
-                .total(2L)
-                .data(Arrays.asList(
-                        MaterialResponse.builder()
-                                .id("1")
-                                .material(MaterialDto.builder()
-                                        .name("N95口罩")
-                                        .category("口罩")
-                                        .quantity(100000.0)
-                                        .standard("ISO-8859-1")
-                                        .build())
-                                .contactorName("张三")
-                                .contactorPhone("18801234567")
-                                .comment("医护人员急用")
-                                .status("PUBLISHED")
-                                .gmtCreated(new Date())
-                                .gmtModified(new Date())
-                                .build(),
-                        MaterialResponse.builder()
-                                .id("2")
-                                .material(MaterialDto.builder()
-                                        .name("医用防护服")
-                                        .category("防护服")
-                                        .quantity(2000.0)
-                                        .standard("ISO-8859-10")
-                                        .build())
-                                .contactorName("张三")
-                                .contactorPhone("18801234567")
-                                .comment("医护人员急用")
-                                .status("PUBLISHED")
-                                .gmtCreated(new Date())
-                                .gmtModified(new Date())
-                                .build()
-                ))
-                .build();
+        return materialRequiredService.listMyRequiredMaterials(page, size, userContext.getUserId());
     }
 
     @ApiOperation(
@@ -210,45 +171,10 @@ public class MaterialsController {
             tags = SwaggerConstants.TAG_SUPPLIED_MATERIALS
     )
     @GetMapping("/supplied-materials/me")
+    @PreAuthorize("hasRole('ROLE_SUPPLIER') or hasRole('ROLE_SYSADMIN')")
     public Page<MaterialResponse> listMySuppliedMaterials(@RequestParam Integer page,
                                                           @RequestParam Integer size) {
-        // TODO: 2020-01-29
-        return Page.<MaterialResponse>builder()
-                .page(page)
-                .pageSize(size)
-                .total(2L)
-                .data(Arrays.asList(
-                        MaterialResponse.builder()
-                                .id("1")
-                                .material(MaterialDto.builder()
-                                        .name("N95口罩")
-                                        .category("口罩")
-                                        .quantity(100000.0)
-                                        .standard("ISO-8859-1")
-                                        .build())
-                                .contactorName("张三")
-                                .contactorPhone("18801234567")
-                                .comment("医护人员急用")
-                                .status("PUBLISHED")
-                                .gmtCreated(new Date())
-                                .gmtModified(new Date())
-                                .build(),
-                        MaterialResponse.builder()
-                                .id("2")
-                                .material(MaterialDto.builder()
-                                        .name("医用防护服")
-                                        .category("防护服")
-                                        .quantity(2000.0)
-                                        .standard("ISO-8859-10")
-                                        .build())
-                                .contactorName("张三")
-                                .contactorPhone("18801234567")
-                                .comment("医护人员急用")
-                                .status("PUBLISHED")
-                                .gmtCreated(new Date())
-                                .gmtModified(new Date())
-                                .build()
-                ))
-                .build();
+        return materialSuppliedService.listMySuppliedMaterials(page, size, userContext.getUserId());
     }
+
 }

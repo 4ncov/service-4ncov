@@ -1,8 +1,8 @@
 package com.ncov.module.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ncov.module.common.enums.MaterialStatus;
 import com.ncov.module.common.exception.MaterialNotFoundException;
 import com.ncov.module.controller.dto.AddressDto;
@@ -26,7 +26,7 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @Service
 @Slf4j
-public class MaterialSuppliedService extends ServiceImpl<MaterialSuppliedMapper, MaterialSuppliedEntity> {
+public class MaterialSuppliedService extends AbstractService<MaterialSuppliedMapper, MaterialSuppliedEntity> {
 
     @Autowired
     private MaterialSuppliedMapper materialSuppliedMapper;
@@ -94,6 +94,16 @@ public class MaterialSuppliedService extends ServiceImpl<MaterialSuppliedMapper,
                 .build();
     }
 
+    public com.ncov.module.controller.resp.Page<MaterialResponse> listMySuppliedMaterials(Integer page
+            , Integer size, Long userId) {
+        return selectPage(MaterialSuppliedEntity.class
+                , page
+                , size
+                , Wrappers.<MaterialSuppliedEntity>lambdaQuery()
+                        .eq(MaterialSuppliedEntity::getMaterialSuppliedUserId, userId)
+                , this::responseMapping);
+    }
+
     private LambdaQueryWrapper<MaterialSuppliedEntity> getFilterQueryWrapper(String category,
                                                                              String status,
                                                                              String contactPhone,
@@ -121,32 +131,34 @@ public class MaterialSuppliedService extends ServiceImpl<MaterialSuppliedMapper,
     }
 
     private List<MaterialResponse> carry(List<MaterialSuppliedEntity> source) {
-        return source.stream()
-                .map(material -> MaterialResponse.builder()
-                        .address(AddressDto.builder()
-                                .country(material.getCountry())
-                                .province(material.getProvince())
-                                .city(material.getCity())
-                                .district(material.getDistrict())
-                                .streetAddress(material.getStreetAddress())
-                                .build())
-                        .comment(material.getMaterialSuppliedComment())
-                        .contactorName(material.getMaterialSuppliedContactorName())
-                        .contactorPhone(material.getMaterialSuppliedContactorPhone())
-                        .gmtCreated(material.getGmtCreated())
-                        .gmtModified(material.getGmtModified())
-                        .id(material.getId().toString())
-                        .material(MaterialDto.builder()
-                                .name(material.getMaterialSuppliedName())
-                                .quantity(material.getMaterialSuppliedQuantity())
-                                .standard(material.getMaterialSuppliedStandard())
-                                .category(material.getMaterialSuppliedCategory())
-                                .imageUrls(material.getImageUrls())
-                                .build())
-                        .organisationName(material.getMaterialSuppliedOrganizationName())
-                        .status(material.getMaterialSuppliedStatus())
-                        .reviewMessage(material.getReviewMessage())
+        return source.stream().map(this::responseMapping).collect(Collectors.toList());
+    }
+
+    private MaterialResponse responseMapping(MaterialSuppliedEntity material) {
+        return MaterialResponse.builder()
+                .address(AddressDto.builder()
+                        .country(material.getCountry())
+                        .province(material.getProvince())
+                        .city(material.getCity())
+                        .district(material.getDistrict())
+                        .streetAddress(material.getStreetAddress())
                         .build())
-                .collect(Collectors.toList());
+                .comment(material.getMaterialSuppliedComment())
+                .contactorName(material.getMaterialSuppliedContactorName())
+                .contactorPhone(material.getMaterialSuppliedContactorPhone())
+                .gmtCreated(material.getGmtCreated())
+                .gmtModified(material.getGmtModified())
+                .id(material.getId().toString())
+                .material(MaterialDto.builder()
+                        .name(material.getMaterialSuppliedName())
+                        .quantity(material.getMaterialSuppliedQuantity())
+                        .standard(material.getMaterialSuppliedStandard())
+                        .category(material.getMaterialSuppliedCategory())
+                        .imageUrls(material.getImageUrls())
+                        .build())
+                .organisationName(material.getMaterialSuppliedOrganizationName())
+                .status(material.getMaterialSuppliedStatus())
+                .reviewMessage(material.getReviewMessage())
+                .build();
     }
 }

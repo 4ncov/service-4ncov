@@ -29,10 +29,10 @@ public class ContactUsController {
 
     @ApiOperation(
             value = "create contact us.",
-            tags = SwaggerConstants.TAG_USERS
+            tags = SwaggerConstants.TAG_CONTACT_MESSAGES
     )
     @PostMapping
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     public RestResponse createContactUs(@RequestBody @Valid ContactUsCreateRequest contactUsCreateRequest) {
         Date now = new Date();
         service.insert(ContactUsEntity.builder()
@@ -47,7 +47,7 @@ public class ContactUsController {
 
     @ApiOperation(
             value = "list contact us.",
-            tags = SwaggerConstants.TAG_USERS
+            tags = SwaggerConstants.TAG_CONTACT_MESSAGES
     )
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
