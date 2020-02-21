@@ -12,4 +12,5 @@ public final class SwaggerConstants {
     public static final String TAG_REQUIRED_MATERIALS = "Required Materials";
     public static final String TAG_SUPPLIED_MATERIALS = "Supplied Materials";
     public static final String TAG_FILES = "Files";
+    public static final String TAG_CONTACT_MESSAGES = "Contact Messages";
 }
