@@ -24,13 +24,11 @@ public class FileController {
             tags = SwaggerConstants.TAG_FILES
     )
     @PostMapping("/images")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(code = HttpStatus.CREATED)
     public RestResponse<ImageUploadResponse> uploadImage(@RequestParam String category,
                                                          @RequestParam("image") MultipartFile image) {
         String imageUrl = fileService.uploadImage(category, image);
-        return RestResponse.<ImageUploadResponse>builder()
-                .message("Image uploaded.")
-                .data(ImageUploadResponse.builder().url(imageUrl).gmtCreated(new Date()).build())
-                .build();
+        return RestResponse.getResp("Image uploaded.",
+                ImageUploadResponse.builder().url(imageUrl).gmtCreated(new Date()).build());
     }
 }

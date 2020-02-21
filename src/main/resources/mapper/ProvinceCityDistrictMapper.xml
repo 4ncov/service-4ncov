@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ncov.module.mapper.ProvinceCityDistrictMapper">
+    <select id="selectDistinctProvinces" parameterType="java.lang.String" resultType="java.lang.String">
+        select distinct(province)
+        from province_city_district
+    </select>
+
+    <select id="selectDistinctCitiesByProvince" parameterType="java.lang.String" resultType="java.lang.String">
+        select distinct(city)
+        from province_city_district
+        <where>
+            province=#{province}
+        </where>
+    </select>
+
+    <select id="selectDistinctDistrictsByProvinceAndCity" resultType="java.lang.String">
+        select distinct(district)
+        from province_city_district
+        <where>
+            province=#{province} and city=#{city}
+        </where>
+    </select>
+</mapper>

@@ -4,9 +4,9 @@ server:
 
 #mybatis
 mybatis-plus:
-  mapper-locations: classpath*:**/mapper/*/*Mapper.xml
+  mapper-locations: classpath:mapper/**/*Mapper.xml
   #实体扫描，多个package用逗号或者分号分隔
-  typeAliasesPackage: com.ncov.*.entity
+  typeAliasesPackage: com.ncov.module.entity
   global-config:
     #主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
     id-type: 0
@@ -20,12 +20,13 @@ mybatis-plus:
     #capital-mode: true
     #序列接口实现类配置
     #key-generator: com.baomidou.springboot.xxx
-    #逻辑删除配置
-    logic-delete-value: -1
-    logic-not-delete-value: 0
     #自定义填充策略接口实现
     #meta-object-handler: com.baomidou.springboot.xxx
     #自定义SQL注入器
+    db-config:
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
   configuration:
     map-underscore-to-camel-case: true
     cache-enabled: false
@@ -49,11 +50,37 @@ spring:
     locations: classpath:db/migration
     outOfOrder: true
     enabled: true
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
 
 security:
   jwtSecret: ${JWT_SECRET}
   # 一个月
   jwtExpirationInMs: 259200000
+  endpointsIgnoreToken:
+    - path: /api/images
+      methods:
+        - POST
+    - path: /api/hospitals/sign-up
+      methods:
+        - POST
+    - path: /api/suppliers/sign-up
+      methods:
+        - POST
+    - path: /api/users/sign-in
+      methods:
+        - POST
+    - path: /api/users/reset-password
+      methods:
+        - POST
+    - path: /api/required-materials
+      methods:
+        - GET
+    - path: /api/supplied-materials
+      methods:
+        - GET
 
 oss:
   endpoint: ${OSS_ENDPOINT}

@@ -1,0 +1,6 @@
+alter table material_required
+change column material_supplied_image_urls material_required_image_urls text,
+change column material_supplied_name material_required_name varchar(100) not null,
+change column material_supplied_category material_required_category varchar(50) not null,
+change column material_supplied_standard material_required_standard varchar(100) not null,
+change column material_supplied_organization_name material_required_organization_name varchar(100) not null;

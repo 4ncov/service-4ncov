@@ -1,10 +1,10 @@
 package com.ncov.module.common.exception;
 
 import com.ncov.module.controller.resp.RestResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * @author JackJun
@@ -24,15 +25,14 @@ import java.util.Objects;
  * Life is not just about survival.
  */
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
-
-    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public RestResponse formValidateFailed(MissingServletRequestParameterException e) {
-        logger.error("ParameterError:{}", e.getMessage());
+        log.error("ParameterError:{}", e.getMessage());
         return RestResponse.getResp("参数错误!");
     }
 
@@ -40,7 +40,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public RestResponse formValidateFailed(MethodArgumentNotValidException e) {
-        logger.error(Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage());
+        log.error(Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage());
         return RestResponse.getResp(e.getBindingResult().getFieldError().getDefaultMessage());
     }
 
@@ -53,19 +53,26 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BadCredentialsException.class)
     @ResponseBody
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public RestResponse loginFailure(BadCredentialsException e) {
         return RestResponse.getResp("账号或密码错误！");
     }
 
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public RestResponse processAccessDeniedException(AccessDeniedException e) {
+        return RestResponse.getResp("当前帐号无权访问.");
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> globalException(Exception e) {
-        ByteArrayOutputStream exceptionStream = new ByteArrayOutputStream();
-        e.printStackTrace(new PrintStream(exceptionStream));
-        String exceptionMsg = exceptionStream.toString();
-        logger.error(exceptionMsg);
-        logger.error(e.getClass().getName());
-        //TODO 全局异常记录
+        ResponseStatus errorHttpStatus = e.getClass().getAnnotation(ResponseStatus.class);
+        if (Objects.nonNull(errorHttpStatus)) {
+            log.warn("Managed exception, http status {}", errorHttpStatus.code(), e);
+            return new ResponseEntity<>(RestResponse.getResp(e.getMessage()), errorHttpStatus.code());
+        }
+        log.error("System error", e);
         return new ResponseEntity<>(RestResponse.getResp("内部程序错误！请联系管理员！"), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
