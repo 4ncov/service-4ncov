@@ -94,6 +94,22 @@ public class MaterialsController {
     }
 
     @ApiOperation(
+            value = "List my required materials.",
+            tags = SwaggerConstants.TAG_REQUIRED_MATERIALS
+    )
+    @GetMapping("/required-materials/me")
+    @PreAuthorize("hasRole('ROLE_SYSADMIN') or hasRole('ROLE_HOSPITAL')")
+    public Page<MaterialResponse> listMyRequiredMaterials(@RequestParam Integer page,
+                                                          @RequestParam Integer size) {
+        return materialRequiredService.getAllRequiredMaterialsPage(page
+                , size
+                , null
+                , null
+                , null
+                , userContext.getUserId());
+    }
+
+    @ApiOperation(
             value = "Create new supplied material.",
             tags = SwaggerConstants.TAG_SUPPLIED_MATERIALS
     )
@@ -158,4 +174,19 @@ public class MaterialsController {
         return materialSuppliedService.getAllSuppliedMaterialsPage(page, size, category, status, contactPhone, userId);
     }
 
+    @ApiOperation(
+            value = "List my supplied materials.",
+            tags = SwaggerConstants.TAG_SUPPLIED_MATERIALS
+    )
+    @GetMapping("/supplied-materials/me")
+    @PreAuthorize("hasRole('ROLE_SUPPLIER') or hasRole('ROLE_SYSADMIN')")
+    public Page<MaterialResponse> listMySuppliedMaterials(@RequestParam Integer page,
+                                                          @RequestParam Integer size) {
+        return materialSuppliedService.getAllSuppliedMaterialsPage(page
+                , size
+                , null
+                , null
+                , null
+                , userContext.getUserId());
+    }
 }
