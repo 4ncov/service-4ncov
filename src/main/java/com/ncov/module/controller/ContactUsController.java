@@ -3,7 +3,6 @@ package com.ncov.module.controller;
 import com.ncov.module.common.SwaggerConstants;
 import com.ncov.module.controller.request.user.ContactUsCreateRequest;
 import com.ncov.module.controller.resp.Page;
-import com.ncov.module.controller.resp.PageResponse;
 import com.ncov.module.controller.resp.RestResponse;
 import com.ncov.module.controller.resp.user.ContactUsResponse;
 import com.ncov.module.entity.ContactUsEntity;
@@ -52,8 +51,8 @@ public class ContactUsController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasRole('ROLE_SYSADMIN')")
-    public PageResponse<ContactUsResponse> listContactUs(@RequestParam Integer page, @RequestParam Integer size) {
-        Page<ContactUsResponse> responsePage = service.selectPage(ContactUsEntity.class
+    public Page<ContactUsResponse> listContactUs(@RequestParam Integer page, @RequestParam Integer size) {
+        return service.selectPage(ContactUsEntity.class
                 , page
                 , size
                 , null
@@ -63,7 +62,6 @@ public class ContactUsController {
                         , entity.getGmtCreated()
                         , entity.getGmtModified()
                         , entity.getCreateUserId()));
-        return PageResponse.getResp("请求成功.", responsePage);
     }
 
 }
