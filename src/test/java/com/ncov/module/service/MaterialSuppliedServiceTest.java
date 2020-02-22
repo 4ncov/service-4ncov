@@ -2,15 +2,18 @@ package com.ncov.module.service;
 
 import com.ncov.module.common.enums.MaterialStatus;
 import com.ncov.module.common.enums.UserStatus;
+import com.ncov.module.common.exception.MaterialNotFoundException;
 import com.ncov.module.controller.dto.AddressDto;
 import com.ncov.module.controller.dto.MaterialDto;
 import com.ncov.module.controller.request.material.MaterialRequest;
 import com.ncov.module.controller.resp.material.MaterialResponse;
 import com.ncov.module.entity.MaterialSuppliedEntity;
 import com.ncov.module.entity.UserInfoEntity;
+import com.ncov.module.mapper.MaterialSuppliedMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
+import org.springframework.security.access.AccessDeniedException;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -23,6 +26,9 @@ class MaterialSuppliedServiceTest {
 
     @Mock
     private UserInfoService userInfoService;
+
+    @Mock
+    private MaterialSuppliedMapper materialSuppliedMapper;
 
     @Spy
     @InjectMocks
@@ -265,5 +271,91 @@ class MaterialSuppliedServiceTest {
         List<MaterialSuppliedEntity> materials = materialsCaptor.getValue();
         assertEquals(2, materials.size());
         assertTrue(materials.stream().allMatch(MaterialSuppliedEntity::isApproved));
+    }
+
+    @Test
+    void should_update_material_when_supplied_is_present_and_publisher_of_the_supplied_is_request_user() {
+        when(materialSuppliedService.updateById(any(MaterialSuppliedEntity.class)))
+                .thenReturn(true);
+        when(materialSuppliedMapper.selectById(anyLong()))
+                .thenReturn(MaterialSuppliedEntity.builder()
+                        .materialSuppliedUserId(1L).build());
+        MaterialResponse suppliedInfo = materialSuppliedService.update(
+                223L,
+                MaterialRequest.builder()
+                        .address(AddressDto.builder()
+                                .country("中国")
+                                .province("湖北省")
+                                .city("武汉市")
+                                .district("东西湖区")
+                                .streetAddress("银潭路1号")
+                                .build())
+                        .contactorName("张三")
+                        .contactorPhone("18801234567")
+                        .comment("医护人员急用")
+                        .materials(Collections.singletonList(MaterialDto.builder()
+                                .name("N95口罩")
+                                .category("口罩")
+                                .quantity(100000.0)
+                                .standard("ISO-8859-1")
+                                .imageUrls(Arrays.asList("https://oss.com/b.jpg", "https://oss.com/a.jpg"))
+                                .build()))
+                        .build(), 1L);
+        assertEquals("223", suppliedInfo.getId());
+    }
+
+    @Test
+    void should_throw_access_denied_exception_when_publisher_of_the_supplied_is_not_requesting_user() {
+        when(materialSuppliedMapper.selectById(anyLong()))
+                .thenReturn(MaterialSuppliedEntity.builder()
+                        .materialSuppliedUserId(123L)
+                        .build());
+        assertThrows(AccessDeniedException.class
+                , () -> materialSuppliedService.update(223L
+                        , MaterialRequest.builder()
+                                .address(AddressDto.builder()
+                                        .country("中国")
+                                        .province("湖北省")
+                                        .city("武汉市")
+                                        .district("东西湖区")
+                                        .streetAddress("银潭路1号")
+                                        .build())
+                                .contactorName("张三")
+                                .contactorPhone("18801234567")
+                                .comment("医护人员急用")
+                                .materials(Collections.singletonList(MaterialDto.builder()
+                                        .name("N95口罩")
+                                        .category("口罩")
+                                        .quantity(100000.0)
+                                        .standard("ISO-8859-1")
+                                        .imageUrls(Arrays.asList("https://oss.com/b.jpg", "https://oss.com/a.jpg"))
+                                        .build()))
+                                .build(), 12L));
+    }
+
+    @Test
+    void should_throw_material_notFound_exception_when_supplied_is_absent() {
+        when(materialSuppliedMapper.selectById(anyLong())).thenReturn(null);
+        assertThrows(MaterialNotFoundException.class
+                , () -> materialSuppliedService.update(223L
+                        , MaterialRequest.builder()
+                                .address(AddressDto.builder()
+                                        .country("中国")
+                                        .province("湖北省")
+                                        .city("武汉市")
+                                        .district("东西湖区")
+                                        .streetAddress("银潭路1号")
+                                        .build())
+                                .contactorName("张三")
+                                .contactorPhone("18801234567")
+                                .comment("医护人员急用")
+                                .materials(Collections.singletonList(MaterialDto.builder()
+                                        .name("N95口罩")
+                                        .category("口罩")
+                                        .quantity(100000.0)
+                                        .standard("ISO-8859-1")
+                                        .imageUrls(Arrays.asList("https://oss.com/b.jpg", "https://oss.com/a.jpg"))
+                                        .build()))
+                                .build(), 1L));
     }
 }

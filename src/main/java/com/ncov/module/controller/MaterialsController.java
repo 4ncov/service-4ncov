@@ -1,7 +1,6 @@
 package com.ncov.module.controller;
 
 import com.ncov.module.common.SwaggerConstants;
-import com.ncov.module.controller.dto.MaterialDto;
 import com.ncov.module.controller.request.material.MaterialRequest;
 import com.ncov.module.controller.resp.Page;
 import com.ncov.module.controller.resp.RestResponse;
@@ -16,8 +15,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -39,6 +36,32 @@ public class MaterialsController {
     public RestResponse createRequiredMaterial(@RequestBody @Valid MaterialRequest material) {
         return RestResponse.getResp("保存成功", materialRequiredService.saveRequiredInfo(material,
                 userContext.getOrganisationId(), userContext.getUserId()));
+    }
+
+    @ApiOperation(
+            value = "update required material.",
+            tags = SwaggerConstants.TAG_REQUIRED_MATERIALS
+    )
+    @PreAuthorize("hasRole('ROLE_HOSPITAL') or hasRole('ROLE_SYSADMIN')")
+    @PutMapping("/required-materials/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public RestResponse updateRequiredMaterial(@PathVariable Long id, @RequestBody @Valid MaterialRequest material) {
+        return RestResponse.getResp("更新成功", materialRequiredService.update(id
+                , material
+                , userContext.getUserId()));
+    }
+
+    @ApiOperation(
+            value = "update supplied material.",
+            tags = SwaggerConstants.TAG_SUPPLIED_MATERIALS
+    )
+    @PreAuthorize("hasRole('ROLE_SUPPLIER') or hasRole('ROLE_SYSADMIN')")
+    @PutMapping("/supplied-materials/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public RestResponse updateSuppliedMaterial(@PathVariable Long id, @RequestBody @Valid MaterialRequest material) {
+        return RestResponse.getResp("更新成功", materialSuppliedService.update(id
+                , material
+                , userContext.getUserId()));
     }
 
     @ApiOperation(

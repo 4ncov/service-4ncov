@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ncov.module.common.enums.MaterialStatus;
 import com.ncov.module.common.exception.MaterialNotFoundException;
+import com.ncov.module.common.util.ImageUtils;
 import com.ncov.module.controller.dto.AddressDto;
 import com.ncov.module.controller.dto.MaterialDto;
 import com.ncov.module.controller.request.material.MaterialRequest;
@@ -14,9 +15,11 @@ import com.ncov.module.entity.UserInfoEntity;
 import com.ncov.module.mapper.MaterialSuppliedMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -66,6 +69,36 @@ public class MaterialSuppliedService extends ServiceImpl<MaterialSuppliedMapper,
         }
         saveBatch(materials);
         return carry(materials);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public MaterialResponse update(Long materialId, MaterialRequest material, Long UserId) {
+        MaterialSuppliedEntity presentMaterial = getById(materialId);
+        if (!Objects.equals(presentMaterial.getMaterialSuppliedUserId(), UserId)) {
+            throw new AccessDeniedException("permission denied!");
+        }
+        MaterialDto materialDto = material.getMaterials().get(0);
+        AddressDto address = material.getAddress();
+        MaterialSuppliedEntity entity = MaterialSuppliedEntity.builder()
+                .id(materialId)
+                .country(address.getCountry())
+                .province(address.getProvince())
+                .city(address.getCity())
+                .district(address.getDistrict())
+                .streetAddress(address.getStreetAddress())
+                .materialSuppliedContactorName(material.getContactorName())
+                .materialSuppliedContactorPhone(material.getContactorPhone())
+                .materialSuppliedOrganizationName(material.getOrganisationName())
+                .materialSuppliedComment(material.getComment())
+                .materialSuppliedImageUrls(ImageUtils.joinImageUrls(materialDto.getImageUrls()))
+                .materialSuppliedName(materialDto.getName())
+                .materialSuppliedCategory(materialDto.getCategory())
+                .materialSuppliedQuantity(materialDto.getQuantity())
+                .materialSuppliedStandard(materialDto.getStandard())
+                .gmtModified(new Date())
+                .build();
+        updateById(entity);
+        return carry(entity);
     }
 
     public void approve(Long id) {
