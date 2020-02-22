@@ -113,6 +113,10 @@ public class MaterialRequiredService extends ServiceImpl<MaterialRequiredMapper,
         updateById(material);
     }
 
+    public MaterialResponse getDetail(Long id) {
+        return carry(getById(id));
+    }
+
     private LambdaQueryWrapper<MaterialRequiredEntity> getFilterQueryWrapper(String category,
                                                                              String status,
                                                                              String contactPhone,
@@ -141,31 +145,35 @@ public class MaterialRequiredService extends ServiceImpl<MaterialRequiredMapper,
 
     private List<MaterialResponse> carry(List<MaterialRequiredEntity> source) {
         return source.stream()
-                .map(material -> MaterialResponse.builder()
-                        .address(AddressDto.builder()
-                                .country(material.getCountry())
-                                .province(material.getProvince())
-                                .city(material.getCity())
-                                .district(material.getDistrict())
-                                .streetAddress(material.getStreetAddress())
-                                .build())
-                        .comment(material.getMaterialRequiredComment())
-                        .contactorName(material.getMaterialRequiredContactorName())
-                        .contactorPhone(material.getMaterialRequiredContactorPhone())
-                        .gmtCreated(material.getGmtCreated())
-                        .gmtModified(material.getGmtModified())
-                        .id(material.getId().toString())
-                        .material(MaterialDto.builder()
-                                .category(material.getMaterialRequiredCategory())
-                                .standard(material.getMaterialRequiredStandard())
-                                .quantity(material.getMaterialRequiredQuantity())
-                                .name(material.getMaterialRequiredName())
-                                .imageUrls(material.getImageUrls())
-                                .build())
-                        .organisationName(material.getMaterialRequiredOrganizationName())
-                        .status(material.getMaterialRequiredStatus())
-                        .reviewMessage(material.getReviewMessage())
-                        .build())
+                .map(this::carry)
                 .collect(Collectors.toList());
+    }
+
+    private MaterialResponse carry(MaterialRequiredEntity material) {
+        return MaterialResponse.builder()
+                .address(AddressDto.builder()
+                        .country(material.getCountry())
+                        .province(material.getProvince())
+                        .city(material.getCity())
+                        .district(material.getDistrict())
+                        .streetAddress(material.getStreetAddress())
+                        .build())
+                .comment(material.getMaterialRequiredComment())
+                .contactorName(material.getMaterialRequiredContactorName())
+                .contactorPhone(material.getMaterialRequiredContactorPhone())
+                .gmtCreated(material.getGmtCreated())
+                .gmtModified(material.getGmtModified())
+                .id(material.getId().toString())
+                .material(MaterialDto.builder()
+                        .category(material.getMaterialRequiredCategory())
+                        .standard(material.getMaterialRequiredStandard())
+                        .quantity(material.getMaterialRequiredQuantity())
+                        .name(material.getMaterialRequiredName())
+                        .imageUrls(material.getImageUrls())
+                        .build())
+                .organisationName(material.getMaterialRequiredOrganizationName())
+                .status(material.getMaterialRequiredStatus())
+                .reviewMessage(material.getReviewMessage())
+                .build();
     }
 }
