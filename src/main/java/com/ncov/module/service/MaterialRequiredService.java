@@ -2,9 +2,9 @@ package com.ncov.module.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ncov.module.common.enums.MaterialStatus;
 import com.ncov.module.common.exception.MaterialNotFoundException;
+import com.ncov.module.common.util.ImageUtils;
 import com.ncov.module.controller.dto.AddressDto;
 import com.ncov.module.controller.dto.MaterialDto;
 import com.ncov.module.controller.request.material.MaterialRequest;
@@ -14,9 +14,11 @@ import com.ncov.module.entity.UserInfoEntity;
 import com.ncov.module.mapper.MaterialRequiredMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -31,7 +33,7 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
  */
 @Slf4j
 @Service
-public class MaterialRequiredService extends ServiceImpl<MaterialRequiredMapper, MaterialRequiredEntity> {
+public class MaterialRequiredService extends AbstractService<MaterialRequiredMapper, MaterialRequiredEntity> {
 
     @Autowired
     private MaterialRequiredMapper materialRequiredMapper;
@@ -82,6 +84,38 @@ public class MaterialRequiredService extends ServiceImpl<MaterialRequiredMapper,
         return carry(materialRequiredEntities);
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    public MaterialResponse update(Long materialId
+            , MaterialRequest material
+            , Long userId) {
+        MaterialRequiredEntity presentMaterial = getById(materialId);
+        if (!Objects.equals(presentMaterial.getMaterialRequiredUserId(), userId)) {
+            throw new AccessDeniedException("permission denied!");
+        }
+        MaterialDto materialDto = material.getMaterials().get(0);
+        AddressDto address = material.getAddress();
+        MaterialRequiredEntity entity = MaterialRequiredEntity.builder()
+                .id(materialId)
+                .country(address.getCountry())
+                .province(address.getProvince())
+                .city(address.getCity())
+                .district(address.getDistrict())
+                .streetAddress(address.getStreetAddress())
+                .materialRequiredContactorName(material.getContactorName())
+                .materialRequiredContactorPhone(material.getContactorPhone())
+                .materialRequiredOrganizationName(material.getOrganisationName())
+                .materialRequiredComment(material.getComment())
+                .materialRequiredImageUrls(ImageUtils.joinImageUrls(materialDto.getImageUrls()))
+                .materialRequiredName(materialDto.getName())
+                .materialRequiredCategory(materialDto.getCategory())
+                .materialRequiredQuantity(materialDto.getQuantity())
+                .materialRequiredStandard(materialDto.getStandard())
+                .gmtModified(new Date())
+                .build();
+        updateById(entity);
+        return carry(entity);
+    }
+
     public com.ncov.module.controller.resp.Page<MaterialResponse> getAllRequiredMaterialsPage(
             Integer page, Integer size, String category, String status, String contactPhone, Long userId) {
         Page<MaterialRequiredEntity> results = materialRequiredMapper.selectPage(
@@ -94,11 +128,6 @@ public class MaterialRequiredService extends ServiceImpl<MaterialRequiredMapper,
                 .pageSize(size)
                 .total(results.getTotal())
                 .build();
-    }
-
-    public MaterialResponse update(MaterialRequest request) {
-        // TODO
-        return null;
     }
 
     public void approve(Long id) {
