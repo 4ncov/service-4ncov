@@ -10,6 +10,7 @@ import com.ncov.module.controller.resp.material.MaterialResponse;
 import com.ncov.module.entity.MaterialSuppliedEntity;
 import com.ncov.module.entity.UserInfoEntity;
 import com.ncov.module.mapper.MaterialSuppliedMapper;
+import com.ncov.module.security.UserContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
@@ -26,10 +27,10 @@ class MaterialSuppliedServiceTest {
 
     @Mock
     private UserInfoService userInfoService;
-
     @Mock
     private MaterialSuppliedMapper materialSuppliedMapper;
-
+    @Mock
+    private UserContext userContext;
     @Spy
     @InjectMocks
     private MaterialSuppliedService materialSuppliedService;
@@ -44,7 +45,9 @@ class MaterialSuppliedServiceTest {
             }
             return true;
         }).when(materialSuppliedService).saveBatch(anyList());
-        when(userInfoService.getUser(anyLong())).thenReturn(UserInfoEntity.builder().status(MaterialStatus.PENDING.name()).build());
+        when(userInfoService.getUser(anyLong())).thenReturn(UserInfoEntity.builder().status(UserStatus.PENDING.name()).build());
+        when(userContext.getUserId()).thenReturn(1L);
+        when(userContext.isSysAdmin()).thenReturn(false);
     }
 
     @Test
@@ -300,7 +303,7 @@ class MaterialSuppliedServiceTest {
                                 .standard("ISO-8859-1")
                                 .imageUrls(Arrays.asList("https://oss.com/b.jpg", "https://oss.com/a.jpg"))
                                 .build()))
-                        .build(), 1L);
+                        .build());
         assertEquals("223", suppliedInfo.getId());
     }
 
@@ -310,6 +313,7 @@ class MaterialSuppliedServiceTest {
                 .thenReturn(MaterialSuppliedEntity.builder()
                         .materialSuppliedUserId(123L)
                         .build());
+        when(userContext.getUserId()).thenReturn(12L);
         assertThrows(AccessDeniedException.class
                 , () -> materialSuppliedService.update(223L
                         , MaterialRequest.builder()
@@ -330,7 +334,7 @@ class MaterialSuppliedServiceTest {
                                         .standard("ISO-8859-1")
                                         .imageUrls(Arrays.asList("https://oss.com/b.jpg", "https://oss.com/a.jpg"))
                                         .build()))
-                                .build(), 12L));
+                                .build()));
     }
 
     @Test
@@ -356,6 +360,6 @@ class MaterialSuppliedServiceTest {
                                         .standard("ISO-8859-1")
                                         .imageUrls(Arrays.asList("https://oss.com/b.jpg", "https://oss.com/a.jpg"))
                                         .build()))
-                                .build(), 1L));
+                                .build()));
     }
 }

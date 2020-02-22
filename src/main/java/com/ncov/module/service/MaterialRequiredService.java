@@ -12,6 +12,7 @@ import com.ncov.module.controller.resp.material.MaterialResponse;
 import com.ncov.module.entity.MaterialRequiredEntity;
 import com.ncov.module.entity.UserInfoEntity;
 import com.ncov.module.mapper.MaterialRequiredMapper;
+import com.ncov.module.security.UserContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
@@ -39,6 +40,8 @@ public class MaterialRequiredService extends AbstractService<MaterialRequiredMap
     private MaterialRequiredMapper materialRequiredMapper;
     @Autowired
     private UserInfoService userInfoService;
+    @Autowired
+    private UserContext userContext;
 
     /**
      * 根据相关条件，查询物料寻求分页列表
@@ -85,11 +88,9 @@ public class MaterialRequiredService extends AbstractService<MaterialRequiredMap
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public MaterialResponse update(Long materialId
-            , MaterialRequest material
-            , Long userId) {
+    public MaterialResponse update(Long materialId, MaterialRequest material) {
         MaterialRequiredEntity presentMaterial = getById(materialId);
-        if (!Objects.equals(presentMaterial.getMaterialRequiredUserId(), userId)) {
+        if (!isUpdateAllowed(presentMaterial)) {
             throw new AccessDeniedException("permission denied!");
         }
         MaterialDto materialDto = material.getMaterials().get(0);
@@ -144,6 +145,10 @@ public class MaterialRequiredService extends AbstractService<MaterialRequiredMap
 
     public MaterialResponse getDetail(Long id) {
         return carry(getById(id));
+    }
+
+    private boolean isUpdateAllowed(MaterialRequiredEntity material) {
+        return userContext.isSysAdmin() || userContext.getUserId().equals(material.getMaterialRequiredUserId());
     }
 
     private LambdaQueryWrapper<MaterialRequiredEntity> getFilterQueryWrapper(String category,

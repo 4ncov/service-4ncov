@@ -46,9 +46,7 @@ public class MaterialsController {
     @PutMapping("/required-materials/{id}")
     @ResponseStatus(HttpStatus.OK)
     public RestResponse updateRequiredMaterial(@PathVariable Long id, @RequestBody @Valid MaterialRequest material) {
-        return RestResponse.getResp("更新成功", materialRequiredService.update(id
-                , material
-                , userContext.getUserId()));
+        return RestResponse.getResp("更新成功", materialRequiredService.update(id, material));
     }
 
     @ApiOperation(
@@ -59,9 +57,7 @@ public class MaterialsController {
     @PutMapping("/supplied-materials/{id}")
     @ResponseStatus(HttpStatus.OK)
     public RestResponse updateSuppliedMaterial(@PathVariable Long id, @RequestBody @Valid MaterialRequest material) {
-        return RestResponse.getResp("更新成功", materialSuppliedService.update(id
-                , material
-                , userContext.getUserId()));
+        return RestResponse.getResp("更新成功", materialSuppliedService.update(id, material));
     }
 
     @ApiOperation(

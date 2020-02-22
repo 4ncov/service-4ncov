@@ -10,6 +10,7 @@ import com.ncov.module.controller.resp.material.MaterialResponse;
 import com.ncov.module.entity.MaterialRequiredEntity;
 import com.ncov.module.entity.UserInfoEntity;
 import com.ncov.module.mapper.MaterialRequiredMapper;
+import com.ncov.module.security.UserContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
@@ -29,10 +30,10 @@ public class MaterialRequiredServiceTest {
 
     @Mock
     private UserInfoService userInfoService;
-
     @Mock
     private MaterialRequiredMapper materialRequiredMapper;
-
+    @Mock
+    private UserContext userContext;
     @Spy
     @InjectMocks
     private MaterialRequiredService materialRequiredService;
@@ -48,6 +49,8 @@ public class MaterialRequiredServiceTest {
             return true;
         }).when(materialRequiredService).saveBatch(anyList());
         when(userInfoService.getUser(anyLong())).thenReturn(UserInfoEntity.builder().status(MaterialStatus.PENDING.name()).build());
+        when(userContext.getUserId()).thenReturn(1L);
+        when(userContext.isSysAdmin()).thenReturn(false);
     }
 
     @Test
@@ -181,7 +184,7 @@ public class MaterialRequiredServiceTest {
                                 .standard("ISO-8859-1")
                                 .imageUrls(Arrays.asList("https://oss.com/b.jpg", "https://oss.com/a.jpg"))
                                 .build()))
-                        .build(), userInfoEntity.getId());
+                        .build());
         assertEquals("223", requiredInfo.getId());
     }
 
@@ -212,7 +215,7 @@ public class MaterialRequiredServiceTest {
                                         .standard("ISO-8859-1")
                                         .imageUrls(Arrays.asList("https://oss.com/b.jpg", "https://oss.com/a.jpg"))
                                         .build()))
-                                .build(), userInfoEntity.getId()));
+                                .build()));
     }
 
     @Test
@@ -239,6 +242,6 @@ public class MaterialRequiredServiceTest {
                                         .standard("ISO-8859-1")
                                         .imageUrls(Arrays.asList("https://oss.com/b.jpg", "https://oss.com/a.jpg"))
                                         .build()))
-                                .build(), userInfoEntity.getId()));
+                                .build()));
     }
 }
