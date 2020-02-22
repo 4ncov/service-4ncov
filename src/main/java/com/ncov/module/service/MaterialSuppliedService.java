@@ -82,26 +82,25 @@ public class MaterialSuppliedService extends ServiceImpl<MaterialSuppliedMapper,
         }
         MaterialDto materialDto = material.getMaterials().get(0);
         AddressDto address = material.getAddress();
-        MaterialSuppliedEntity entity = MaterialSuppliedEntity.builder()
-                .id(materialId)
+        MaterialSuppliedEntity updatedMaterial = presentMaterial.toBuilder()
+                .materialSuppliedName(materialDto.getName())
+                .materialSuppliedCategory(materialDto.getCategory())
+                .materialSuppliedStandard(materialDto.getStandard())
+                .materialSuppliedContactorName(material.getContactorName())
+                .materialSuppliedContactorPhone(material.getContactorPhone())
                 .country(address.getCountry())
                 .province(address.getProvince())
                 .city(address.getCity())
                 .district(address.getDistrict())
                 .streetAddress(address.getStreetAddress())
-                .materialSuppliedContactorName(material.getContactorName())
-                .materialSuppliedContactorPhone(material.getContactorPhone())
+                .materialSuppliedQuantity(materialDto.getQuantity())
                 .materialSuppliedOrganizationName(material.getOrganisationName())
                 .materialSuppliedComment(material.getComment())
                 .materialSuppliedImageUrls(ImageUtils.joinImageUrls(materialDto.getImageUrls()))
-                .materialSuppliedName(materialDto.getName())
-                .materialSuppliedCategory(materialDto.getCategory())
-                .materialSuppliedQuantity(materialDto.getQuantity())
-                .materialSuppliedStandard(materialDto.getStandard())
                 .gmtModified(new Date())
                 .build();
-        updateById(entity);
-        return carry(entity);
+        updateById(updatedMaterial);
+        return carry(updatedMaterial);
     }
 
     public void approve(Long id) {

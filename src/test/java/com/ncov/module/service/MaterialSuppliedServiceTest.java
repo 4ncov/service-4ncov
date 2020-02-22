@@ -282,7 +282,7 @@ class MaterialSuppliedServiceTest {
                 .thenReturn(true);
         when(materialSuppliedMapper.selectById(anyLong()))
                 .thenReturn(MaterialSuppliedEntity.builder()
-                        .materialSuppliedUserId(1L).build());
+                        .id(223L).materialSuppliedUserId(1L).build());
         MaterialResponse suppliedInfo = materialSuppliedService.update(
                 223L,
                 MaterialRequest.builder()

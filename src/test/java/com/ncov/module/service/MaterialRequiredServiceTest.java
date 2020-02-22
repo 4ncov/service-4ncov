@@ -158,11 +158,10 @@ public class MaterialRequiredServiceTest {
 
     @Test
     void should_update_material_when_required_is_present_and_publisher_of_the_required_is_request_user() {
-        UserInfoEntity userInfoEntity = UserInfoEntity.builder().id(1L).build();
         when(materialRequiredService.updateById(any(MaterialRequiredEntity.class)))
                 .thenReturn(true);
         when(materialRequiredMapper.selectById(anyLong()))
-                .thenReturn(MaterialRequiredEntity.builder()
+                .thenReturn(MaterialRequiredEntity.builder().id(223L)
                         .materialRequiredUserId(1L).build());
         MaterialResponse requiredInfo = materialRequiredService.update(
                 223L,

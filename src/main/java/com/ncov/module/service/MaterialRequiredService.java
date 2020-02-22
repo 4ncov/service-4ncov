@@ -95,26 +95,25 @@ public class MaterialRequiredService extends AbstractService<MaterialRequiredMap
         }
         MaterialDto materialDto = material.getMaterials().get(0);
         AddressDto address = material.getAddress();
-        MaterialRequiredEntity entity = MaterialRequiredEntity.builder()
-                .id(materialId)
+        MaterialRequiredEntity updatedMaterial = presentMaterial.toBuilder()
+                .materialRequiredContactorName(material.getContactorName())
+                .materialRequiredContactorPhone(material.getContactorPhone())
                 .country(address.getCountry())
                 .province(address.getProvince())
                 .city(address.getCity())
                 .district(address.getDistrict())
                 .streetAddress(address.getStreetAddress())
-                .materialRequiredContactorName(material.getContactorName())
-                .materialRequiredContactorPhone(material.getContactorPhone())
-                .materialRequiredOrganizationName(material.getOrganisationName())
+                .materialRequiredQuantity(materialDto.getQuantity())
                 .materialRequiredComment(material.getComment())
                 .materialRequiredImageUrls(ImageUtils.joinImageUrls(materialDto.getImageUrls()))
                 .materialRequiredName(materialDto.getName())
                 .materialRequiredCategory(materialDto.getCategory())
-                .materialRequiredQuantity(materialDto.getQuantity())
                 .materialRequiredStandard(materialDto.getStandard())
+                .materialRequiredOrganizationName(material.getOrganisationName())
                 .gmtModified(new Date())
                 .build();
-        updateById(entity);
-        return carry(entity);
+        updateById(updatedMaterial);
+        return carry(updatedMaterial);
     }
 
     public com.ncov.module.controller.resp.Page<MaterialResponse> getAllRequiredMaterialsPage(

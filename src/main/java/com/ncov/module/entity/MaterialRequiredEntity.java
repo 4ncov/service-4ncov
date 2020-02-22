@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Builder(toBuilder = true)
 @TableName("material_required")
 public class MaterialRequiredEntity {
     private Long id;
