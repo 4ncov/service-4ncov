@@ -180,6 +180,7 @@ public abstract class AbstractService<M extends BaseMapper<T>, T> extends Servic
                         .filter(Objects::nonNull)
                         .map(carryFunction)
                         .collect(Collectors.toCollection(LinkedList::new)))
+                .total(mpPage.getTotal())
                 .build();
     }
 
