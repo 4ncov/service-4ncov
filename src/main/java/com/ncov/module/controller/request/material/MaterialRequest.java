@@ -24,6 +24,8 @@ public class MaterialRequest {
     @ApiModelProperty(value = "发布/供货机构名称")
     @NotEmpty(message = "机构名称不能为空")
     private String organisationName;
+    @ApiModelProperty(value = "发布/供货机构Logo")
+    private String organisationLogo;
     @ApiModelProperty(value = "收货/发货地址")
     @Valid
     private AddressDto address;

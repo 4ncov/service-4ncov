@@ -95,6 +95,7 @@ public class MaterialSuppliedService extends ServiceImpl<MaterialSuppliedMapper,
                 .streetAddress(address.getStreetAddress())
                 .materialSuppliedQuantity(materialDto.getQuantity())
                 .materialSuppliedOrganizationName(material.getOrganisationName())
+                .materialSuppliedOrganizationLogo(material.getOrganisationLogo())
                 .materialSuppliedComment(material.getComment())
                 .materialSuppliedImageUrls(ImageUtils.joinImageUrls(materialDto.getImageUrls()))
                 .gmtModified(new Date())
@@ -192,6 +193,7 @@ public class MaterialSuppliedService extends ServiceImpl<MaterialSuppliedMapper,
                         .imageUrls(material.getImageUrls())
                         .build())
                 .organisationName(material.getMaterialSuppliedOrganizationName())
+                .organisationLogo(material.getMaterialSuppliedOrganizationLogo())
                 .status(material.getMaterialSuppliedStatus())
                 .reviewMessage(material.getReviewMessage())
                 .build();

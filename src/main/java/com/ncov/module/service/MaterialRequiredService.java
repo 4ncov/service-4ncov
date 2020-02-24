@@ -110,6 +110,7 @@ public class MaterialRequiredService extends AbstractService<MaterialRequiredMap
                 .materialRequiredCategory(materialDto.getCategory())
                 .materialRequiredStandard(materialDto.getStandard())
                 .materialRequiredOrganizationName(material.getOrganisationName())
+                .materialRequiredOrganizationLogo(material.getOrganisationLogo())
                 .gmtModified(new Date())
                 .build();
         updateById(updatedMaterial);
@@ -205,6 +206,7 @@ public class MaterialRequiredService extends AbstractService<MaterialRequiredMap
                         .imageUrls(material.getImageUrls())
                         .build())
                 .organisationName(material.getMaterialRequiredOrganizationName())
+                .organisationLogo(material.getMaterialRequiredOrganizationLogo())
                 .status(material.getMaterialRequiredStatus())
                 .reviewMessage(material.getReviewMessage())
                 .build();

@@ -31,4 +31,6 @@ public class SupplierSignUpRequest {
     @ApiModelProperty(value = "是否自备物流")
     @NotNull(message = "必须选择是否自备物流")
     private Boolean haveLogistics;
+    @ApiModelProperty(value = "供应商公司Logo")
+    private String logoUrl;
 }

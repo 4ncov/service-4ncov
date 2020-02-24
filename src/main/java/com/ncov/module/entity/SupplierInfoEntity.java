@@ -25,6 +25,7 @@ public class SupplierInfoEntity {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
     private String materialSupplierName;
+    private String logo;
     private String materialSupplierContactorName;
     private String materialSupplierVerifyImageUrls;
     private Long materialSupplierCreatorUserId;
