@@ -2,9 +2,9 @@ package com.ncov.module.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ncov.module.common.enums.MaterialStatus;
 import com.ncov.module.common.exception.MaterialNotFoundException;
+import com.ncov.module.common.util.ImageUtils;
 import com.ncov.module.controller.dto.AddressDto;
 import com.ncov.module.controller.dto.MaterialDto;
 import com.ncov.module.controller.request.material.MaterialRequest;
@@ -12,11 +12,14 @@ import com.ncov.module.controller.resp.material.MaterialResponse;
 import com.ncov.module.entity.MaterialRequiredEntity;
 import com.ncov.module.entity.UserInfoEntity;
 import com.ncov.module.mapper.MaterialRequiredMapper;
+import com.ncov.module.security.UserContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -31,12 +34,14 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
  */
 @Slf4j
 @Service
-public class MaterialRequiredService extends ServiceImpl<MaterialRequiredMapper, MaterialRequiredEntity> {
+public class MaterialRequiredService extends AbstractService<MaterialRequiredMapper, MaterialRequiredEntity> {
 
     @Autowired
     private MaterialRequiredMapper materialRequiredMapper;
     @Autowired
     private UserInfoService userInfoService;
+    @Autowired
+    private UserContext userContext;
 
     /**
      * 根据相关条件，查询物料寻求分页列表
@@ -82,6 +87,35 @@ public class MaterialRequiredService extends ServiceImpl<MaterialRequiredMapper,
         return carry(materialRequiredEntities);
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    public MaterialResponse update(Long materialId, MaterialRequest material) {
+        MaterialRequiredEntity presentMaterial = getById(materialId);
+        if (!isUpdateAllowed(presentMaterial)) {
+            throw new AccessDeniedException("permission denied!");
+        }
+        MaterialDto materialDto = material.getMaterials().get(0);
+        AddressDto address = material.getAddress();
+        MaterialRequiredEntity updatedMaterial = presentMaterial.toBuilder()
+                .materialRequiredContactorName(material.getContactorName())
+                .materialRequiredContactorPhone(material.getContactorPhone())
+                .country(address.getCountry())
+                .province(address.getProvince())
+                .city(address.getCity())
+                .district(address.getDistrict())
+                .streetAddress(address.getStreetAddress())
+                .materialRequiredQuantity(materialDto.getQuantity())
+                .materialRequiredComment(material.getComment())
+                .materialRequiredImageUrls(ImageUtils.joinImageUrls(materialDto.getImageUrls()))
+                .materialRequiredName(materialDto.getName())
+                .materialRequiredCategory(materialDto.getCategory())
+                .materialRequiredStandard(materialDto.getStandard())
+                .materialRequiredOrganizationName(material.getOrganisationName())
+                .gmtModified(new Date())
+                .build();
+        updateById(updatedMaterial);
+        return carry(updatedMaterial);
+    }
+
     public com.ncov.module.controller.resp.Page<MaterialResponse> getAllRequiredMaterialsPage(
             Integer page, Integer size, String category, String status, String contactPhone, Long userId) {
         Page<MaterialRequiredEntity> results = materialRequiredMapper.selectPage(
@@ -96,11 +130,6 @@ public class MaterialRequiredService extends ServiceImpl<MaterialRequiredMapper,
                 .build();
     }
 
-    public MaterialResponse update(MaterialRequest request) {
-        // TODO
-        return null;
-    }
-
     public void approve(Long id) {
         MaterialRequiredEntity material = getById(id);
         material.approve();
@@ -111,6 +140,14 @@ public class MaterialRequiredService extends ServiceImpl<MaterialRequiredMapper,
         MaterialRequiredEntity material = getById(id);
         material.reject(message);
         updateById(material);
+    }
+
+    public MaterialResponse getDetail(Long id) {
+        return carry(getById(id));
+    }
+
+    private boolean isUpdateAllowed(MaterialRequiredEntity material) {
+        return userContext.isSysAdmin() || userContext.getUserId().equals(material.getMaterialRequiredUserId());
     }
 
     private LambdaQueryWrapper<MaterialRequiredEntity> getFilterQueryWrapper(String category,
@@ -141,31 +178,35 @@ public class MaterialRequiredService extends ServiceImpl<MaterialRequiredMapper,
 
     private List<MaterialResponse> carry(List<MaterialRequiredEntity> source) {
         return source.stream()
-                .map(material -> MaterialResponse.builder()
-                        .address(AddressDto.builder()
-                                .country(material.getCountry())
-                                .province(material.getProvince())
-                                .city(material.getCity())
-                                .district(material.getDistrict())
-                                .streetAddress(material.getStreetAddress())
-                                .build())
-                        .comment(material.getMaterialRequiredComment())
-                        .contactorName(material.getMaterialRequiredContactorName())
-                        .contactorPhone(material.getMaterialRequiredContactorPhone())
-                        .gmtCreated(material.getGmtCreated())
-                        .gmtModified(material.getGmtModified())
-                        .id(material.getId().toString())
-                        .material(MaterialDto.builder()
-                                .category(material.getMaterialRequiredCategory())
-                                .standard(material.getMaterialRequiredStandard())
-                                .quantity(material.getMaterialRequiredQuantity())
-                                .name(material.getMaterialRequiredName())
-                                .imageUrls(material.getImageUrls())
-                                .build())
-                        .organisationName(material.getMaterialRequiredOrganizationName())
-                        .status(material.getMaterialRequiredStatus())
-                        .reviewMessage(material.getReviewMessage())
-                        .build())
+                .map(this::carry)
                 .collect(Collectors.toList());
+    }
+
+    private MaterialResponse carry(MaterialRequiredEntity material) {
+        return MaterialResponse.builder()
+                .address(AddressDto.builder()
+                        .country(material.getCountry())
+                        .province(material.getProvince())
+                        .city(material.getCity())
+                        .district(material.getDistrict())
+                        .streetAddress(material.getStreetAddress())
+                        .build())
+                .comment(material.getMaterialRequiredComment())
+                .contactorName(material.getMaterialRequiredContactorName())
+                .contactorPhone(material.getMaterialRequiredContactorPhone())
+                .gmtCreated(material.getGmtCreated())
+                .gmtModified(material.getGmtModified())
+                .id(material.getId().toString())
+                .material(MaterialDto.builder()
+                        .category(material.getMaterialRequiredCategory())
+                        .standard(material.getMaterialRequiredStandard())
+                        .quantity(material.getMaterialRequiredQuantity())
+                        .name(material.getMaterialRequiredName())
+                        .imageUrls(material.getImageUrls())
+                        .build())
+                .organisationName(material.getMaterialRequiredOrganizationName())
+                .status(material.getMaterialRequiredStatus())
+                .reviewMessage(material.getReviewMessage())
+                .build();
     }
 }
