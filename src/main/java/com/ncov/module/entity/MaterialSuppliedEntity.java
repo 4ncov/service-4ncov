@@ -23,7 +23,6 @@ public class MaterialSuppliedEntity {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
     private String materialSuppliedName;
-    private String materialSuppliedOrganizationLogo;
     private String materialSuppliedCategory;
     private String materialSuppliedStandard;
     private String materialSuppliedContactorName;
@@ -62,7 +61,6 @@ public class MaterialSuppliedEntity {
                         .streetAddress(request.getAddress().getStreetAddress())
                         .materialSuppliedQuantity(material.getQuantity())
                         .materialSuppliedOrganizationName(request.getOrganisationName())
-                        .materialSuppliedOrganizationLogo(request.getOrganisationLogo())
                         .materialSupplierOrganizationId(organisationId)
                         .materialSuppliedUserId(userId)
                         .materialSuppliedComment(request.getComment())

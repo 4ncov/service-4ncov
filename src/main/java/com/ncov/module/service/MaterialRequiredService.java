@@ -10,6 +10,7 @@ import com.ncov.module.controller.dto.MaterialDto;
 import com.ncov.module.controller.request.material.MaterialRequest;
 import com.ncov.module.controller.resp.material.MaterialResponse;
 import com.ncov.module.entity.MaterialRequiredEntity;
+import com.ncov.module.entity.SupplierInfoEntity;
 import com.ncov.module.entity.UserInfoEntity;
 import com.ncov.module.mapper.MaterialRequiredMapper;
 import com.ncov.module.security.UserContext;
@@ -19,10 +20,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
@@ -41,7 +39,11 @@ public class MaterialRequiredService extends AbstractService<MaterialRequiredMap
     @Autowired
     private UserInfoService userInfoService;
     @Autowired
+    private SupplierService supplierService;
+    @Autowired
     private UserContext userContext;
+
+    private Map<Long, String> supplierInfoEntityMap = null;
 
     /**
      * 根据相关条件，查询物料寻求分页列表
@@ -109,8 +111,6 @@ public class MaterialRequiredService extends AbstractService<MaterialRequiredMap
                 .materialRequiredName(materialDto.getName())
                 .materialRequiredCategory(materialDto.getCategory())
                 .materialRequiredStandard(materialDto.getStandard())
-                .materialRequiredOrganizationName(material.getOrganisationName())
-                .materialRequiredOrganizationLogo(material.getOrganisationLogo())
                 .gmtModified(new Date())
                 .build();
         updateById(updatedMaterial);
@@ -144,7 +144,10 @@ public class MaterialRequiredService extends AbstractService<MaterialRequiredMap
     }
 
     public MaterialResponse getDetail(Long id) {
-        return carry(getById(id));
+        MaterialRequiredEntity materialRequiredEntity = getById(id);
+        SupplierInfoEntity supplierInfoEntity = supplierService.getById(materialRequiredEntity.getMaterialRequiredOrganizationId());
+        supplierInfoEntityMap.put(supplierInfoEntity.getId(), supplierInfoEntity.getLogo());
+        return carry(materialRequiredEntity);
     }
 
     private boolean isUpdateAllowed(MaterialRequiredEntity material) {
@@ -178,6 +181,9 @@ public class MaterialRequiredService extends AbstractService<MaterialRequiredMap
     }
 
     private List<MaterialResponse> carry(List<MaterialRequiredEntity> source) {
+        List<Long> oids = source.stream().map(MaterialRequiredEntity::getMaterialRequiredOrganizationId).collect(Collectors.toList());
+        List<SupplierInfoEntity> supplierInfoEntityList = supplierService.list(new LambdaQueryWrapper<SupplierInfoEntity>().in(SupplierInfoEntity::getId, oids));
+        supplierInfoEntityMap = supplierInfoEntityList.stream().collect(Collectors.toMap(SupplierInfoEntity::getId, SupplierInfoEntity::getLogo));
         return source.stream()
                 .map(this::carry)
                 .collect(Collectors.toList());
@@ -205,8 +211,7 @@ public class MaterialRequiredService extends AbstractService<MaterialRequiredMap
                         .name(material.getMaterialRequiredName())
                         .imageUrls(material.getImageUrls())
                         .build())
-                .organisationName(material.getMaterialRequiredOrganizationName())
-                .organisationLogo(material.getMaterialRequiredOrganizationLogo())
+                .organisationLogo(supplierInfoEntityMap != null?supplierInfoEntityMap.get(material.getMaterialRequiredOrganizationId()):"")
                 .status(material.getMaterialRequiredStatus())
                 .reviewMessage(material.getReviewMessage())
                 .build();

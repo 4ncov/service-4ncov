@@ -79,10 +79,6 @@ public class MaterialRequiredEntity {
      * 供货方机构名称
      */
     private String materialRequiredOrganizationName;
-    /**
-     * 供货方机构logo
-     */
-    private String materialRequiredOrganizationLogo;
 
     /**
      * 物资寻求状态
@@ -115,7 +111,6 @@ public class MaterialRequiredEntity {
                 .materialRequiredContactorName(materialRequest.getContactorName())
                 .materialRequiredContactorPhone(materialRequest.getContactorPhone())
                 .materialRequiredOrganizationName(materialRequest.getOrganisationName())
-                .materialRequiredOrganizationLogo(materialRequest.getOrganisationLogo())
                 .materialRequiredComment(materialRequest.getComment())
                 .materialRequiredImageUrls(ImageUtils.joinImageUrls(material.getImageUrls()))
                 .materialRequiredOrganizationId(organizationId)
