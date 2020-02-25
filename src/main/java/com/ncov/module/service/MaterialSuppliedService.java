@@ -103,7 +103,10 @@ public class MaterialSuppliedService extends ServiceImpl<MaterialSuppliedMapper,
                 .gmtModified(new Date())
                 .build();
         updateById(updatedMaterial);
-        return carry(updatedMaterial);
+
+        SupplierInfoEntity supplierInfoEntity = supplierService.getById(updatedMaterial.getMaterialSupplierOrganizationId());
+
+        return carry(updatedMaterial, supplierInfoEntity.getLogo());
     }
 
     public void approve(Long id) {
@@ -135,8 +138,7 @@ public class MaterialSuppliedService extends ServiceImpl<MaterialSuppliedMapper,
     public MaterialResponse getDetail(Long id) {
         MaterialSuppliedEntity materialSuppliedEntity = getById(id);
         SupplierInfoEntity supplierInfoEntity = supplierService.getById(materialSuppliedEntity.getMaterialSupplierOrganizationId());
-        supplierInfoEntityMap.put(supplierInfoEntity.getId(), supplierInfoEntity.getLogo());
-        return carry(materialSuppliedEntity);
+        return carry(materialSuppliedEntity, supplierInfoEntity.getLogo());
     }
 
     private boolean isUpdateAllowed(MaterialSuppliedEntity material) {
@@ -172,13 +174,13 @@ public class MaterialSuppliedService extends ServiceImpl<MaterialSuppliedMapper,
     private List<MaterialResponse> carry(List<MaterialSuppliedEntity> source) {
         List<Long> oids = source.stream().map(MaterialSuppliedEntity::getMaterialSupplierOrganizationId).collect(Collectors.toList());
         List<SupplierInfoEntity> supplierInfoEntityList = supplierService.list(new LambdaQueryWrapper<SupplierInfoEntity>().in(SupplierInfoEntity::getId, oids));
-        supplierInfoEntityMap = supplierInfoEntityList.stream().collect(Collectors.toMap(SupplierInfoEntity::getId, SupplierInfoEntity::getLogo));
+        Map<Long, String> supplierInfoEntityMap = supplierInfoEntityList.stream().collect(Collectors.toMap(SupplierInfoEntity::getId, SupplierInfoEntity::getLogo));
         return source.stream()
-                .map(this::carry)
+                .map(material -> this.carry(material, supplierInfoEntityMap.get(material.getMaterialSupplierOrganizationId())))
                 .collect(Collectors.toList());
     }
 
-    private MaterialResponse carry(MaterialSuppliedEntity material) {
+    private MaterialResponse carry(MaterialSuppliedEntity material, String logo) {
         return MaterialResponse.builder()
                 .address(AddressDto.builder()
                         .country(material.getCountry())
@@ -201,7 +203,7 @@ public class MaterialSuppliedService extends ServiceImpl<MaterialSuppliedMapper,
                         .imageUrls(material.getImageUrls())
                         .build())
                 .organisationName(material.getMaterialSuppliedOrganizationName())
-                .organisationLogo(supplierInfoEntityMap != null?supplierInfoEntityMap.get(material.getMaterialSupplierOrganizationId()):"")
+                .organisationLogo(logo)
                 .status(material.getMaterialSuppliedStatus())
                 .reviewMessage(material.getReviewMessage())
                 .build();

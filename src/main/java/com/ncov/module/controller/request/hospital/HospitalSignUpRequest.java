@@ -17,6 +17,8 @@ public class HospitalSignUpRequest {
     @ApiModelProperty(value = "需求方机构名称")
     @NotEmpty(message = "机构名称不能为空")
     private String name;
+    @ApiModelProperty(value = "需求方机构logo")
+    private String logoUrl;
     @ApiModelProperty(value = "18位社会统一信用代码")
     @NotEmpty(message = "社会统一信用代码不能为空")
     @Size(min = 18, max = 18, message = "社会统一信用代码必须为18位")

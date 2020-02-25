@@ -15,6 +15,8 @@ public class HospitalResponse {
     private String id;
     @ApiModelProperty(value = "需求方机构名称")
     private String name;
+    @ApiModelProperty(value = "需求方机构logo")
+    private String logo;
     @ApiModelProperty(value = "18位社会统一信用代码")
     private String uniformSocialCreditCode;
     @ApiModelProperty(value = "需求方联系人")

@@ -30,6 +30,7 @@ public class HospitalInfoEntity {
     private String hospitalVerifyImageUrls;
     private String hospitalContactorName;
     private String hospitalContactorTelephone;
+    private String logo;
     private Date gmtCreated;
     private Date gmtModified;
     private Short deleted;

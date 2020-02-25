@@ -9,6 +9,7 @@ import com.ncov.module.controller.dto.AddressDto;
 import com.ncov.module.controller.dto.MaterialDto;
 import com.ncov.module.controller.request.material.MaterialRequest;
 import com.ncov.module.controller.resp.material.MaterialResponse;
+import com.ncov.module.entity.HospitalInfoEntity;
 import com.ncov.module.entity.MaterialRequiredEntity;
 import com.ncov.module.entity.SupplierInfoEntity;
 import com.ncov.module.entity.UserInfoEntity;
@@ -39,11 +40,9 @@ public class MaterialRequiredService extends AbstractService<MaterialRequiredMap
     @Autowired
     private UserInfoService userInfoService;
     @Autowired
-    private SupplierService supplierService;
+    private HospitalService hospitalService;
     @Autowired
     private UserContext userContext;
-
-    private Map<Long, String> supplierInfoEntityMap = null;
 
     /**
      * 根据相关条件，查询物料寻求分页列表
@@ -114,7 +113,10 @@ public class MaterialRequiredService extends AbstractService<MaterialRequiredMap
                 .gmtModified(new Date())
                 .build();
         updateById(updatedMaterial);
-        return carry(updatedMaterial);
+
+        HospitalInfoEntity hospitalInfoEntity = hospitalService.getById(updatedMaterial.getMaterialRequiredOrganizationId());
+
+        return carry(updatedMaterial, hospitalInfoEntity.getLogo());
     }
 
     public com.ncov.module.controller.resp.Page<MaterialResponse> getAllRequiredMaterialsPage(
@@ -145,9 +147,8 @@ public class MaterialRequiredService extends AbstractService<MaterialRequiredMap
 
     public MaterialResponse getDetail(Long id) {
         MaterialRequiredEntity materialRequiredEntity = getById(id);
-        SupplierInfoEntity supplierInfoEntity = supplierService.getById(materialRequiredEntity.getMaterialRequiredOrganizationId());
-        supplierInfoEntityMap.put(supplierInfoEntity.getId(), supplierInfoEntity.getLogo());
-        return carry(materialRequiredEntity);
+        HospitalInfoEntity hospitalInfoEntity = hospitalService.getById(materialRequiredEntity.getMaterialRequiredOrganizationId());
+        return carry(materialRequiredEntity, hospitalInfoEntity.getLogo());
     }
 
     private boolean isUpdateAllowed(MaterialRequiredEntity material) {
@@ -182,14 +183,14 @@ public class MaterialRequiredService extends AbstractService<MaterialRequiredMap
 
     private List<MaterialResponse> carry(List<MaterialRequiredEntity> source) {
         List<Long> oids = source.stream().map(MaterialRequiredEntity::getMaterialRequiredOrganizationId).collect(Collectors.toList());
-        List<SupplierInfoEntity> supplierInfoEntityList = supplierService.list(new LambdaQueryWrapper<SupplierInfoEntity>().in(SupplierInfoEntity::getId, oids));
-        supplierInfoEntityMap = supplierInfoEntityList.stream().collect(Collectors.toMap(SupplierInfoEntity::getId, SupplierInfoEntity::getLogo));
+        List<HospitalInfoEntity> hospitalInfoEntityList = hospitalService.list(new LambdaQueryWrapper<HospitalInfoEntity>().in(HospitalInfoEntity::getId, oids));
+        Map<Long, String> hospitalInfoEntityMap = hospitalInfoEntityList.stream().collect(Collectors.toMap(HospitalInfoEntity::getId, HospitalInfoEntity::getLogo));
         return source.stream()
-                .map(this::carry)
+                .map(material -> this.carry(material, hospitalInfoEntityMap.get(material.getMaterialRequiredOrganizationId())))
                 .collect(Collectors.toList());
     }
 
-    private MaterialResponse carry(MaterialRequiredEntity material) {
+    private MaterialResponse carry(MaterialRequiredEntity material, String logo) {
         return MaterialResponse.builder()
                 .address(AddressDto.builder()
                         .country(material.getCountry())
@@ -211,7 +212,7 @@ public class MaterialRequiredService extends AbstractService<MaterialRequiredMap
                         .name(material.getMaterialRequiredName())
                         .imageUrls(material.getImageUrls())
                         .build())
-                .organisationLogo(supplierInfoEntityMap != null?supplierInfoEntityMap.get(material.getMaterialRequiredOrganizationId()):"")
+                .organisationLogo(logo)
                 .status(material.getMaterialRequiredStatus())
                 .reviewMessage(material.getReviewMessage())
                 .build();
