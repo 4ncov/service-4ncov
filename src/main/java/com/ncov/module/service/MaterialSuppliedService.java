@@ -10,7 +10,6 @@ import com.ncov.module.controller.dto.AddressDto;
 import com.ncov.module.controller.dto.MaterialDto;
 import com.ncov.module.controller.request.material.MaterialRequest;
 import com.ncov.module.controller.resp.material.MaterialResponse;
-import com.ncov.module.entity.MaterialRequiredEntity;
 import com.ncov.module.entity.MaterialSuppliedEntity;
 import com.ncov.module.entity.SupplierInfoEntity;
 import com.ncov.module.entity.UserInfoEntity;
@@ -39,8 +38,6 @@ public class MaterialSuppliedService extends ServiceImpl<MaterialSuppliedMapper,
     private SupplierService supplierService;
     @Autowired
     private UserContext userContext;
-
-    private Map<Long, String> supplierInfoEntityMap = null;
 
     /**
      * 根据相关条件，查询物料供应分页列表

@@ -1,6 +1,6 @@
 package com.ncov.module.service;
 
-import com.ncov.module.common.enums.MaterialStatus;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.ncov.module.common.enums.UserStatus;
 import com.ncov.module.common.exception.MaterialNotFoundException;
 import com.ncov.module.controller.dto.AddressDto;
@@ -8,6 +8,7 @@ import com.ncov.module.controller.dto.MaterialDto;
 import com.ncov.module.controller.request.material.MaterialRequest;
 import com.ncov.module.controller.resp.material.MaterialResponse;
 import com.ncov.module.entity.MaterialSuppliedEntity;
+import com.ncov.module.entity.SupplierInfoEntity;
 import com.ncov.module.entity.UserInfoEntity;
 import com.ncov.module.mapper.MaterialSuppliedMapper;
 import com.ncov.module.security.UserContext;
@@ -31,6 +32,8 @@ class MaterialSuppliedServiceTest {
     private MaterialSuppliedMapper materialSuppliedMapper;
     @Mock
     private UserContext userContext;
+    @Mock
+    private SupplierService supplierService;
     @Spy
     @InjectMocks
     private MaterialSuppliedService materialSuppliedService;
@@ -48,6 +51,8 @@ class MaterialSuppliedServiceTest {
         when(userInfoService.getUser(anyLong())).thenReturn(UserInfoEntity.builder().status(UserStatus.PENDING.name()).build());
         when(userContext.getUserId()).thenReturn(1L);
         when(userContext.isSysAdmin()).thenReturn(false);
+        when(supplierService.list(any(LambdaQueryWrapper.class))).thenReturn(Collections.singletonList(SupplierInfoEntity.builder().id(1L).logo("logo.jpg").build()));
+        when(supplierService.getById(anyLong())).thenReturn(SupplierInfoEntity.builder().id(1L).logo("logo.jpg").build());
     }
 
     @Test
@@ -74,6 +79,7 @@ class MaterialSuppliedServiceTest {
         assertEquals("10", response.getId());
         assertEquals(MaterialDto.builder().name("Materialname").quantity(200000.0).standard("ISO9001").category("Mask").imageUrls(Arrays.asList("https://oss.com/images/1.png", "https://oss.com/images/2.png")).build(), response.getMaterial());
         assertEquals("Supplier Organisation", response.getOrganisationName());
+        assertEquals("logo.jpg", response.getOrganisationLogo());
         assertEquals(AddressDto.builder().country("中国").province("湖北省").city("武汉市").district("东西湖区").streetAddress("银潭路1号").build(), response.getAddress());
         assertEquals("Test M", response.getContactorName());
         assertEquals("18800001111", response.getContactorPhone());
@@ -152,6 +158,7 @@ class MaterialSuppliedServiceTest {
         assertEquals("10", response0.getId());
         assertEquals(MaterialDto.builder().name("Materialname").quantity(200000.0).standard("ISO9001").category("Mask").imageUrls(Arrays.asList("https://oss.com/images/1.png", "https://oss.com/images/2.png")).build(), response0.getMaterial());
         assertEquals("Supplier Organisation", response0.getOrganisationName());
+        assertEquals("logo.jpg", response0.getOrganisationLogo());
         assertEquals(AddressDto.builder()
                 .country("中国")
                 .province("湖北省")
@@ -168,6 +175,7 @@ class MaterialSuppliedServiceTest {
         assertEquals("11", response1.getId());
         assertEquals(MaterialDto.builder().name("Coat").quantity(3000.0).standard("ISO9002").category("Coat").imageUrls(Arrays.asList("https://oss.com/images/1.png", "https://oss.com/images/2.png")).build(), response1.getMaterial());
         assertEquals("Supplier Organisation", response1.getOrganisationName());
+        assertEquals("logo.jpg", response1.getOrganisationLogo());
         assertEquals(AddressDto.builder()
                 .country("中国")
                 .province("湖北省")
@@ -282,7 +290,7 @@ class MaterialSuppliedServiceTest {
                 .thenReturn(true);
         when(materialSuppliedMapper.selectById(anyLong()))
                 .thenReturn(MaterialSuppliedEntity.builder()
-                        .id(223L).materialSuppliedUserId(1L).build());
+                        .id(223L).materialSuppliedUserId(1L).materialSupplierOrganizationId(1L).build());
         MaterialResponse suppliedInfo = materialSuppliedService.update(
                 223L,
                 MaterialRequest.builder()

@@ -1,5 +1,6 @@
 package com.ncov.module.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.ncov.module.common.enums.MaterialStatus;
 import com.ncov.module.common.enums.UserStatus;
 import com.ncov.module.common.exception.MaterialNotFoundException;
@@ -7,6 +8,7 @@ import com.ncov.module.controller.dto.AddressDto;
 import com.ncov.module.controller.dto.MaterialDto;
 import com.ncov.module.controller.request.material.MaterialRequest;
 import com.ncov.module.controller.resp.material.MaterialResponse;
+import com.ncov.module.entity.HospitalInfoEntity;
 import com.ncov.module.entity.MaterialRequiredEntity;
 import com.ncov.module.entity.UserInfoEntity;
 import com.ncov.module.mapper.MaterialRequiredMapper;
@@ -34,6 +36,8 @@ public class MaterialRequiredServiceTest {
     private MaterialRequiredMapper materialRequiredMapper;
     @Mock
     private UserContext userContext;
+    @Mock
+    private HospitalService hospitalService;
     @Spy
     @InjectMocks
     private MaterialRequiredService materialRequiredService;
@@ -51,6 +55,8 @@ public class MaterialRequiredServiceTest {
         when(userInfoService.getUser(anyLong())).thenReturn(UserInfoEntity.builder().status(MaterialStatus.PENDING.name()).build());
         when(userContext.getUserId()).thenReturn(1L);
         when(userContext.isSysAdmin()).thenReturn(false);
+        when(hospitalService.list(any(LambdaQueryWrapper.class))).thenReturn(Collections.singletonList(HospitalInfoEntity.builder().id(1L).logo("image.png").build()));
+        when(hospitalService.getById(anyLong())).thenReturn(HospitalInfoEntity.builder().id(1L).logo("image.png").build());
     }
 
     @Test
@@ -88,6 +94,7 @@ public class MaterialRequiredServiceTest {
         assertEquals("医护人员急用", response.getComment());
         assertEquals("哈哈", response.getOrganisationName());
         assertEquals("PENDING", response.getStatus());
+        assertEquals("image.png", response.getOrganisationLogo());
         assertNotNull(response.getGmtCreated());
         ArgumentCaptor<List> entitiesCaptor = ArgumentCaptor.forClass(List.class);
         verify(materialRequiredService).saveBatch(entitiesCaptor.capture());
@@ -162,7 +169,7 @@ public class MaterialRequiredServiceTest {
                 .thenReturn(true);
         when(materialRequiredMapper.selectById(anyLong()))
                 .thenReturn(MaterialRequiredEntity.builder().id(223L)
-                        .materialRequiredUserId(1L).build());
+                        .materialRequiredUserId(1L).materialRequiredOrganizationId(1L).build());
         MaterialResponse requiredInfo = materialRequiredService.update(
                 223L,
                 MaterialRequest.builder()
@@ -189,7 +196,6 @@ public class MaterialRequiredServiceTest {
 
     @Test
     void should_throw_access_denied_exception_when_publisher_of_the_required_is_not_requesting_user() {
-        UserInfoEntity userInfoEntity = UserInfoEntity.builder().id(12L).build();
         when(materialRequiredMapper.selectById(anyLong()))
                 .thenReturn(MaterialRequiredEntity.builder()
                         .materialRequiredUserId(123L)
@@ -220,7 +226,6 @@ public class MaterialRequiredServiceTest {
     @Test
     void should_throw_material_notFound_exception_when_required_is_absent() {
         when(materialRequiredMapper.selectById(anyLong())).thenReturn(null);
-        UserInfoEntity userInfoEntity = UserInfoEntity.builder().id(1L).build();
         assertThrows(MaterialNotFoundException.class
                 , () -> materialRequiredService.update(223L
                         , MaterialRequest.builder()

@@ -212,6 +212,7 @@ public class MaterialRequiredService extends AbstractService<MaterialRequiredMap
                         .name(material.getMaterialRequiredName())
                         .imageUrls(material.getImageUrls())
                         .build())
+                .organisationName(material.getMaterialRequiredOrganizationName())
                 .organisationLogo(logo)
                 .status(material.getMaterialRequiredStatus())
                 .reviewMessage(material.getReviewMessage())
