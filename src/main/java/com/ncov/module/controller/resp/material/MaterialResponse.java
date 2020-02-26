@@ -23,6 +23,8 @@ public class MaterialResponse {
     private MaterialDto material;
     @ApiModelProperty(value = "寻求方/供货方机构名称")
     private String organisationName;
+    @ApiModelProperty(value = "寻求方/供货方机构logo")
+    private String organisationLogo;
     @ApiModelProperty(value = "收货/发货地址")
     private AddressDto address;
     @ApiModelProperty(value = "联系人")

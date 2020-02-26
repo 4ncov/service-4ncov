@@ -35,6 +35,7 @@ public class HospitalService extends ServiceImpl<HospitalInfoMapper, HospitalInf
                 .contactorTelephone(hospitalInfo.getHospitalContactorTelephone())
                 .uniformSocialCreditCode(hospitalInfo.getHospitalUniformSocialCreditCode())
                 .gmtModified(hospitalInfo.getGmtModified())
+                .logo(hospitalInfo.getLogo())
                 .build();
     }
 
@@ -46,6 +47,7 @@ public class HospitalService extends ServiceImpl<HospitalInfoMapper, HospitalInf
                 .hospitalName(hospitalSignUpRequest.getName())
                 .hospitalUniformSocialCreditCode(hospitalSignUpRequest.getUniformSocialCreditCode())
                 .gmtCreated(new Date())
+                .logo(hospitalSignUpRequest.getLogoUrl())
                 .build();
 
         this.save(hospitalInfo);

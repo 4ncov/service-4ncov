@@ -47,6 +47,7 @@ public class SupplierService extends ServiceImpl<SupplierMapper, SupplierInfoEnt
                 .materialSupplierCreatorUserId(userId)
                 .haveLogistics(supplierSignUpRequest.getHaveLogistics())
                 .gmtCreated(new Date())
+                .logo(supplierSignUpRequest.getLogoUrl())
                 .build();
         supplierInfo.setMaterialSupplierVerifyImageUrls(imageUrls);
 

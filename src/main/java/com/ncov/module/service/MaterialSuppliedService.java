@@ -10,7 +10,9 @@ import com.ncov.module.controller.dto.AddressDto;
 import com.ncov.module.controller.dto.MaterialDto;
 import com.ncov.module.controller.request.material.MaterialRequest;
 import com.ncov.module.controller.resp.material.MaterialResponse;
+import com.ncov.module.entity.MaterialRequiredEntity;
 import com.ncov.module.entity.MaterialSuppliedEntity;
+import com.ncov.module.entity.SupplierInfoEntity;
 import com.ncov.module.entity.UserInfoEntity;
 import com.ncov.module.mapper.MaterialSuppliedMapper;
 import com.ncov.module.security.UserContext;
@@ -20,10 +22,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
@@ -37,7 +36,11 @@ public class MaterialSuppliedService extends ServiceImpl<MaterialSuppliedMapper,
     @Autowired
     private UserInfoService userInfoService;
     @Autowired
+    private SupplierService supplierService;
+    @Autowired
     private UserContext userContext;
+
+    private Map<Long, String> supplierInfoEntityMap = null;
 
     /**
      * 根据相关条件，查询物料供应分页列表
@@ -100,7 +103,10 @@ public class MaterialSuppliedService extends ServiceImpl<MaterialSuppliedMapper,
                 .gmtModified(new Date())
                 .build();
         updateById(updatedMaterial);
-        return carry(updatedMaterial);
+
+        SupplierInfoEntity supplierInfoEntity = supplierService.getById(updatedMaterial.getMaterialSupplierOrganizationId());
+
+        return carry(updatedMaterial, supplierInfoEntity.getLogo());
     }
 
     public void approve(Long id) {
@@ -130,7 +136,9 @@ public class MaterialSuppliedService extends ServiceImpl<MaterialSuppliedMapper,
     }
 
     public MaterialResponse getDetail(Long id) {
-        return carry(getById(id));
+        MaterialSuppliedEntity materialSuppliedEntity = getById(id);
+        SupplierInfoEntity supplierInfoEntity = supplierService.getById(materialSuppliedEntity.getMaterialSupplierOrganizationId());
+        return carry(materialSuppliedEntity, supplierInfoEntity.getLogo());
     }
 
     private boolean isUpdateAllowed(MaterialSuppliedEntity material) {
@@ -164,12 +172,15 @@ public class MaterialSuppliedService extends ServiceImpl<MaterialSuppliedMapper,
     }
 
     private List<MaterialResponse> carry(List<MaterialSuppliedEntity> source) {
+        List<Long> oids = source.stream().map(MaterialSuppliedEntity::getMaterialSupplierOrganizationId).collect(Collectors.toList());
+        List<SupplierInfoEntity> supplierInfoEntityList = supplierService.list(new LambdaQueryWrapper<SupplierInfoEntity>().in(SupplierInfoEntity::getId, oids));
+        Map<Long, String> supplierInfoEntityMap = supplierInfoEntityList.stream().collect(Collectors.toMap(SupplierInfoEntity::getId, SupplierInfoEntity::getLogo));
         return source.stream()
-                .map(this::carry)
+                .map(material -> this.carry(material, supplierInfoEntityMap.get(material.getMaterialSupplierOrganizationId())))
                 .collect(Collectors.toList());
     }
 
-    private MaterialResponse carry(MaterialSuppliedEntity material) {
+    private MaterialResponse carry(MaterialSuppliedEntity material, String logo) {
         return MaterialResponse.builder()
                 .address(AddressDto.builder()
                         .country(material.getCountry())
@@ -192,6 +203,7 @@ public class MaterialSuppliedService extends ServiceImpl<MaterialSuppliedMapper,
                         .imageUrls(material.getImageUrls())
                         .build())
                 .organisationName(material.getMaterialSuppliedOrganizationName())
+                .organisationLogo(logo)
                 .status(material.getMaterialSuppliedStatus())
                 .reviewMessage(material.getReviewMessage())
                 .build();
