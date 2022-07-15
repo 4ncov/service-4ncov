@@ -27,7 +27,7 @@
         <commons-io.version>2.6</commons-io.version>
         <commons-lang3.version>3.9</commons-lang3.version>
         <commons-collection4.version>4.4</commons-collection4.version>
-        <awssdk.version>1.11.714</awssdk.version>
+        <awssdk.version>1.12.261</awssdk.version>
         <javax-validation.version>2.0.1.Final</javax-validation.version>
     </properties>
 
